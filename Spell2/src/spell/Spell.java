@@ -34,18 +34,18 @@ public class Spell implements SpellCorrector{
 		}finally{
 			s.close();
 		}
-//		System.out.println(dictionary.toString());
 	}
 
 	@Override
 	public String suggestSimilarWord(String inputWord)throws NoSimilarWordFoundException {
+		if(inputWord.length() == 0)
+			throw new NoSimilarWordFoundException();
 		Node temp = dictionary.find(inputWord);
 		if(temp == null || temp.getValue() == 0){
 			String d1 = dictionary.checkDistance1(inputWord);
 			if(d1 == null){
 				String d2 = dictionary.checkDistance2(inputWord);
 				if(d2 == null){
-//					System.out.println(dictionary.toString());
 					throw new NoSimilarWordFoundException();
 				}else
 					return d2;
@@ -53,8 +53,6 @@ public class Spell implements SpellCorrector{
 				return d1;
 		}
 		else{
-//			System.out.println(dictionary.find(inputWord).getValue());
-//			System.out.println("returned inputed word");
 			return inputWord.toLowerCase();
 		}
 	}
