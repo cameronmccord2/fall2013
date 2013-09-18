@@ -21,12 +21,15 @@ public class Main {
 		/**
 		 * Create an instance of your corrector here
 		 */
-		SpellCorrector corrector = new Spell();
+		Spell corrector = new Spell();
 		
 		corrector.useDictionary(dictionaryFileName);
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		
 		System.out.println("Suggestion is: " + suggestion);
+//		System.out.println("to String: " + corrector.getDictionary().toString());
+		System.out.println("node count: " + corrector.getDictionary().getNodeCount());
+		System.out.println("word count: " + corrector.getDictionary().getWordCount());
 	}
 
 }

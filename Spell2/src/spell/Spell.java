@@ -15,6 +15,10 @@ public class Spell implements SpellCorrector{
 		dictionary = new Dictionary();
 	}
 	
+	public Dictionary getDictionary(){
+		return dictionary;
+	}
+	
 	@Override
 	public void useDictionary(String dictionaryFileName) throws IOException {
 		dictionary = new Dictionary();
@@ -30,6 +34,7 @@ public class Spell implements SpellCorrector{
 		}finally{
 			s.close();
 		}
+//		System.out.println(dictionary.toString());
 	}
 
 	@Override
@@ -40,6 +45,7 @@ public class Spell implements SpellCorrector{
 			if(d1 == null){
 				String d2 = dictionary.checkDistance2(inputWord);
 				if(d2 == null){
+//					System.out.println(dictionary.toString());
 					throw new NoSimilarWordFoundException();
 				}else
 					return d2;
@@ -47,9 +53,9 @@ public class Spell implements SpellCorrector{
 				return d1;
 		}
 		else{
-			System.out.println(dictionary.find(inputWord).getValue());
-			System.out.println("returned inputed word");
-			return inputWord;
+//			System.out.println(dictionary.find(inputWord).getValue());
+//			System.out.println("returned inputed word");
+			return inputWord.toLowerCase();
 		}
 	}
 

@@ -2,6 +2,7 @@ package spell;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class Dictionary implements Trie{
 	public Node rootNode;
@@ -19,20 +20,24 @@ public class Dictionary implements Trie{
     
     @Override
 	public String toString(){
-    	ArrayList<String> allWords = this.alphabatizeList(rootNode.getAllUniqueWords(""));
+    	ArrayList<String> allWords = this.alphabatizeList(rootNode.getAllUniqueWords(new StringBuilder("")));
     	StringBuilder sb = new StringBuilder();
+//    	System.out.println(allWords.toString());
     	for(int i = 0; i < allWords.size(); i++){
+//    		System.out.println("Word: " + allWords.get(i) + " " + allWords.size());
     		sb.append(allWords.get(i));
     		sb.append(" ");
     		sb.append(rootNode.findWord(allWords.get(i)).getValue());
-    		sb.append("\n");
+    		if(i < allWords.size() - 1)
+    			sb.append("\n");
     	}
+//    	System.out.println("here");
     	return sb.toString();
     }
 	
 	@Override
 	public int hashCode(){
-		return rootNode.getAllUniqueWords("").size() * rootNode.getHowManyNodes() * 97;
+		return rootNode.getAllUniqueWords(new StringBuilder("")).size() * rootNode.getHowManyNodes() * 97;
 	}
 	
 	@Override
@@ -48,18 +53,18 @@ public class Dictionary implements Trie{
 
 	@Override
 	public void add(String word) {
-        if(rootNode.addWord(word).getValue() == 1)
+        if(rootNode.addWord(word.toLowerCase()).getValue() == 1)
             uniqueWords++;
     }
 
 	@Override
 	public Node find(String word){
-		return rootNode.findWord(word);
+		return rootNode.findWord(word.toLowerCase());
 	}
 
 	@Override
 	public int getWordCount() {
-        int temp = rootNode.getAllUniqueWords("").size();
+        int temp = rootNode.getAllUniqueWords(new StringBuilder("")).size();
         if(temp != uniqueWords)
             System.out.println("counted previously: " + uniqueWords + ", counted now: " + temp);
 		return temp;
@@ -67,27 +72,32 @@ public class Dictionary implements Trie{
 
 	@Override
 	public int getNodeCount() {
-		return rootNode.getHowManyNodes();
+		return rootNode.getHowManyNodes() + 1;
 	}
 	
 	private String doFinalDetermination(ArrayList<String> tempListWithDuplicates, String word){
-		ArrayList<String> tempListNoDuplicates = new ArrayList<String>();
-		for(int i = 0; i < tempListWithDuplicates.size(); i++){//remove duplicates
-			if(!this.isWordInList(tempListNoDuplicates, tempListWithDuplicates.get(i)))
-				tempListNoDuplicates.add(tempListWithDuplicates.get(i));
-		}
-		
+		Date tempDate = new Date();
+//		System.out.println("checkpoint1: " + (( (new Date()).getTime() - tempDate.getTime())));
+//		ArrayList<String> tempListNoDuplicates = new ArrayList<String>();
+//		for(int i = 0; i < tempListWithDuplicates.size(); i++){//remove duplicates
+//			if(!this.isWordInList(tempListNoDuplicates, tempListWithDuplicates.get(i)))
+//				tempListNoDuplicates.add(tempListWithDuplicates.get(i));
+//		}
+//		System.out.println("checkpoint2: " + (( (new Date()).getTime() - tempDate.getTime())));
 		ArrayList<String> tempList = new ArrayList<String>();
-		for(int i = 0; i < tempListNoDuplicates.size(); i++){
-			Node tempNode = rootNode.findWord(tempListNoDuplicates.get(i));
-			if(tempNode != null && tempNode.getValue() != 0)// make sure the words are in the dictionary
-				tempList.add(tempListNoDuplicates.get(i));
+		for(int i = 0; i < tempListWithDuplicates.size(); i++){
+			Node tempNode = rootNode.findWord(tempListWithDuplicates.get(i));
+			if(tempNode != null && tempNode.getValue() > 0)// make sure the words are in the dictionary
+				if(!this.isWordInList(tempList, tempListWithDuplicates.get(i)))
+					tempList.add(tempListWithDuplicates.get(i));
 		}
+//		System.out.println("checkpoint3: " + (( (new Date()).getTime() - tempDate.getTime())));
 		if(tempList.size() == 1)
 			return tempList.get(0);
 		else if(tempList.size() == 0)
 			return null;
 		else{
+//			System.out.println("checkpoint4: " + (( (new Date()).getTime() - tempDate.getTime())));
 			int foundCount = 0;
 			ArrayList<String> words = new ArrayList<String>();
 			for(int i = 0; i < tempList.size(); i++){// find the one that happens the most in the dictionary
@@ -104,6 +114,7 @@ public class Dictionary implements Trie{
 					}
 				}
 			}
+//			System.out.println("checkpoint5: " + (( (new Date()).getTime() - tempDate.getTime())));
 			if(words.size() == 1)
 				return words.get(0);
 			else if(words.size() > 1){// order by alphabetical and return the first one
@@ -119,6 +130,7 @@ public class Dictionary implements Trie{
 	}
 	
 	private ArrayList<String> doChecks(String word){
+//		System.out.println(word);
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.addAll(this.doAlterations(word));
 		temp.addAll(this.doDeletion(word));
@@ -128,25 +140,44 @@ public class Dictionary implements Trie{
 	}
 
 	public String checkDistance1(String word){
-		distance1 = this.doChecks(word);
+//		System.out.println("check distance1, length: " + word.length());
+		distance1 = new ArrayList<String>();
+		distance1.addAll(this.doChecks(word));
+//		System.out.println("word length: " + word.length());
 		System.out.println("words to check: " + distance1.size());
 		return this.doFinalDetermination(distance1, word);
 	}
 	
 	public String checkDistance2(String word){
 		distance2 = new ArrayList<String>();
+//		System.out.println("check distance 2");
 		for(int i = 0; i < distance1.size(); i++){
+//			System.out.println("check distance2, length: " + distance1.get(i).length());
+//			System.out.println("check distance 2: " + distance1.get(i).length());
 			distance2.addAll(this.doChecks(distance1.get(i)));
+//			System.out.println("word length: " + distance1.get(i).length());
 		}
 		System.out.println("words to check: " + distance2.size());
 		return this.doFinalDetermination(distance2, word);
 	}
 
     private ArrayList<String> doDeletion(String word){
-//    	System.out.println(word);
+//    	System.out.println("do deletion:" + word);
+    	if(word.length() == 1)
+    		return new ArrayList<String>();
         ArrayList<String> list = new ArrayList<String>();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < word.length(); i++){
-            list.add(word.substring(0, i) + word.substring(i + 1, word.length()));
+        	sb = new StringBuilder();
+        	sb.append(word.substring(0, i));
+        	sb.append(word.substring(i + 1, word.length()));
+        	String temp = sb.toString();
+//        	if(temp.length() < 2)
+//        		System.out.println("word has been reduced too much:"+ temp.length() + " " + temp + " " + word);
+        	if(temp.length() > 0)
+        		list.add(temp);
+//        	else
+//        		System.out.println("found word of 0 length");
 //            System.out.println(list.get(list.size() - 1));
         }
         if(list.size() != word.length())
@@ -155,28 +186,43 @@ public class Dictionary implements Trie{
     }
     
     private ArrayList<String> doTranspositions(String word){
+//    	System.out.println("transposition: " + word);
         ArrayList<String> list = new ArrayList<String>();
         if(word.length() == 1)
         	list.add(word);
         else{
+        	StringBuilder sb = new StringBuilder();
 	        for(int i = 0; i < word.length() - 1; i++){
-	        	String temp = word.substring(0, i) + word.charAt(i + 1) + word.charAt(i);
+	        	sb = new StringBuilder();
+	        	sb.append(word.substring(0, i));
+	        	sb.append(word.charAt(i + 1));
+	        	sb.append(word.charAt(i));
+//	        	String temp = word.substring(0, i) + word.charAt(i + 1) + word.charAt(i);
+	      
 	        	if(!(word.length() <= i + 2))
-	        		temp += word.substring(i+2);
-	        	list.add(temp);// make sure
+	        		sb.append(word.substring(i+2));
+	        	list.add(sb.toString());// make sure
 	        }
 	        if(list.size() != (word.length() - 1))
-	        	throw new RuntimeException("not enough results found for transposition: " + list.size() + ", should have: " + (word.length() - 1));
+	        	throw new RuntimeException("not enough results found for transposition: " + list.size() + ", should have: " + (word.length() - 1) + ", word: " + word);
         }
+//        if(word.equals("ezya"))
+//        	System.out.println("here: " + list.toString());
         return list;
     }
 
     private ArrayList<String> doAlterations(String word){
         ArrayList<String> list = new ArrayList<String>();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < word.length(); i++){
             for(int j = 0; j < 26; j++){
-            	String temp = word.substring(0, i) + ((char)(j + 'a')) + word.substring(i + 1, word.length());
-            	if(!temp.equalsIgnoreCase(word))
+            	sb = new StringBuilder();
+            	sb.append(word.substring(0, i));
+            	sb.append(((char)(j + 'a')));
+            	sb.append(word.substring(i + 1, word.length()));
+//            	String temp = word.substring(0, i) + ((char)(j + 'a')) + word.substring(i + 1, word.length());
+            	String temp = sb.toString();
+            	if(!temp.equalsIgnoreCase(word) && word.length() != 0)
             		list.add(temp);
             }
         }
@@ -187,9 +233,15 @@ public class Dictionary implements Trie{
 
     private ArrayList<String> doInsertions(String word){
         ArrayList<String> list = new ArrayList<String>();
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < word.length() + 1; i++){
             for(int j = 0; j < 26; j++){
-                list.add(word.substring(0, i) + ((char)(j + 'a')) + word.substring(i, word.length()));
+            	sb = new StringBuilder();
+            	sb.append(word.substring(0, i));
+            	sb.append(((char)(j + 'a')));
+            	sb.append(word.substring(i, word.length()));
+//                list.add(word.substring(0, i) + ((char)(j + 'a')) + word.substring(i, word.length()));
+            	list.add(sb.toString());
 //                System.out.println(list.get(list.size() - 1));
             }
         }
@@ -234,14 +286,15 @@ public class Dictionary implements Trie{
     	}
 
         public Node findWord(String word){
-            if(word.length() == 0)
-                throw new RuntimeException("Should never have gotten to adding a word of no length find");
+            if(word.length() == 0){
+                if(this.getValue() > 0)
+                	return this;
+                else
+                	return null;
+            }
             if(getNodeForLetter(word.charAt(0)) == null)
                 return null;
-            else if (word.length() == 1) {
-                return getNodeForLetter(word.charAt(0));
-            } else
-                return getNodeForLetter(word.charAt(0)).findWord(word.substring(1));
+            return getNodeForLetter(word.charAt(0)).findWord(word.substring(1));
         }
     	
     	public void makeWord(){
@@ -267,8 +320,14 @@ public class Dictionary implements Trie{
     	}
     	
     	private Node getNodeForLetter(char letter){
+    		
     		int index = letter - 'a';
+    		try{
     		return children[index];
+    		}catch(Exception e){
+    			System.out.println("letter: " + letter);
+    		}
+    		return null;
     	}
 
     	@Override
@@ -276,14 +335,17 @@ public class Dictionary implements Trie{
     		return count;
     	}
 
-        public ArrayList<String> getAllUniqueWords(String currentWord){
+        public ArrayList<String> getAllUniqueWords(StringBuilder currentWord){
             ArrayList<String> words = new ArrayList<String>();
             for (int i = 0; i < 26; i++){
                 if(children[i] != null){
+//                	System.out.println("child is not null: " + ((char)(i+'a')));
+                	StringBuilder sb = new StringBuilder(currentWord);
+                	sb.append(((char)(i + 'a')));
                     if(children[i].count > 0){
-                        words.add(currentWord + (i + 'a'));
-                        words.addAll(children[i].getAllUniqueWords(currentWord + (i + 'a')));
+                        words.add(sb.toString());
                     }
+                    words.addAll(children[i].getAllUniqueWords(sb));
                 }
             }
             return words;
