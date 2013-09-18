@@ -42,8 +42,11 @@ public class Dictionary implements Trie{
 	
 	@Override
 	public boolean equals(Object o){
-		Dictionary temp = (Dictionary)o;
-		return this.rootNode.equals(temp.rootNode);
+		if(o != null && o instanceof Dictionary){
+			Dictionary temp = (Dictionary)o;
+			return this.rootNode.equals(temp.rootNode);
+		}
+		return false;
 	}
 	
 	public Dictionary(){
@@ -176,8 +179,8 @@ public class Dictionary implements Trie{
 //        		System.out.println("word has been reduced too much:"+ temp.length() + " " + temp + " " + word);
         	if(temp.length() > 0)
         		list.add(temp);
-//        	else
-//        		System.out.println("found word of 0 length");
+        	else
+        		System.out.println("found word of 0 length");
 //            System.out.println(list.get(list.size() - 1));
         }
         if(list.size() != word.length())
