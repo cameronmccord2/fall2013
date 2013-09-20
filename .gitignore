@@ -5,3 +5,5 @@
 .classpath
 .cproject
 /bin
+/debug
+/target
