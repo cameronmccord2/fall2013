@@ -33,24 +33,18 @@ public interface LineCounter {
 			theMap = new HashMap<File, Integer>();
 		}
 		@Override
-		public Map<File, Integer> countLines(File directory,
-				String fileSelectionPattern, boolean recursive) {
+		public Map<File, Integer> countLines(File directory, String fileSelectionPattern, boolean recursive) {
 			isRecursive = recursive;
 			try{
 			theFileSelectionPattern = Pattern.compile(fileSelectionPattern);	
 			}catch(PatternSyntaxException p){
 				return null;
 			}
-			if(directory.isDirectory()){
-				
-			}else if(directory.isFile()){
-				
-			}else{
-				return null;
+			if(directory.isDirectory() || directory.isFile()){
+				countThese(directory);
+				return theMap;
 			}
-			
-			countThese(directory);
-			return theMap;
+			return null;
 		}
 		
 		private Boolean countThese(File directory)
@@ -110,16 +104,11 @@ public interface LineCounter {
 							}
 						}
 					}
-					
-				
 				}
 			}
-			
 			return true;
 		}
-		
 	}
-	
 }
 
 

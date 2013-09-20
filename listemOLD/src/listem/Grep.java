@@ -43,10 +43,9 @@ public interface Grep {
 			theMap = new HashMap<File, List<String>>();
 			//theList = new ArrayList<String>();
 		}
+		
 		@Override
-		public Map<File, List<String>> grep(File directory,
-				String fileSelectionPattern, String substringSelectionPattern,
-				boolean recursive) {
+		public Map<File, List<String>> grep(File directory, String fileSelectionPattern, String substringSelectionPattern, boolean recursive) {
 			//Pattern theFilePattern = null;
 			isRecursive = recursive;
 			try{
@@ -57,77 +56,11 @@ public interface Grep {
 			}
 			if(directory == null){
 				return null;
-			} else if(directory.isDirectory()){
-				
-			}else if(directory.isFile()){
-				
-			}else{
-				return null;
 			}
-			countThese(directory);
-			
+			if(countThese(directory))
+				return theMap;
 			return null;
 		}
-		
-		private Boolean countThese(File directory){
-			if(directory.isDirectory()){
-				if(directory.canRead()){
-					File[] theFiles = directory.listFiles();
-					if(theFiles != null){
-						for(int i = 0; i < theFiles.length; i++){
-							if(theFiles[i].isDirectory()){
-								if(isRecursive){
-									countThese(theFiles[i]);
-								}
-							}else if(theFiles[i].isFile()){
-								countThese(theFiles[i]);
-							}
-						}
-					}
-				}else{
-					System.err.println("countThese: cannot read directory");
-				}
-			} else if(directory.isFile()){
-				if(directory.canRead()){
-					if(theFileSelectionPattern.matcher(directory.getPath()).matches()){
-						Scanner s = null;
-						//int matchesThisFile = 0;
-						boolean readThis = true;
-						List<String> theList = new ArrayList<String>();
-						try{
-							s = new Scanner(new BufferedInputStream(new FileInputStream(directory)));
-						}catch(FileNotFoundException fnfe){
-							readThis = false;
-							System.err.println("countThis: fileNotFoundException");
-						}
-						if(readThis){
-							while(readThis){
-								String theNextLine = null;
-								if(s.hasNextLine()){
-									theNextLine = s.nextLine();
-									if(theSubstringSelectionPattern.matcher(theNextLine).matches()){
-										theList.add(theNextLine);
-									}
-								}else{
-									readThis = false;
-								}
-							}
-							theMap.put(directory, theList);
-						}
-						
-						
-						s.close();
-					}
-				}else{
-					System.err.println("countThese: cannot read directory");
-				}
-			}else{
-				System.err.println("CountThese: badDirectory");
-			}
-			
-			return true;
-		}
-		
 	}
 }
 
