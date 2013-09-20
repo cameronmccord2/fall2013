@@ -1,0 +1,6 @@
+Queries: 
+IsInRoomAtDH('Snoopy',R,'M',H) 
+# 
+. 
+#|comment >= 
+wow|# 
