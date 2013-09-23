@@ -11,60 +11,46 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class FileManager {
-	static private HashMap<File, List<String>> countThese(File directory, boolean recursive, Pattern filePattern, Pattern subPattern, HashMap<File, List<String>> map){
-		if(directory.isDirectory()){
-			if(directory.canRead()){
+	static public void countThese(File directory, boolean recursive, Pattern filePattern, Pattern subPattern, HashMap<File, List<String>> grepMap, HashMap<File, Integer> lineCountMap){
+		if(directory.canRead()){
+			if(directory.isDirectory()){
 				File[] theFiles = directory.listFiles();
 				if(theFiles != null){
 					for(int i = 0; i < theFiles.length; i++){
-						if(theFiles[i].isDirectory()){
-							if(recursive){
-								countThese(theFiles[i], recursive, filePattern, subPattern, map);
-							}
-						}else if(theFiles[i].isFile()){
-							countThese(theFiles[i], recursive, filePattern, subPattern, map);
-						}
+						if(theFiles[i].isDirectory() && recursive || theFiles[i].isFile())
+							countThese(theFiles[i], recursive, filePattern, subPattern, grepMap, lineCountMap);
 					}
 				}
-			}else{
-				System.err.println("countThese: cannot read directory");
-			}
-		} else if(directory.isFile()){
-			if(directory.canRead()){
+			}else if(directory.isFile()){
 				if(filePattern.matcher(directory.getPath()).matches()){// or getName?
 					Scanner s = null;
-					//int matchesThisFile = 0;
-					boolean readThis = true;
-					List<String> theList = new ArrayList<String>();
 					try{
 						s = new Scanner(new BufferedInputStream(new FileInputStream(directory)));
-						if(readThis){
-							while(readThis){
-								String theNextLine = null;
-								if(s.hasNextLine()){
-									theNextLine = s.nextLine();
-									if(subPattern.matcher(theNextLine).matches()){
-										theList.add(theNextLine);
-									}
-								}else{
-									readThis = false;
-								}
+						if(grepMap != null){// do grep
+							List<String> theList = new ArrayList<String>();
+							while(s.hasNextLine()){
+								String theNextLine = s.nextLine();
+								if(subPattern.matcher(theNextLine).matches())
+									theList.add(theNextLine);
 							}
-							map.put(directory, theList);
+							grepMap.put(directory, theList);
+						}else{// do line counter
+							int nuOfLines = 0;
+							while(s.hasNextLine()){
+								s.nextLine();
+								nuOfLines++;
+							}
+							lineCountMap.put(directory, nuOfLines);
 						}
 					}catch(FileNotFoundException fnfe){
-						readThis = false;
 						System.err.println("countThis: fileNotFoundException");
 					}finally{
 						s.close();
 					}
 				}
-			}else{
-				System.err.println("countThese: cannot read directory");
-			}
-		}else{
-			System.err.println("CountThese: badDirectory");
-		}
-		return map;
+			}else
+				System.err.println("CountThese: not directory or file");
+		}else
+			System.err.println("cannot read directory: " + directory.getPath());
 	}
 }

@@ -1,14 +1,9 @@
 package listem;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -33,33 +28,24 @@ public interface Grep {
 			String substringSelectionPattern, boolean recursive);
 	
 	public class GrepClass extends GLSuper implements Grep {
-		Map<File, List<String>> theMap;
-		Pattern theSubstringSelectionPattern;
-		boolean isRecursive;
-		//List<String> theList;
 		
 		public GrepClass(){
 			super();
-			theMap = new HashMap<File, List<String>>();
-			//theList = new ArrayList<String>();
 		}
 		
+		@SuppressWarnings("finally")
 		@Override
 		public Map<File, List<String>> grep(File directory, String fileSelectionPattern, String substringSelectionPattern, boolean recursive) {
-			//Pattern theFilePattern = null;
-			isRecursive = recursive;
+			if(directory == null)
+				return null;
+			HashMap<File, List<String>> theMap = new HashMap<File, List<String>>();
 			try{
-				theFileSelectionPattern = Pattern.compile(fileSelectionPattern);
-				theSubstringSelectionPattern = Pattern.compile(substringSelectionPattern);
+				FileManager.countThese(directory, recursive, Pattern.compile(fileSelectionPattern), Pattern.compile(substringSelectionPattern), theMap, null);
 			}catch(PatternSyntaxException pse){
 				return null;
-			}
-			if(directory == null){
-				return null;
-			}
-			if(countThese(directory))
+			}finally{
 				return theMap;
-			return null;
+			}
 		}
 	}
 }
