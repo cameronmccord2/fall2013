@@ -953,7 +953,7 @@ void Lex::emit(TokenType tokenType) {
 	}
 	else
 		token = new Token(tokenType, input->getTokensValue(), input->getCurrentTokensLineNumber());
-    if(tokenType != COMMENT && tokenType != EOTF)
+    if(tokenType != COMMENT)
         storeToken(token);
     else
     	delete token;

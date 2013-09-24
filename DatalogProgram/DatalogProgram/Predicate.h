@@ -11,13 +11,21 @@
 
 #include <iostream>
 #include "DatalogProgram.h"
+#include "Parameter.h"
 
 class Predicate{
 private:
     
 public:
-    Predicate();
+    Predicate(DatalogProgram *dp);
     ~Predicate();
+    string toString();
+private:
+    string identifier;
+    bool valueIsIdentifier;
+    vector<Parameter*>* parameters;
+    void readParameterList(DatalogProgram* dp);
+    void readParameter(DatalogProgram* dp);
     void parsePredicate(DatalogProgram* dp);
 };
 #endif /* defined(__DatalogProgram__Predicate__) */

@@ -11,16 +11,19 @@
 
 #include <iostream>
 #include <vector>
-#include "Predicate.h"
+#include "Rule.h"
 
+class DatalogProgram;
+class Predicate;
 class RuleList{
 private:
-    std::vector<Predicate*>* list;
+    std::vector<Rule*>* list;
 public:
     RuleList();
     ~RuleList();
-    void add(Predicate* predicate);
+    int getCount();
     std::string toString();
+    void parseRuleList(DatalogProgram* dp);
 };
 
 #endif /* defined(__DatalogProgram__RuleList__) */

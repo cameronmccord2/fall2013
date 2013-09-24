@@ -11,8 +11,9 @@
 
 #include <iostream>
 #include <vector>
-#include "Predicate.h"
-#include "DatalogProgram.h"
+
+class Predicate;
+class DatalogProgram;
 
 class SchemeList{
 private:
@@ -20,7 +21,7 @@ private:
 public:
     SchemeList();
     ~SchemeList();
-    void add(Predicate* predicate);
+    int getCount();
     std::string toString();
     void parseSchemeList(DatalogProgram* dp);
 };

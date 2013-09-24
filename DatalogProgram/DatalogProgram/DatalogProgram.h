@@ -15,6 +15,7 @@
 #include "FactList.h"
 #include "RuleList.h"
 #include "QueryList.h"
+#include "DomainList.h"
 
 class DatalogProgram{
 private:
@@ -26,6 +27,9 @@ public:
     Token* nextToken();
     Token* getCurrentToken();
     void setError(Token* token);
+    bool isSuccessful();
+    void setDomainElement(string element);
+    
 private:
     bool successful;
     Token* offendingToken;
@@ -36,5 +40,6 @@ private:
     FactList* factList;
     RuleList* ruleList;
     QueryList* queryList;
+    DomainList* domainList;
 };
 #endif /* defined(__DatalogProgram__DatalogProgram__) */

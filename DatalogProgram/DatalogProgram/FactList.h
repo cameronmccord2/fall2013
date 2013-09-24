@@ -11,7 +11,9 @@
 
 #include <iostream>
 #include <vector>
-#include "Predicate.h"
+
+class Predicate;
+class DatalogProgram;
 
 class FactList{
 private:
@@ -19,8 +21,9 @@ private:
 public:
     FactList();
     ~FactList();
-    void add(Predicate* predicate);
+    int getCount();
     std::string toString();
+    void parseFactList(DatalogProgram* dp);
 };
 
 #endif /* defined(__DatalogProgram__FactList__) */

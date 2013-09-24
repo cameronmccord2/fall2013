@@ -11,7 +11,9 @@
 
 #include <iostream>
 #include <vector>
-#include "Predicate.h"
+
+class Predicate;
+class DatalogProgram;
 
 class QueryList{
 private:
@@ -19,8 +21,9 @@ private:
 public:
     QueryList();
     ~QueryList();
-    void add(Predicate* predicate);
+    int getCount();
     std::string toString();
+    void parseQueryList(DatalogProgram* dp);
 };
 
 #endif /* defined(__DatalogProgram__QueryList__) */

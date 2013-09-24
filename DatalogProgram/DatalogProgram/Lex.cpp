@@ -173,7 +173,7 @@ char character;
 switch(state) {
 	case ProcessingComment:
 		character = input->getCurrentCharacter();
-		cout << "in comment: " << character << endl;
+//		cout << "in comment: " << character << endl;
 		if(character == '\n'){
 			emit(COMMENT);
 			result = getNextState();
@@ -335,7 +335,7 @@ char character;
 switch(state) {
 	case ProcessingId:
 		character = input->getCurrentCharacter();
-		cout << "processing id: " << character << endl;
+//		cout << "processing id: " << character << endl;
 		if(isalnum(character)){
 			result = ProcessingId;
 			input->advance();
@@ -901,7 +901,7 @@ State Lex::getNextState() {
     State result;
     char currentCharacter = input->getCurrentCharacter();
 	if(isspace(currentCharacter)){
-		cout << "Found whitespace" << endl;
+//		cout << "Found whitespace" << endl;
 		result = Whitespace;
 		input->advance();
 		input->mark();
@@ -957,7 +957,7 @@ void Lex::emit(TokenType tokenType) {
 	}
 	else
 		token = new Token(tokenType, input->getTokensValue(), input->getCurrentTokensLineNumber());
-    if(tokenType != COMMENT && tokenType != EOTF)
+    if(tokenType != COMMENT)
         storeToken(token);
     else
     	delete token;

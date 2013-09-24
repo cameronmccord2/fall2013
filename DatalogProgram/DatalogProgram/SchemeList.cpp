@@ -36,15 +36,61 @@
 //<Parameter List>  ->  <Parameter>
 //<Parameter>       ->  String | Identifier
 #include "SchemeList.h"
+#include "DatalogProgram.h"
+#include "Predicate.h"
+
+SchemeList::SchemeList(){
+    this->list = new std::vector<Predicate*>();
+}
+
+SchemeList::~SchemeList(){
+    for (size_t i = 0; i < this->list->size(); i++) {
+        delete this->list->at(i);
+    }
+    delete this->list;
+}
 
 void SchemeList::parseSchemeList(DatalogProgram* dp){
-    Token* token = dp->nextToken();
-    if (token->getTokenType() == COLON) {
-        while (dp->getCurrentToken()->getTokenType() == ID) {
-            Predicate* predicate = new Predicate();
-            predicate->parsePredicate();
-            this->add(predicate);
+    if (dp->getCurrentToken()->getTokenType() == COLON) {
+        dp->nextToken();
+        while (dp->getCurrentToken()->getTokenType() == ID && dp->isSuccessful()) {
+            this->list->push_back(new Predicate(dp));
+//            cout << "after push" << dp->getCurrentToken()->toString();
         }
+//        cout << "ended scheme list" << dp->getCurrentToken()->toString();
     }else
-        dp->setError(token);
+        dp->setError(dp->getCurrentToken());
 }
+
+std::string SchemeList::toString(){
+    std::string finalString = "";
+    for (size_t i = 0; i < this->list->size(); i++) {
+        finalString += "\t";
+        finalString += this->list->at(i)->toString();
+        finalString += "\n";
+    }
+    return finalString;
+}
+
+int SchemeList::getCount(){
+    return (int)this->list->size();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

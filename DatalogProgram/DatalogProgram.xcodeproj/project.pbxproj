@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21CF8ACE17F09E8000E9499F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8ACD17F09E8000E9499F /* main.cpp */; };
-		21CF8AD017F09E8000E9499F /* DatalogProgram.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 21CF8ACF17F09E8000E9499F /* DatalogProgram.1 */; };
 		21CF8AE317F09EF700E9499F /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AD617F09EF700E9499F /* Input.cpp */; };
 		21CF8AE417F09EF700E9499F /* Lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AD817F09EF700E9499F /* Lex.cpp */; };
 		21CF8AE517F09EF700E9499F /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8ADA17F09EF700E9499F /* State.cpp */; };
@@ -17,12 +15,13 @@
 		21CF8AE817F09EF700E9499F /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AE117F09EF700E9499F /* Utils.cpp */; };
 		21CF8AEB17F0A02700E9499F /* Predicate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AE917F0A02700E9499F /* Predicate.cpp */; };
 		21CF8AEE17F0A73A00E9499F /* DatalogProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AEC17F0A73A00E9499F /* DatalogProgram.cpp */; };
-		21CF8AF117F0A74B00E9499F /* Rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AEF17F0A74B00E9499F /* Rule.cpp */; };
 		21CF8AF417F0A75800E9499F /* Parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AF217F0A75800E9499F /* Parameter.cpp */; };
 		21CF8AFB17F0AE9A00E9499F /* SchemeList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AF917F0AE9A00E9499F /* SchemeList.cpp */; };
 		21CF8AFE17F0AEA900E9499F /* FactList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AFC17F0AEA900E9499F /* FactList.cpp */; };
 		21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AFF17F0AEBC00E9499F /* RuleList.cpp */; };
 		21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0217F0AEC700E9499F /* QueryList.cpp */; };
+		21CF8B0717F2143F00E9499F /* DomainList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0517F2143F00E9499F /* DomainList.cpp */; };
+		21CF8B0A17F2190000E9499F /* Rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0817F2190000E9499F /* Rule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,7 +31,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				21CF8AD017F09E8000E9499F /* DatalogProgram.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -40,8 +38,6 @@
 
 /* Begin PBXFileReference section */
 		21CF8ACA17F09E8000E9499F /* DatalogProgram */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DatalogProgram; sourceTree = BUILT_PRODUCTS_DIR; };
-		21CF8ACD17F09E8000E9499F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		21CF8ACF17F09E8000E9499F /* DatalogProgram.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = DatalogProgram.1; sourceTree = "<group>"; };
 		21CF8AD617F09EF700E9499F /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
 		21CF8AD717F09EF700E9499F /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
 		21CF8AD817F09EF700E9499F /* Lex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lex.cpp; sourceTree = "<group>"; };
@@ -59,8 +55,6 @@
 		21CF8AEA17F0A02700E9499F /* Predicate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Predicate.h; sourceTree = "<group>"; };
 		21CF8AEC17F0A73A00E9499F /* DatalogProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DatalogProgram.cpp; sourceTree = "<group>"; };
 		21CF8AED17F0A73A00E9499F /* DatalogProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatalogProgram.h; sourceTree = "<group>"; };
-		21CF8AEF17F0A74B00E9499F /* Rule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rule.cpp; sourceTree = "<group>"; };
-		21CF8AF017F0A74B00E9499F /* Rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rule.h; sourceTree = "<group>"; };
 		21CF8AF217F0A75800E9499F /* Parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parameter.cpp; sourceTree = "<group>"; };
 		21CF8AF317F0A75800E9499F /* Parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parameter.h; sourceTree = "<group>"; };
 		21CF8AF917F0AE9A00E9499F /* SchemeList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SchemeList.cpp; sourceTree = "<group>"; };
@@ -71,6 +65,12 @@
 		21CF8B0017F0AEBC00E9499F /* RuleList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuleList.h; sourceTree = "<group>"; };
 		21CF8B0217F0AEC700E9499F /* QueryList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QueryList.cpp; sourceTree = "<group>"; };
 		21CF8B0317F0AEC700E9499F /* QueryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryList.h; sourceTree = "<group>"; };
+		21CF8B0517F2143F00E9499F /* DomainList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DomainList.cpp; sourceTree = "<group>"; };
+		21CF8B0617F2143F00E9499F /* DomainList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DomainList.h; sourceTree = "<group>"; };
+		21CF8B0817F2190000E9499F /* Rule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rule.cpp; sourceTree = "<group>"; };
+		21CF8B0917F2190000E9499F /* Rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rule.h; sourceTree = "<group>"; };
+		21CF8B0E17F2202B00E9499F /* in21.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in21.txt; sourceTree = "<group>"; };
+		21CF8B1217F2336800E9499F /* in22.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in22.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +106,6 @@
 				21CF8AF617F0A77700E9499F /* Source */,
 				21CF8AF517F0A76A00E9499F /* other */,
 				21CF8AF717F0A78800E9499F /* Lexical Analyzer */,
-				21CF8ACD17F09E8000E9499F /* main.cpp */,
 				21CF8AF817F0A79700E9499F /* Parser */,
 			);
 			path = DatalogProgram;
@@ -115,7 +114,6 @@
 		21CF8AF517F0A76A00E9499F /* other */ = {
 			isa = PBXGroup;
 			children = (
-				21CF8ACF17F09E8000E9499F /* DatalogProgram.1 */,
 			);
 			name = other;
 			sourceTree = "<group>";
@@ -124,6 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				21CF8ADC17F09EF700E9499F /* testFile1.txt */,
+				21CF8B0E17F2202B00E9499F /* in21.txt */,
+				21CF8B1217F2336800E9499F /* in22.txt */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -154,8 +154,6 @@
 				21CF8AEA17F0A02700E9499F /* Predicate.h */,
 				21CF8AEC17F0A73A00E9499F /* DatalogProgram.cpp */,
 				21CF8AED17F0A73A00E9499F /* DatalogProgram.h */,
-				21CF8AEF17F0A74B00E9499F /* Rule.cpp */,
-				21CF8AF017F0A74B00E9499F /* Rule.h */,
 				21CF8AF217F0A75800E9499F /* Parameter.cpp */,
 				21CF8AF317F0A75800E9499F /* Parameter.h */,
 				21CF8AF917F0AE9A00E9499F /* SchemeList.cpp */,
@@ -166,6 +164,10 @@
 				21CF8B0017F0AEBC00E9499F /* RuleList.h */,
 				21CF8B0217F0AEC700E9499F /* QueryList.cpp */,
 				21CF8B0317F0AEC700E9499F /* QueryList.h */,
+				21CF8B0517F2143F00E9499F /* DomainList.cpp */,
+				21CF8B0617F2143F00E9499F /* DomainList.h */,
+				21CF8B0817F2190000E9499F /* Rule.cpp */,
+				21CF8B0917F2190000E9499F /* Rule.h */,
 			);
 			name = Parser;
 			sourceTree = "<group>";
@@ -222,19 +224,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				21CF8AE417F09EF700E9499F /* Lex.cpp in Sources */,
+				21CF8B0A17F2190000E9499F /* Rule.cpp in Sources */,
 				21CF8AE717F09EF700E9499F /* TokenType.cpp in Sources */,
 				21CF8AE817F09EF700E9499F /* Utils.cpp in Sources */,
+				21CF8B0717F2143F00E9499F /* DomainList.cpp in Sources */,
 				21CF8AE617F09EF700E9499F /* Token.cpp in Sources */,
 				21CF8AEE17F0A73A00E9499F /* DatalogProgram.cpp in Sources */,
 				21CF8AE317F09EF700E9499F /* Input.cpp in Sources */,
-				21CF8ACE17F09E8000E9499F /* main.cpp in Sources */,
 				21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */,
 				21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */,
 				21CF8AFE17F0AEA900E9499F /* FactList.cpp in Sources */,
 				21CF8AE517F09EF700E9499F /* State.cpp in Sources */,
 				21CF8AFB17F0AE9A00E9499F /* SchemeList.cpp in Sources */,
 				21CF8AEB17F0A02700E9499F /* Predicate.cpp in Sources */,
-				21CF8AF117F0A74B00E9499F /* Rule.cpp in Sources */,
 				21CF8AF417F0A75800E9499F /* Parameter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

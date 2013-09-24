@@ -80,4 +80,5 @@
 (ID,"Who",18)
 (RIGHT_PAREN,")",18)
 (Q_MARK,"?",18)
-Total Tokens = 82
+(EOF,"",18)
+Total Tokens = 83

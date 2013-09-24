@@ -11,12 +11,18 @@
 
 #include <iostream>
 
+class DatalogProgram;
 class Parameter{
 private:
     
 public:
-    Parameter();
+    Parameter(DatalogProgram *dp);
     ~Parameter();
+    std::string toString();
+private:
+    void readParameter(DatalogProgram *dp);
+    std::string value;
+    bool valueIsString;
 };
 
 #endif /* defined(__DatalogProgram__Parameter__) */
