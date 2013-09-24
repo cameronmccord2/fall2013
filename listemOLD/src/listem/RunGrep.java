@@ -40,7 +40,7 @@ public class RunGrep {
 		/**
 		 * Create an instance of your Grep here
 		 */
-		Grep grep = new listem.Grep.GrepClass();
+		Grep grep = new listem.MyGrep();
 		
 		Map<File, List<String>> result = grep.grep(new File(dirName), filePattern, searchPattern, recursive);
 		

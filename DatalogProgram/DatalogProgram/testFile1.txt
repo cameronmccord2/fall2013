@@ -1,0 +1,9 @@
+.
+,
+a1234567890
+'a string''stuff'
+#Comments get dropped
+Schemes
+FactsRules
+::-
+#| Snap(A,B,C,D)?

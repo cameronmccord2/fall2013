@@ -1,11 +1,8 @@
 package listem;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 // if no substrings matched do i still add the file to the map?
 
@@ -26,28 +23,6 @@ public interface Grep {
 	 */
 	public Map<File, List<String>> grep(File directory, String fileSelectionPattern, 
 			String substringSelectionPattern, boolean recursive);
-	
-	public class GrepClass extends GLSuper implements Grep {
-		
-		public GrepClass(){
-			super();
-		}
-		
-		@SuppressWarnings("finally")
-		@Override
-		public Map<File, List<String>> grep(File directory, String fileSelectionPattern, String substringSelectionPattern, boolean recursive) {
-			if(directory == null)
-				return null;
-			HashMap<File, List<String>> theMap = new HashMap<File, List<String>>();
-			try{
-				FileManager.countThese(directory, recursive, Pattern.compile(fileSelectionPattern), Pattern.compile(substringSelectionPattern), theMap, null);
-			}catch(PatternSyntaxException pse){
-				return null;
-			}finally{
-				return theMap;
-			}
-		}
-	}
 }
 
 

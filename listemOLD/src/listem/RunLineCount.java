@@ -35,7 +35,7 @@ public class RunLineCount {
 		/**
 		 * Create an instance of your Grep here
 		 */
-		LineCounter counter = new listem.LineCounter.LineCounterClass();
+		LineCounter counter = new listem.MyLineCount();
 		Map<File, Integer> lineCountResult = counter.countLines(new File(dirName), filePattern, recursive);
 		
 		RunLineCount.outputLineCountResult(lineCountResult);

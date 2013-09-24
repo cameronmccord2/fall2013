@@ -12,8 +12,10 @@ import java.util.regex.Pattern;
 
 public class FileManager {
 	static public void countThese(File directory, boolean recursive, Pattern filePattern, Pattern subPattern, HashMap<File, List<String>> grepMap, HashMap<File, Integer> lineCountMap){
+		//System.out.println("in file manager");
 		if(directory.canRead()){
 			if(directory.isDirectory()){
+//				System.out.println("found directory: " + directory.getAbsolutePath());
 				File[] theFiles = directory.listFiles();
 				if(theFiles != null){
 					for(int i = 0; i < theFiles.length; i++){
@@ -22,7 +24,9 @@ public class FileManager {
 					}
 				}
 			}else if(directory.isFile()){
-				if(filePattern.matcher(directory.getPath()).matches()){// or getName?
+				//System.out.println("found file: " + directory.getAbsolutePath());
+				if(filePattern.matcher(directory.getName()).matches()){// or getName?
+//					System.out.println("found match: " + directory.getAbsolutePath());
 					Scanner s = null;
 					try{
 						s = new Scanner(new BufferedInputStream(new FileInputStream(directory)));
@@ -30,10 +34,11 @@ public class FileManager {
 							List<String> theList = new ArrayList<String>();
 							while(s.hasNextLine()){
 								String theNextLine = s.nextLine();
-								if(subPattern.matcher(theNextLine).matches())
+								if(subPattern.matcher(theNextLine).find())
 									theList.add(theNextLine);
 							}
-							grepMap.put(directory, theList);
+							if(theList.size() > 0)// only do ones that had some inside the file found
+								grepMap.put(directory, theList);
 						}else{// do line counter
 							int nuOfLines = 0;
 							while(s.hasNextLine()){
