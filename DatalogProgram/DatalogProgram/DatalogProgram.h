@@ -35,7 +35,7 @@ private:
     Token* offendingToken;
     void parseTokens();
     std::vector<Token*>* tokens;
-    int currentToken;
+    size_t currentToken;
     SchemeList* schemeList;
     FactList* factList;
     RuleList* ruleList;

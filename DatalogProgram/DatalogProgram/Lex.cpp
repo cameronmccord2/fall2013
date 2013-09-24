@@ -120,7 +120,7 @@ void Lex::advance() {
 }
 
 bool Lex::hasNext() {
-    return index < tokens->size();
+    return index < (int)tokens->size();
 }
 
 State Lex::nextState2() {
