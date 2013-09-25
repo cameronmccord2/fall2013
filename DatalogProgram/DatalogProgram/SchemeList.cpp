@@ -57,6 +57,8 @@ void SchemeList::parseSchemeList(DatalogProgram* dp){
             this->list->push_back(new Predicate(dp));
 //            cout << "after push" << dp->getCurrentToken()->toString();
         }
+	if((int)this->list->size() == 0)
+		dp->setError(dp->getCurrentToken());
 //        cout << "ended scheme list" << dp->getCurrentToken()->toString();
     }else
         dp->setError(dp->getCurrentToken());

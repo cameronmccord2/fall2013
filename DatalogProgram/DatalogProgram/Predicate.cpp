@@ -79,8 +79,12 @@ void Predicate::readParameterList(DatalogProgram *dp){
             this->parameters->push_back(parameter);
             if (dp->nextToken()->getTokenType() == COMMA) {// the last parameter wont have a token afterwards
                 dp->nextToken();
+		if(dp->getCurrentToken()->getTokenType() != STRING && dp->getCurrentToken()->getTokenType() != ID)
+			dp->setError(dp->getCurrentToken());
             }
         }
+	if((int)this->parameters->size() == 0)
+		dp->setError(dp->getCurrentToken());
 //        cout << "finished reading parameter list" << endl;
         return;
     }else

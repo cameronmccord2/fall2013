@@ -10,6 +10,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+// nothing in rule list after :-
 
 DatalogProgram::DatalogProgram(vector<Token*>* tokens){
     this->successful = true;
@@ -64,40 +65,30 @@ bool DatalogProgram::isSuccessful(){
 }
 
 void DatalogProgram::parseTokens(){
-    while (this->getCurrentToken()->getTokenType() != EOTF && this->isSuccessful()) {
-//        cout << "token type: " << this->getCurrentToken()->getTokenType() << ", facts: " << FACTS << endl;
-        switch (this->getCurrentToken()->getTokenType()) {
-            case SCHEMES:
-//                cout << "going to read shcememe";
-                this->nextToken();
-                this->schemeList->parseSchemeList(this);
-//                cout << "after after schemem list" << this->getCurrentToken()->toString();
-                break;
                 
-            case FACTS:
-//                cout << "going to read facts" << endl;
-                this->nextToken();
+		if(this->getCurrentToken()->getTokenType() == SCHEMES){
+this->nextToken();
+                	this->schemeList->parseSchemeList(this);
+		}else
+			this->setError(this->getCurrentToken());
+                
+if(this->getCurrentToken()->getTokenType() == FACTS){
+this->nextToken();
                 this->factList->parseFactList(this);
-                break;
+}else
+			this->setError(this->getCurrentToken());
                 
-            case RULES:
-//                cout << "going to read rules" << endl;
-                this->nextToken();
+if(this->getCurrentToken()->getTokenType() == RULES){
+this->nextToken();
                 this->ruleList->parseRuleList(this);
-                break;
+}else
+			this->setError(this->getCurrentToken());
                 
-            case QUERIES:
-//                cout << "going to read queries" << endl;
-                this->nextToken();
+if(this->getCurrentToken()->getTokenType() == QUERIES){
+this->nextToken();
                 this->queryList->parseQueryList(this);
-                break;
-                
-            default:
-//                cout << "failed on default" << this->getCurrentToken()->toString();
-                this->setError(this->getCurrentToken());
-                break;
-        }
-    }
+}else
+			this->setError(this->getCurrentToken());
     if (this->getCurrentToken()->getTokenType() == EOTF) {
         return;
     }else if (this->isSuccessful()){
