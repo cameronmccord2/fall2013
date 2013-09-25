@@ -10,7 +10,7 @@
 #define __DatalogProgram__DomainList__
 
 #include <iostream>
-#include <vector>
+#include <set>
 
 class DomainList{
 public:
@@ -20,6 +20,6 @@ public:
     void setDomainElement(std::string element);
     std::string toString();
 private:
-    std::vector<std::string>* elements;
+    std::set<std::string>* elements;
 };
 #endif /* defined(__DatalogProgram__DomainList__) */

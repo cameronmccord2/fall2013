@@ -9,7 +9,7 @@
 #include "DomainList.h"
 
 DomainList::DomainList(){
-    this->elements = new std::vector<std::string>();
+    this->elements = new std::set<std::string>();
 }
 
 DomainList::~DomainList(){
@@ -17,12 +17,7 @@ DomainList::~DomainList(){
 }
 
 void DomainList::setDomainElement(std::string element){
-    for (size_t i = 0; i < this->elements->size(); i++) {
-        if (elements->at(i) == element) {
-            return;
-        }
-    }
-    this->elements->push_back(element);
+    this->elements->insert(element);
 }
 
 int DomainList::getCount(){
@@ -31,13 +26,21 @@ int DomainList::getCount(){
 
 std::string DomainList::toString(){
     std::string finalString = "";
-    for (size_t i = 0; i < this->elements->size(); i++) {
-        finalString += "\t'";
-        finalString += this->elements->at(i);
+    for(std::set<std::string>::iterator it=this->elements->begin(); it!= this->elements->end(); ++it){
+        finalString += "  '";
+        finalString += *it;
         finalString += "'";
-        if (i != this->elements->size() - 1) {
+        if (it != this->elements->end()) {
             finalString += "\n";
         }
     }
+//    for (size_t i = 0; i < this->elements->size(); i++) {
+//        finalString += "\t'";
+//        finalString += this->elements->at(i);
+//        finalString += "'";
+//        if (i != this->elements->size() - 1) {
+//            finalString += "\n";
+//        }
+//    }
     return finalString;
 }

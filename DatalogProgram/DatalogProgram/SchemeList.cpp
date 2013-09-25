@@ -65,7 +65,7 @@ void SchemeList::parseSchemeList(DatalogProgram* dp){
 std::string SchemeList::toString(){
     std::string finalString = "";
     for (size_t i = 0; i < this->list->size(); i++) {
-        finalString += "\t";
+        finalString += "  ";
         finalString += this->list->at(i)->toString();
         finalString += "\n";
     }
