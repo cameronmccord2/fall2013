@@ -60,26 +60,30 @@ void RuleList::parseRuleList(DatalogProgram *dp){
             rule->firstPredicate = new Predicate(dp);
 //            dp->nextToken();
 //            cout << "should be colon dash" << dp->getCurrentToken()->toString();
-            if(dp->getCurrentToken()->getTokenType() == COLON_DASH){
-//                cout << "should be colon dash" << dp->getCurrentToken()->toString();
-                dp->nextToken();
-                while (dp->getCurrentToken()->getTokenType() == ID && dp->isSuccessful()) {
-                    rule->list->push_back(new Predicate(dp));
-                    if (dp->getCurrentToken()->getTokenType() == COMMA) {
-                        dp->nextToken();
-                    }
-                }
-                if (dp->getCurrentToken()->getTokenType() == PERIOD) {
-                    this->list->push_back(rule);
-                    dp->nextToken();
-                }else
-                    dp->setError(dp->getCurrentToken());
-            }else{
-                dp->setError(dp->getCurrentToken());
-            }
+            this->parseRuleList2(dp, rule);
         }
     }else
         dp->setError(dp->getCurrentToken());
+}
+
+void RuleList::parseRuleList2(DatalogProgram *dp, Rule *rule){
+    if(dp->getCurrentToken()->getTokenType() == COLON_DASH){
+    //                cout << "should be colon dash" << dp->getCurrentToken()->toString();
+        dp->nextToken();
+        while (dp->getCurrentToken()->getTokenType() == ID && dp->isSuccessful()) {
+            rule->list->push_back(new Predicate(dp));
+            if (dp->getCurrentToken()->getTokenType() == COMMA) {
+                dp->nextToken();
+            }
+        }
+        if (dp->getCurrentToken()->getTokenType() == PERIOD) {
+            this->list->push_back(rule);
+            dp->nextToken();
+        }else
+            dp->setError(dp->getCurrentToken());
+    }else{
+        dp->setError(dp->getCurrentToken());
+    }
 }
 
 std::string RuleList::toString(){

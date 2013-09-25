@@ -24,6 +24,7 @@ public:
     int getCount();
     std::string toString();
     void parseRuleList(DatalogProgram* dp);
+    void parseRuleList2(DatalogProgram *dp, Rule *rule);
 };
 
 #endif /* defined(__DatalogProgram__RuleList__) */

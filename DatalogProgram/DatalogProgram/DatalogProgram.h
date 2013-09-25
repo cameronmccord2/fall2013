@@ -29,7 +29,7 @@ public:
     void setError(Token* token);
     bool isSuccessful();
     void setDomainElement(string element);
-    
+    void writeToFile(char* filename);
 private:
     bool successful;
     Token* offendingToken;

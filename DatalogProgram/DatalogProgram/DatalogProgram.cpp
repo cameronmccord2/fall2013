@@ -8,6 +8,8 @@
 
 #include "DatalogProgram.h"
 #include <sstream>
+#include <iostream>
+#include <fstream>
 
 DatalogProgram::DatalogProgram(vector<Token*>* tokens){
     this->successful = true;
@@ -24,7 +26,11 @@ DatalogProgram::DatalogProgram(vector<Token*>* tokens){
 }
 
 DatalogProgram::~DatalogProgram(){
-    // TODO delete everything
+    delete this->factList;
+    delete this->schemeList;
+    delete this->ruleList;
+    delete this->queryList;
+    delete this->domainList;
 }
 
 Token* DatalogProgram::nextToken(){
@@ -109,14 +115,25 @@ string DatalogProgram::toString(){
         return "Failure!\n\t" + this->offendingToken->toString();
 }
 
+void DatalogProgram::writeToFile(char* filename){
+    try{
+        ofstream myfile;
+        myfile.open(filename);
+        myfile << this->toString();
+        myfile.close();
+    }catch(exception& e){
+        e.what();
+    }
+}
+
 int main(int argc, char* argv[]) {
 	Lex *lex = NULL;
     DatalogProgram *dp = NULL;
 	try{
-//        lex = new Lex(argv[1]);
-        lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in21.txt");
+        lex = new Lex(argv[1]);
+        // lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in21.txt");
         dp = new DatalogProgram(lex->getTokens());
-        cout << dp->toString();
+        dp->writeToFile(argv[2]);
 	}catch(exception& e){
 		e.what();
 	}
