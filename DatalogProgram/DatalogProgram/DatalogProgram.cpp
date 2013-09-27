@@ -118,14 +118,15 @@ void DatalogProgram::writeToFile(char* filename){
 }
 
 int main(int argc, char* argv[]) {
+    cout << "test";
 	Lex *lex = NULL;
     DatalogProgram *dp = NULL;
 	try{
-        lex = new Lex(argv[1]);
-        //lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in21.txt");
+//        lex = new Lex(argv[1]);
+        lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in21.txt");
         dp = new DatalogProgram(lex->getTokens());
-        dp->writeToFile(argv[2]);
-        //cout << dp->toString();
+//        dp->writeToFile(argv[2]);
+        cout << dp->toString();
 	}catch(exception& e){
 		e.what();
 	}
