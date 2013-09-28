@@ -74,10 +74,12 @@ void RuleList::parseRuleList2(DatalogProgram *dp, Rule *rule){
             rule->list->push_back(new Predicate(dp));
             if (dp->getCurrentToken()->getTokenType() == COMMA) {
                 dp->nextToken();
+		if(dp->getCurrentToken()->getTokenType() != ID)
+			dp->setError(dp->getCurrentToken());
             }
         }
-        if((int)rule->list->size() == 0)
-            dp->setError(dp->getCurrentToken());
+	if((int)rule->list->size() == 0)
+		dp->setError(dp->getCurrentToken());
         if (dp->getCurrentToken()->getTokenType() == PERIOD) {
             this->list->push_back(rule);
             dp->nextToken();
