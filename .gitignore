@@ -7,3 +7,8 @@
 /bin
 /debug
 /target
+.DS_STORE
+*.orig
+/listemOLD/bin
+/EvilHangman/bin
+/EvilHangman/src/hangman/*.class
