@@ -17,10 +17,11 @@ class DatalogProgram;
 
 class QueryList{
 private:
-    std::vector<Predicate*>* list;
+    
 public:
     QueryList();
     ~QueryList();
+    std::vector<Predicate*>* list;
     int getCount();
     std::string toString();
     void parseQueryList(DatalogProgram* dp);

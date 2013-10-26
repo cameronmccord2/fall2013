@@ -1,0 +1,46 @@
+CREATE TABLE users(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT,
+	firstName	String 			NOT NULL,
+	lastName	String			NOT NULL,
+	email 		String			NOT NULL,
+	userName	String			NOT NULL,
+	password	String 			NOT NULL,
+	indexedRecords Integer	default 0	NOT NULL
+);
+
+CREATE TABLE projects(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT,
+	title 		String 			NOT NULL,
+	recordsPerImage Integer 	NOT NULL,
+	firstYCoor 	Integer			NOT NULL,
+	recordHeight 	Integer		NOT NULL
+);
+
+CREATE TABLE fields(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT,
+	title 		String 			NOT NULL,
+	xcoor		Integer 		NOT NULL,
+	width 		Integer 		NOT NULL,
+	helpHtml 	String 			NULL,
+	knownData 	String 			NULL,
+	projectId 	Integer 		FOREIGN KEY projects(id) NOT NULL
+);
+
+CREATE TABLE images(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT,
+	file 		String 			NOT NULL,
+	projectId 	Integer 		FOREIGN KEY projects(id) NOT NULL,
+	userId		Integer 		FOREIGN KEY users(id) NULL,
+	finished 	Integer default 0 NOT NULL
+);
+
+CREATE TABLE records(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT,
+	imageId 	Integer 		FOREIGN KEY images(id) NOT NULL
+);
+
+CREATE TABLE values(
+	id 			Integer 		PRIMARY KEY AUTOINCREMENT,
+	recordId	Integer 		FOREIGN KEY records(id) NOT NULL,
+	value 		String			NOT NULL
+);

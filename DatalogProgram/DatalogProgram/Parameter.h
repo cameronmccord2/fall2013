@@ -19,10 +19,12 @@ public:
     Parameter(DatalogProgram *dp);
     ~Parameter();
     std::string toString();
-private:
-    void readParameter(DatalogProgram *dp);
     std::string value;
     bool valueIsString;
+    bool valueIsVariable();
+private:
+    void readParameter(DatalogProgram *dp);
+    
 };
 
 #endif /* defined(__DatalogProgram__Parameter__) */

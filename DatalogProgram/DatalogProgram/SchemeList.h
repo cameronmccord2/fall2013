@@ -17,8 +17,10 @@ class DatalogProgram;
 
 class SchemeList{
 private:
-    std::vector<Predicate*>* list;
+    
 public:
+    std::vector<Predicate*>* list;
+    Predicate* getPredicateAtIndex(int index);
     SchemeList();
     ~SchemeList();
     int getCount();

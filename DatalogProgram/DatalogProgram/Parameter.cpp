@@ -40,3 +40,7 @@ std::string Parameter::toString(){
     }
     return finalString;
 }
+
+bool Parameter::valueIsVariable(){
+    return !this->valueIsString;
+}

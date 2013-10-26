@@ -106,7 +106,9 @@ string Predicate::toString(){
 }
 
 
-
+string Predicate::getIdentifier(){
+    return this->identifier;
+}
 
 
 

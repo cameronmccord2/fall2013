@@ -20,10 +20,12 @@ public:
     Predicate(DatalogProgram *dp);
     ~Predicate();
     string toString();
-private:
     string identifier;
     bool valueIsIdentifier;
     vector<Parameter*>* parameters;
+    std::string getIdentifier();
+private:
+    
     void readParameterList(DatalogProgram* dp);
     void readParameter(DatalogProgram* dp);
     void parsePredicate(DatalogProgram* dp);

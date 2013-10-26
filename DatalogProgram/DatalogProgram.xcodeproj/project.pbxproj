@@ -22,6 +22,10 @@
 		21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0217F0AEC700E9499F /* QueryList.cpp */; };
 		21CF8B0717F2143F00E9499F /* DomainList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0517F2143F00E9499F /* DomainList.cpp */; };
 		21CF8B0A17F2190000E9499F /* Rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8B0817F2190000E9499F /* Rule.cpp */; };
+		DCEB3B76181B913000052ADA /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B74181B913000052ADA /* Database.cpp */; };
+		DCEB3B79181B913D00052ADA /* Relation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B77181B913D00052ADA /* Relation.cpp */; };
+		DCEB3B7C181B914700052ADA /* Schema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7A181B914700052ADA /* Schema.cpp */; };
+		DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7D181B915300052ADA /* Tuple.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +75,14 @@
 		21CF8B0917F2190000E9499F /* Rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rule.h; sourceTree = "<group>"; };
 		21CF8B0E17F2202B00E9499F /* in21.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in21.txt; sourceTree = "<group>"; };
 		21CF8B1217F2336800E9499F /* in22.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in22.txt; sourceTree = "<group>"; };
+		DCEB3B74181B913000052ADA /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
+		DCEB3B75181B913000052ADA /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		DCEB3B77181B913D00052ADA /* Relation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Relation.cpp; sourceTree = "<group>"; };
+		DCEB3B78181B913D00052ADA /* Relation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Relation.h; sourceTree = "<group>"; };
+		DCEB3B7A181B914700052ADA /* Schema.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Schema.cpp; sourceTree = "<group>"; };
+		DCEB3B7B181B914700052ADA /* Schema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Schema.h; sourceTree = "<group>"; };
+		DCEB3B7D181B915300052ADA /* Tuple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tuple.cpp; sourceTree = "<group>"; };
+		DCEB3B7E181B915300052ADA /* Tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tuple.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +115,7 @@
 		21CF8ACC17F09E8000E9499F /* DatalogProgram */ = {
 			isa = PBXGroup;
 			children = (
+				DCEB3B73181B8DDE00052ADA /* Database */,
 				21CF8AF617F0A77700E9499F /* Source */,
 				21CF8AF517F0A76A00E9499F /* other */,
 				21CF8AF717F0A78800E9499F /* Lexical Analyzer */,
@@ -172,6 +185,21 @@
 			name = Parser;
 			sourceTree = "<group>";
 		};
+		DCEB3B73181B8DDE00052ADA /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				DCEB3B74181B913000052ADA /* Database.cpp */,
+				DCEB3B75181B913000052ADA /* Database.h */,
+				DCEB3B77181B913D00052ADA /* Relation.cpp */,
+				DCEB3B78181B913D00052ADA /* Relation.h */,
+				DCEB3B7A181B914700052ADA /* Schema.cpp */,
+				DCEB3B7B181B914700052ADA /* Schema.h */,
+				DCEB3B7D181B915300052ADA /* Tuple.cpp */,
+				DCEB3B7E181B915300052ADA /* Tuple.h */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -223,14 +251,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCEB3B79181B913D00052ADA /* Relation.cpp in Sources */,
 				21CF8AE417F09EF700E9499F /* Lex.cpp in Sources */,
 				21CF8B0A17F2190000E9499F /* Rule.cpp in Sources */,
+				DCEB3B76181B913000052ADA /* Database.cpp in Sources */,
 				21CF8AE717F09EF700E9499F /* TokenType.cpp in Sources */,
 				21CF8AE817F09EF700E9499F /* Utils.cpp in Sources */,
 				21CF8B0717F2143F00E9499F /* DomainList.cpp in Sources */,
 				21CF8AE617F09EF700E9499F /* Token.cpp in Sources */,
+				DCEB3B7C181B914700052ADA /* Schema.cpp in Sources */,
 				21CF8AEE17F0A73A00E9499F /* DatalogProgram.cpp in Sources */,
 				21CF8AE317F09EF700E9499F /* Input.cpp in Sources */,
+				DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */,
 				21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */,
 				21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */,
 				21CF8AFE17F0AEA900E9499F /* FactList.cpp in Sources */,
@@ -345,6 +377,7 @@
 				21CF8AD517F09E8000E9499F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

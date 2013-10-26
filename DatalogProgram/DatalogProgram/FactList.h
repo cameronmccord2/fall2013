@@ -17,10 +17,11 @@ class DatalogProgram;
 
 class FactList{
 private:
-    std::vector<Predicate*>* list;
+    
 public:
     FactList();
     ~FactList();
+    std::vector<Predicate*>* list;
     int getCount();
     std::string toString();
     void parseFactList(DatalogProgram* dp);

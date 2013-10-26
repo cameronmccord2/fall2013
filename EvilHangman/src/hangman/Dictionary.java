@@ -112,8 +112,6 @@ public class Dictionary {
 					if(rightMostKeys.size() == 0)
 						throw new RuntimeException("error, no chars returned from getRightMostCharacterKeyList");
 					if(rightMostKeys.size() == 1){
-//						System.out.println("success 3");
-//						System.out.println(rightMostKeys.toString());
 						this.lastSet = newMap.get(rightMostKeys.get(0));
 						return this.lastSet;
 					}else{
