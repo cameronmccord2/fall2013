@@ -122,14 +122,19 @@ Relation* Relation::project1(vector<int>* indexes){
     return this;
 }
 
-Relation* Relation::project(){// removes constants that we have already found
-    vector<int>* indexes = new vector<int>();// indexes of non-variables
+Relation* Relation::project2(vector<int>* indexes){
     for (size_t i = 0; i < this->queryParams->size(); i++) {// get indexes of non-variables
         Parameter *p = this->queryParams->at(i);
         if(p->valueIsString){
             indexes->push_back((int)i);
         }
     }
+    return this;
+}
+
+Relation* Relation::project(){// removes constants that we have already found
+    vector<int>* indexes = new vector<int>();// indexes of non-variables
+    this->project2(indexes);
     if (indexes->size() == 0) {
         delete indexes;
         return this;
@@ -181,6 +186,90 @@ void Database::addVariableToDoneKeys(int position, string value){
     this->variablePositions2->find(value)->second->push_back(position);
 }
 
+Relation* Relation::reduceSideways2(Relation *query, Database *db){
+    bool finishedRemovingDuplicates = false;
+    while (!finishedRemovingDuplicates) {
+        set<int> pos = set<int>();
+        for (size_t k = 0; k < this->variableNames->size(); k++) {// itemize duplicate variables
+            for (size_t l = 0; l < this->variableNames->size(); l++) {
+                if (l <= k) {
+                    continue;
+                }
+                if (this->variableNames->at(k) == this->variableNames->at(l)) {
+                    pos.insert((int)l);
+                }
+            }
+        }
+        
+        if (pos.size() == 0) {
+            finishedRemovingDuplicates = true;
+            continue;
+        }
+        // delete duplicates
+        set<int>::reverse_iterator rit;
+        for (rit = pos.rbegin(); rit != pos.rend(); ++rit) {// reverse loop positions that need to be deleted
+            int t = *rit;
+            
+            this->variableNames->erase(this->variableNames->begin() + t);
+            
+            this->deleteTupleValueAtPosition(t);
+        }
+    }
+    return this;
+}
+
+Relation* Relation::reduceSideways(Relation *query, Database *db){
+    // relation has had all the constants removed, now do variables, find any that are the same
+    for (size_t k = 0; k < query->keys->size(); k++) {
+        vector<int> *positions = db->variablePositions->find(query->keys->at(k))->second;
+        if (positions->size() == 1) {
+            continue;
+        }
+        for (size_t l = 0; l < positions->size(); l++) {// keep the tuples that have the same value in both positions
+            this->selectVariable(positions->at(0), positions->at(l+1));// always compare the 0 position to whatever is next
+            if (positions->size() - 2 == l) {// last one
+                break;
+            }
+        }
+    }
+    
+    
+    this->reduceSideways2(query, db);
+    
+    
+    delete query->keys;
+    query->tuples = this->tuples;
+    query->variableNames = this->variableNames;
+    return query;
+}
+
+Relation* Relation::reduceVertical(Relation* query, Database *db){
+    for (size_t a = 0; a < this->variableNames->size(); a++) {// rename the variables to something that will for sure never be given in their test code, helpful?
+        this->variableNames->at(a) = this->variableNames->at(a) + "Cameron";
+    }
+    
+    this->queryParams = query->queryParams;
+    query->keys = new vector<string>();// This itemizes the query's variable names, later we can keep all tuples that are the same for keys that have multiple indexes in the result data columns - slam(X, X, A)// make sure Xs are the same
+    
+    for (size_t k = 0; k < query->queryParams->size();) {// check each param in the query
+        Parameter *parameter = query->queryParams->at(k);
+        if (parameter->valueIsString) {
+            this->selectConstant((int)k, parameter->value);// gives all tuples back that match string for that column
+            k++;
+        }else{// value is a variable
+            //   query column             table column
+            if (parameter->value == this->variableNames->at(k)) {
+                db->addVariableToSet((int)k, parameter->value);// variable name in the query is the same as the column name in the fact list
+                query->keys->push_back(parameter->value);// add to later check for possible duplicate keys
+                k++;
+            }else{
+                this->rename((int)k, parameter->value);// must need to rename the column name to be the query's variable name
+            }
+        }
+    }
+    return this;
+}
+
 bool Database::run(){
     for (size_t i = 0; i < this->queries->size(); i++) {// run all queries
         Relation *query = this->queries->at(i);
@@ -191,81 +280,12 @@ bool Database::run(){
             
             if (relation->name == query->name) {// this should only ever happen once
                 
-                for (size_t a = 0; a < relation->variableNames->size(); a++) {// rename the variables to something that will for sure never be given in their test code, helpful?
-                    relation->variableNames->at(a) = relation->variableNames->at(a) + "Cameron";
-                }
-                
-                relation->queryParams = query->queryParams;
-                query->keys = new vector<string>();// This itemizes the query's variable names, later we can keep all tuples that are the same for keys that have multiple indexes in the result data columns - slam(X, X, A)// make sure Xs are the same
-                
-                for (size_t k = 0; k < query->queryParams->size();) {// check each param in the query
-                    Parameter *parameter = query->queryParams->at(k);
-                    if (parameter->valueIsString) {
-                        relation = relation->selectConstant((int)k, parameter->value);// gives all tuples back that match string for that column
-                        k++;
-                    }else{// value is a variable
-                        //   query column             table column
-                        if (parameter->value == relation->variableNames->at(k)) {
-                            this->addVariableToSet((int)k, parameter->value);// variable name in the query is the same as the column name in the fact list
-                            query->keys->push_back(parameter->value);// add to later check for possible duplicate keys
-                            k++;
-                        }else{
-                            relation->rename((int)k, parameter->value);// must need to rename the column name to be the query's variable name
-                        }
-                    }
-                }
+                relation->reduceVertical(query, this);
                 
                 relation->project();// do projection, remove all constants in the result data, these we dont care about now
                 
+                query = relation->reduceSideways(query, this);
                 
-                // relation has had all the constants removed, now do variables, find any that are the same
-                for (size_t k = 0; k < query->keys->size(); k++) {
-                    vector<int> *positions = this->variablePositions->find(query->keys->at(k))->second;
-                    if (positions->size() == 1) {
-                        continue;
-                    }
-                    for (size_t l = 0; l < positions->size(); l++) {// keep the tuples that have the same value in both positions
-                        relation = relation->selectVariable(positions->at(0), positions->at(l+1));// always compare the 0 position to whatever is next
-                        if (positions->size() - 2 == l) {// last one
-                            break;
-                        }
-                    }
-                }
-                
-                
-                bool finishedRemovingDuplicates = false;
-                while (!finishedRemovingDuplicates) {
-                    set<int> pos = set<int>();
-                    for (size_t k = 0; k < relation->variableNames->size(); k++) {// itemize duplicate variables
-                        for (size_t l = 0; l < relation->variableNames->size(); l++) {
-                            if (l <= k) {
-                                continue;
-                            }
-                            if (relation->variableNames->at(k) == relation->variableNames->at(l)) {
-                                pos.insert((int)l);
-                            }
-                        }
-                    }
-                    
-                    if (pos.size() == 0) {
-                        finishedRemovingDuplicates = true;
-                        continue;
-                    }
-                    // delete duplicates
-                    set<int>::reverse_iterator rit;
-                    for (rit = pos.rbegin(); rit != pos.rend(); ++rit) {// reverse loop positions that need to be deleted
-                        int t = *rit;
-                        
-                        relation->variableNames->erase(relation->variableNames->begin() + t);
-                        
-                        relation = relation->deleteTupleValueAtPosition(t);
-                    }
-                }
-                
-                
-                delete query->keys;
-                query->tuples = relation->tuples;
-                query->variableNames = relation->variableNames;
                 break;
             }
         }

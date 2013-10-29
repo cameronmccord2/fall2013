@@ -392,11 +392,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "Database::run()"
             landmarkType = "5">
             <Locations>
@@ -452,11 +452,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
             landmarkName = "Database::run()"
             landmarkType = "5">
             <Locations>
@@ -512,11 +512,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -528,89 +528,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777582.012599"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "3187">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777582.012933"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "196"
-                  endingLineNumber = "196"
-                  offsetFromSymbolStart = "3244">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "285"
+            endingLineNumber = "285"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -628,22 +550,6 @@
             startingLineNumber = "69"
             endingLineNumber = "69"
             landmarkName = "Relation::selectConstant(int position, string value)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
-            landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -702,11 +608,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778146.50653"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -718,11 +624,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778137.16069"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -734,11 +640,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778146.50653"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -750,57 +656,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404760020.874971"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "180"
-                  endingLineNumber = "180"
-                  offsetFromSymbolStart = "2233">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404760020.875251"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "180"
-                  endingLineNumber = "180"
-                  offsetFromSymbolStart = "3615">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "Database::addVariableToSet(int position, string value)"
             landmarkType = "5">
             <Locations>
@@ -870,57 +730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404760910.684336"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "171"
-                  endingLineNumber = "171"
-                  offsetFromSymbolStart = "357">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404760910.684671"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "171"
-                  endingLineNumber = "171"
-                  offsetFromSymbolStart = "1709">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -932,11 +746,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "Database::run()"
             landmarkType = "5">
             <Locations>
@@ -1038,27 +852,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "Database::run()"
             landmarkType = "5">
          </BreakpointContent>
@@ -1070,11 +868,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778146.50653"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "300"
-            endingLineNumber = "300"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "Relation::toStringRemainingTuples()"
             landmarkType = "5">
             <Locations>
@@ -1206,22 +1004,6 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "208"
-            endingLineNumber = "208"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
             timestampString = "404776665.801016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
@@ -1268,11 +1050,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778146.50653"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
             landmarkName = "Relation::toStringRemainingTuples()"
             landmarkType = "5">
          </BreakpointContent>
@@ -1284,11 +1066,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
             landmarkName = "Relation::project()"
             landmarkType = "5">
          </BreakpointContent>
@@ -1300,451 +1082,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
+            timestampString = "404783618.37226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404774555.523058"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "2962">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404774555.523707"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "3176">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.264164"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "5620">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.264432"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "5691">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.264696"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "6236">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "223"
-            endingLineNumber = "223"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404776669.6234"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "5924">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404776669.623733"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "5959">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.265262"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "256"
-                  endingLineNumber = "256"
-                  offsetFromSymbolStart = "9444">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.265535"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "256"
-                  endingLineNumber = "256"
-                  offsetFromSymbolStart = "9584">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.265812"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "256"
-                  endingLineNumber = "256"
-                  offsetFromSymbolStart = "9722">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.266077"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "256"
-                  endingLineNumber = "256"
-                  offsetFromSymbolStart = "9830">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404777937.266371"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "256"
-                  endingLineNumber = "256"
-                  offsetFromSymbolStart = "11407">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778095.103578"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778345.358352"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778345.360569"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "6364">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778345.361082"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "6428">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778345.361368"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "8345">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778348.013951"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778348.028324"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "6364">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778348.028684"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "6428">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Database::run()"
-                  moduleName = "DatalogProgram"
-                  urlString = "file:///Users/taylormccord/Dropbox/Eclipse%20Workspace/fall2013/DatalogProgram/DatalogProgram/Database.cpp"
-                  timestampString = "404778348.028961"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "238"
-                  endingLineNumber = "238"
-                  offsetFromSymbolStart = "8345">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778411.096226"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
-            landmarkName = "Database::run()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DatalogProgram/Database.cpp"
-            timestampString = "404778490.746213"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
             landmarkName = "Relation::deleteTupleValueAtPosition(int pos)"
             landmarkType = "5">
             <Locations>

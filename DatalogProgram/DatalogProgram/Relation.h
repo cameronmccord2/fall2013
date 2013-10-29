@@ -15,6 +15,8 @@
 #include "Schema.h"
 #include "Parameter.h"
 
+class Database;
+
 class Relation{
 public:
     string name;
@@ -28,6 +30,10 @@ public:
     Relation(Relation *old);
     ~Relation();
     Relation* project1(vector<int>* indexes);
+    Relation* project2(vector<int>* indexes);
+    Relation* reduceSideways(Relation *query, Database *db);
+    Relation* reduceSideways2(Relation *query, Database *db);
+    Relation* reduceVertical(Relation* query, Database *db);
     Relation* selectConstant(int position, string value);
     Relation* selectVariable(int position1, int position2);
     Relation* project();

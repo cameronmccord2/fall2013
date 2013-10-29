@@ -22,7 +22,6 @@ public:
     bool run();
     void writeToFile(char* filename);
     string toString();
-private:
     vector<Relation*>* relations;
     vector<Relation*>* queries;
     vector<Relation*>* results;
@@ -31,5 +30,7 @@ private:
     map<string, vector<int>*>* variablePositions2;
     vector<Tuple*>* tuplesToDelete;
     void addVariableToDoneKeys(int position, string value);
+private:
+    
 };
 #endif /* defined(__DatalogProgram__Database__) */
