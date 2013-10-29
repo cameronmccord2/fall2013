@@ -9,8 +9,6 @@
 #ifndef __DatalogProgram__Schema__
 #define __DatalogProgram__Schema__
 
-using namespace std;
-
 #include <iostream>
 
 class Schema {

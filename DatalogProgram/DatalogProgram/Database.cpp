@@ -96,10 +96,34 @@ Relation* Relation::selectVariable(int position1, int position2){// return where
     return this;
 }
 
-Relation* Relation::project(){// removes constants that we have already found
-    vector<int>* indexes = new vector<int>();// indexes of non-variables
+Relation* Relation::project1(vector<int>* indexes){
     vector<Parameter*>* newParameters = new vector<Parameter*>();
     vector<string>* newVariableNames = new vector<string>();
+    int count = 0;
+    bool keepEverythingElse = false;
+    for (size_t i = 0; i < this->queryParams->size(); i++) {// only keep the column headers for the variable values
+        if (count == indexes->size()) {
+            keepEverythingElse = true;
+        }
+        if (keepEverythingElse || i != indexes->at(count)) {
+            newParameters->push_back(this->queryParams->at(i));// keep the column headers that we need
+            newVariableNames->push_back(this->variableNames->at(i));
+        }else
+            count++;
+        //        else
+        //            delete this->queryParams->at(i);// this is not needed because the parameters will be deleted when we delete dp
+    }
+    this->queryParams->clear();
+    delete this->queryParams;
+    this->queryParams = newParameters;
+    this->variableNames->clear();
+    delete this->variableNames;
+    this->variableNames = newVariableNames;
+    return this;
+}
+
+Relation* Relation::project(){// removes constants that we have already found
+    vector<int>* indexes = new vector<int>();// indexes of non-variables
     for (size_t i = 0; i < this->queryParams->size(); i++) {// get indexes of non-variables
         Parameter *p = this->queryParams->at(i);
         if(p->valueIsString){
@@ -108,8 +132,6 @@ Relation* Relation::project(){// removes constants that we have already found
     }
     if (indexes->size() == 0) {
         delete indexes;
-        delete newParameters;
-        delete newVariableNames;
         return this;
     }
     int count = 0;
@@ -135,28 +157,7 @@ Relation* Relation::project(){// removes constants that we have already found
     this->tuples->clear();// remove the tuples because they are referenced in dp still
     delete this->tuples;// delete the old set
     this->tuples = newTuples;
-    
-    count = 0;
-    bool keepEverythingElse = false;
-    for (size_t i = 0; i < this->queryParams->size(); i++) {// only keep the column headers for the variable values
-        if (count == indexes->size()) {
-            keepEverythingElse = true;
-        }
-        if (keepEverythingElse || i != indexes->at(count)) {
-            newParameters->push_back(this->queryParams->at(i));// keep the column headers that we need
-            newVariableNames->push_back(this->variableNames->at(i));
-        }else
-            count++;
-//        else
-//            delete this->queryParams->at(i);// this is not needed because the parameters will be deleted when we delete dp
-    }
-    this->queryParams->clear();
-    delete this->queryParams;
-    this->queryParams = newParameters;
-    this->variableNames->clear();
-    delete this->variableNames;
-    this->variableNames = newVariableNames;
-    
+    this->project1(indexes);
     delete indexes;
     return this;
 }

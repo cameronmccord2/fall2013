@@ -9,8 +9,6 @@
 #ifndef __DatalogProgram__Relation__
 #define __DatalogProgram__Relation__
 
-using namespace std;
-
 #include <iostream>
 #include <set>
 #include "Tuple.h"
@@ -29,6 +27,7 @@ public:
     Relation();
     Relation(Relation *old);
     ~Relation();
+    Relation* project1(vector<int>* indexes);
     Relation* selectConstant(int position, string value);
     Relation* selectVariable(int position1, int position2);
     Relation* project();
