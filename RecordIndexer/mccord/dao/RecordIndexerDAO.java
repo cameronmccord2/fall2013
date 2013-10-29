@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import server.FailedException;
 import server.InvalidCredentialsException;
-
 import communicator.DownloadBatchParams;
 import communicator.DownloadBatchResult;
 import communicator.DownloadFileParams;
@@ -20,7 +19,6 @@ import communicator.SubmitBatchParams;
 import communicator.SubmitBatchResult;
 import communicator.ValidateUserParams;
 import communicator.ValidateUserResult;
-
 import models.FieldValues;
 import models.Fields;
 import models.Images;
@@ -105,6 +103,20 @@ public interface RecordIndexerDAO {
 	 * @throws FailedException the failed exception
 	 */
 	public DownloadFileResult downloadFile(DownloadFileParams params) throws FailedException;
+
+	void resetDatabase();
+
+	public void putUser(Users u);
+
+	public Integer putProject(Projects p);
+
+	public Integer putField(Fields f);
+
+	public Integer putImage(Images i);
+
+	public Integer putRecord(Records r);
+
+	public Integer putFieldValue(FieldValues fv, Integer id);
 	
 	
 	

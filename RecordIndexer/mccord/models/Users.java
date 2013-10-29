@@ -1,5 +1,9 @@
 package models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Users.
@@ -151,5 +155,33 @@ public class Users {
 	 */
 	public void setIndexedRecords(Integer indexedRecords) {
 		this.indexedRecords = indexedRecords;
+	}
+
+	/*
+	 * protected Integer id;
+protected String firstName;
+protected String lastName;
+protected String email;
+protected String userName;
+protected String password;
+protected Integer indexedRecords;
+	 */
+	public static ArrayList<Users> parseResultSet(ResultSet resultSet) {
+		ArrayList<Users> responses = new ArrayList<Users>();
+    	try{
+			while(resultSet.next()){
+				Users response = new Users();
+				response.setId(resultSet.getInt("id"));
+				response.setFirstName(resultSet.getString("firstName"));
+				response.setLastName(resultSet.getString("lastName"));
+				response.setEmail(resultSet.getString("email"));
+				response.setUserName(resultSet.getString("username"));
+				response.setPassword(resultSet.getString("passwrod"));
+				responses.add(response);
+			}
+    	}catch(SQLException e){
+    		throw new RuntimeException(e);
+    	}
+    	return responses;
 	}
 }

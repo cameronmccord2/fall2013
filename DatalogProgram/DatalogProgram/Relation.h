@@ -22,16 +22,21 @@ public:
     string name;
     vector<string>* variableNames;
     vector<Parameter*>* queryParams;
-    set<Tuple*>* tuples;
+    vector<Parameter*>* originalQueryParams;
+    set<Tuple>* tuples;
     Relation *result;
     vector<string>* keys;
     Relation();
+    Relation(Relation *old);
     ~Relation();
     Relation* selectConstant(int position, string value);
     Relation* selectVariable(int position1, int position2);
-    Relation* project(int position, string toValue);
+    Relation* project();
     Relation* rename(int position, string toValue);
     vector<Relation*>* relationsToDelete;
+    string toStringRemainingTuples();
+    string toStringOriginalQueryColumns();
+    Relation* deleteTupleValueAtPosition(int pos);
 private:
     
 };

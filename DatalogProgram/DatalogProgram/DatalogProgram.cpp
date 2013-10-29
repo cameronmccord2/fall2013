@@ -121,11 +121,15 @@ int main(int argc, char* argv[]) {
 	Lex *lex = NULL;
     DatalogProgram *dp = NULL;
     Database *d = NULL;
+    string temp;
 	try{
-        lex = new Lex(argv[1]);
-        //lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in21.txt");
+//        lex = new Lex(argv[1]);
+        lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in52.txt");
         dp = new DatalogProgram(lex->getTokens());
         d = new Database(dp);
+        cout << d->toString();
+        cin >> temp;
+//        d->writeToFile(argv[2]);
 //        dp->writeToFile(argv[2]);
         //cout << dp->toString();
 	}catch(exception& e){
@@ -133,5 +137,6 @@ int main(int argc, char* argv[]) {
 	}
 	delete lex;
     delete dp;
+    delete d;
     return 0;
 }

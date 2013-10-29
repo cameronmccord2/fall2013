@@ -1,5 +1,9 @@
 package models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class FieldValues.
@@ -88,5 +92,28 @@ public class FieldValues {
 	 */
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	/*
+	 * protected Integer id;
+protected Integer recordId;
+protected Integer fieldId;
+protected String value;
+	 */
+	public static ArrayList<FieldValues> parseResultSet(ResultSet resultSet) {
+		ArrayList<FieldValues> responses = new ArrayList<FieldValues>();
+    	try{
+			while(resultSet.next()){
+				FieldValues response = new FieldValues();
+				response.setId(resultSet.getInt("id"));
+				response.setRecordId(resultSet.getInt("recordId"));
+				response.setFieldId(resultSet.getInt("fieldId"));
+				response.setValue(resultSet.getString("value"));
+				responses.add(response);
+			}
+    	}catch(SQLException e){
+    		throw new RuntimeException(e);
+    	}
+    	return responses;
 	}
 }

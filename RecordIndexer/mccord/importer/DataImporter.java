@@ -9,7 +9,15 @@ import java.util.zip.*;
 
 import com.thoughtworks.xstream.XStream;
 
+import dao.JDBCRecordIndexerDAO;
+import dao.RecordIndexerDAO;
+import models.FieldValues;
+import models.Fields;
+import models.Images;
 import models.IndexerData;
+import models.Projects;
+import models.Records;
+import models.Users;
 
 /**
  * The Class DataImporter.
@@ -35,18 +43,47 @@ public class DataImporter {
 		// xstream
 		XStream xstream = new XStream();
 		try {
-			IndexerData id = (IndexerData)xstream.fromXML(this.getPathForXml(path));
+			IndexerData indexerData = (IndexerData)xstream.fromXML(this.getPathForXml(path));
+			this.importXml(indexerData);
 		} catch (FileNotFoundException e) {
 			System.out.println("couldnt find xml file");
 			e.printStackTrace();
 		}
 	}
 	
+	private void importXml(IndexerData id) {
+		RecordIndexerDAO dao = new JDBCRecordIndexerDAO();
+		for(Users u : id.getUsers()){
+			dao.putUser(u);
+		}
+		for(Projects p : id.getProjects()){
+			p.setId(dao.putProject(p));
+			for(Fields f : p.getFields()){
+				f.setProjectId(p.getId());
+				f.setId(dao.putField(f));
+			}
+			for(Images i : p.getImages()){
+				i.setProjectId(p.getId());
+				i.setId(dao.putImage(i));
+				for(Records r : i.getRecords()){
+					r.setImageId(i.getId());
+					r.setId(dao.putRecord(r));
+					int count = 0;
+					for(FieldValues fv : r.getFieldValues()){
+						fv.setRecordId(r.getId());
+						fv.setId(dao.putFieldValue(fv, p.getFields().get(count).getId()));
+						count++;
+					}
+				}
+			}
+		}
+	}
+
 	private String getPathForXml(String basePath) throws FileNotFoundException{
 		File f = new File(basePath);
 		if(f.isDirectory()){
 			for(String p : f.list()){
-				
+				// TODO not finished
 			}
 		}else
 			throw new FileNotFoundException();

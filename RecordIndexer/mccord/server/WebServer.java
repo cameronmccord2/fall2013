@@ -66,7 +66,7 @@ public class WebServer implements WebServerInterface{
 		server.createContext("/getFields", getFieldsHandler);
 		server.createContext("/search", searchHandler);
 		server.createContext("/downloadFile", downloadFileHandler);
-		
+	
 		server.start();
 	}
 	

@@ -1,5 +1,9 @@
 package models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Images.
@@ -20,6 +24,8 @@ public class Images {
 	
 	/** The finished. */
 	protected Integer finished;
+	
+	protected ArrayList<Records> records;
 	
 	/**
 	 * Gets the id.
@@ -109,5 +115,38 @@ public class Images {
 	 */
 	public void setFinished(Integer finished) {
 		this.finished = finished;
+	}
+
+	/*
+	 * protected Integer id;
+protected String file;
+protected Integer projectId; 	
+protected Integer userId; 		
+protected Integer finished;
+	 */
+	public static ArrayList<Images> parseResultSet(ResultSet resultSet) {
+		ArrayList<Images> responses = new ArrayList<Images>();
+    	try{
+			while(resultSet.next()){
+				Images response = new Images();
+				response.setId(resultSet.getInt("id"));
+				response.setFile(resultSet.getString("file"));
+				response.setProjectId(resultSet.getInt("projectId"));
+				response.setUserId(resultSet.getInt("userId"));
+				response.setFinished(resultSet.getInt("finished"));
+				responses.add(response);
+			}
+    	}catch(SQLException e){
+    		throw new RuntimeException(e);
+    	}
+    	return responses;
+	}
+
+	public ArrayList<Records> getRecords() {
+		return records;
+	}
+
+	public void setRecords(ArrayList<Records> records) {
+		this.records = records;
 	}
 }

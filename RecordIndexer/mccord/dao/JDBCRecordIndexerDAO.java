@@ -1,7 +1,12 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import models.FieldValues;
 import models.Fields;
@@ -38,18 +43,163 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		Users u = this.getUserByUsernamePassword(params.getUsername(), params.getPassword());
 		vur.setFirstName(u.getFirstName());
 		vur.setLastName(u.getLastName());
-		vur.setCount(this.getFinishedRecordsForUserId(u.getId()));
+		vur.setCount(this.getNumberOfFinishedRecordsForUserId(u.getId()));
 		return null;
 	}
 
-	private Integer getFinishedRecordsForUserId(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	private Integer getNumberOfFinishedRecordsForUserId(Integer userId) {
+		ArrayList<Images> images = this.getImagesForUserId(userId);
+		Integer count = 0;
+		for(Images i : images){
+			ArrayList<Records> records = this.getRecordsForImageId(i.getId());
+			if(records != null)
+				count += records.size();
+		}
+		return count;
+	}
+	
+	@SuppressWarnings("finally")
+	private ArrayList<Images> getImagesForUserId(Integer userId) {
+		Connection connection = null;
+	    ArrayList<Images> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from images WHERE userId = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, userId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Images.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
+	}
+	
+	@Override
+	public void resetDatabase(){
+		this.dropAllTables();
+		this.createAllTables();
 	}
 
+	@SuppressWarnings("finally")
+	private boolean createAllTables(){
+		Connection connection = null;
+	    try{
+	    	// load the sqlite-JDBC driver using the current class loader
+		    Class.forName("org.sqlite.JDBC");
+	      // create a database connection
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      Statement statement = connection.createStatement();
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      statement.executeUpdate("CREATE TABLE users(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,firstName String NOT NULL,lastName String NOT NULL,email String NOT NULL,userName String UNIQUE NOT NULL,password String NOT NULL,indexedRecords Integer default 0 NOT NULL)");
+	      statement.executeUpdate("CREATE TABLE projects(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,title String NOT NULL,recordsPerImage Integer NOT NULL,firstYCoor Integer NOT NULL,recordHeight Integer NOT NULL)");
+	      statement.executeUpdate("CREATE TABLE fields(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,position Integer NOT NULL,title String NOT NULL,xcoor Integer NOT NULL,width Integer NOT NULL,helpHtml String NULL,knownData String NULL,projectId Integer NOT NULL,FOREIGN KEY(projectId) REFERENCES projects(id))");
+	      statement.executeUpdate("CREATE TABLE images(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,file String NOT NULL,projectId Integer NOT NULL,userId Integer NULL,finished Integer default 0 NOT NULL,FOREIGN KEY(projectId) REFERENCES projects(id),FOREIGN KEY(userId) REFERENCES users(id))");
+	      statement.executeUpdate("CREATE TABLE records(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,imageId Integer NOT NULL,FOREIGN KEY(imageId) REFERENCES images(id))");
+	      statement.executeUpdate("CREATE TABLE fieldValues(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,recordId Integer NOT NULL,fieldId Integer NOT NULL,value String NOT NULL,FOREIGN KEY(fieldId) REFERENCES fields(id),FOREIGN KEY(recordId) REFERENCES records(id))");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return true;
+	      }
+	    }
+	}
+	
+	@SuppressWarnings("finally")
+	private boolean dropAllTables(){
+		Connection connection = null;
+	    try{
+	    	// load the sqlite-JDBC driver using the current class loader
+		    Class.forName("org.sqlite.JDBC");
+	      // create a database connection
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      Statement statement = connection.createStatement();
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      
+	      statement.executeUpdate("drop table if exists fieldValues");
+	      statement.executeUpdate("drop table if exists records");
+	      statement.executeUpdate("drop table if exists images");
+	      statement.executeUpdate("drop table if exists fields");
+	      statement.executeUpdate("drop table if exists projects");
+	      statement.executeUpdate("drop table if exists users");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return true;
+	      }
+	    }
+	}
+
+	@SuppressWarnings("finally")
 	private Users getUserByUsernamePassword(String username, String password) throws InvalidCredentialsException {
-		// TODO Auto-generated method stub
-		return null;
+	    Connection connection = null;
+	    ArrayList<Users> users = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from users WHERE username = ? AND password = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setString(1, username);
+	      statement.setString(2, password);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      users = Users.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  if(users != null && users.size() > 0)
+	    		  return users.get(0);
+	    	  throw new InvalidCredentialsException();
+	      }
+	    }
 	}
 
 	@Override
@@ -66,9 +216,35 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		return result;
 	}
 
+	@SuppressWarnings("finally")
 	private ArrayList<GetProjectsResult> getAllProjects() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<GetProjectsResult> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from projects";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = GetProjectsResult.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
 	}
 
 	@Override
@@ -83,7 +259,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		}
 		GetSampleImageResult result = new GetSampleImageResult();
 		result.setUrl(this.getStringPathOfImage(params.getProjectId()));
-		// TODO Auto-generated method stub
+		// TODO Finish this
 		return result;
 	}
 
@@ -114,14 +290,70 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		return result;
 	}
 	
+	@SuppressWarnings("finally")
 	private ArrayList<Fields> getAllFieldsForProjectId(int projectId, boolean withAllDetails){
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Fields> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from fields WHERE projectId = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, projectId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Fields.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
 	}
 
+	@SuppressWarnings("finally")
 	private Projects getProjectById(Integer projectId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Projects> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from projects WHERE id = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, projectId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Projects.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  if(result != null && result.size() == 1)
+	    		  return result.get(0);
+	    	  return null;
+	      }
+	    }
 	}
 
 	@Override
@@ -146,12 +378,12 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	}
 
 	private boolean insertRecord(String record, int batchId) {// returns true if success
-		Records r = insertRecordForBatchId(batchId);
+		int recordId = insertRecordForBatchId(batchId);
 		String[] fieldValues = record.split("/,/");
 		ArrayList<Fields> fields = this.getFieldsForBatchId(batchId);
 		int count = 0;
 		for(String fv : fieldValues){
-			if(!this.insertFieldValueForRecordIdFieldId(fv, r.getId(), fields.get(count).getId()))
+			if(this.insertFieldValueForRecordIdFieldId(fv, recordId, fields.get(count).getId()) < 1)
 				return false;
 			count++;
 			if(count == fields.size())
@@ -159,10 +391,64 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		}
 		return true;
 	}
+	
+	private int parseFirstInt(ResultSet generatedKeys, String key) {
+		try {
+			while(generatedKeys.next())
+				return (int) generatedKeys.getLong(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			throw new RuntimeException("" + generatedKeys.getLong(1));
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-	private boolean insertFieldValueForRecordIdFieldId(String fv, Integer recordId, Integer fieldId) {
-		// TODO Auto-generated method stub
-		return true;
+/*
+ * CREATE TABLE fieldValues(
+	id 			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	recordId 	Integer 		NOT NULL,
+	fieldId 	Integer 		NOT NULL,
+	value 		String			NOT NULL,
+	FOREIGN KEY(fieldId) 		REFERENCES fields(id),
+	FOREIGN KEY(recordId) 		REFERENCES records(id)
+);
+ */
+	@SuppressWarnings("finally")
+	private int insertFieldValueForRecordIdFieldId(String fv, Integer recordId, Integer fieldId) {
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into fieldValues SET (recordId, fieldId, value) VALUES (?, ?, ?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setInt(1, recordId);
+	      statement.setInt(2, fieldId);
+	      statement.setString(3, fv);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
 	private ArrayList<Fields> getFieldsForBatchId(Integer batchId) {
@@ -171,14 +457,78 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		return fields;
 	}
 
+	@SuppressWarnings("finally")
 	private Images getBatchById(Integer batchId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Images> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from images WHERE id = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, batchId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Images.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  if(result != null && result.size() == 1)
+	    		  return result.get(0);
+	    	  return null;
+	      }
+	    }
 	}
 
-	private Records insertRecordForBatchId(int batchId) {
-		// TODO Auto-generated method stub
-		return null;
+	/*
+	 * CREATE TABLE records(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	imageId 	Integer			NOT NULL,
+	FOREIGN KEY(imageId)		REFERENCES images(id)
+);
+	 */
+	@SuppressWarnings("finally")
+	private int insertRecordForBatchId(int batchId) {
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into records SET (imageId) VALUES (?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setInt(1, batchId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
 	@Override
@@ -207,9 +557,35 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		return result;
 	}
 
+	@SuppressWarnings("finally")
 	private ArrayList<Fields> getAllFields() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Fields> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from fields";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Fields.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
 	}
 
 	@Override
@@ -235,7 +611,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 			}
 		}
 		for(SearchesToDo s : searches){
-			ArrayList<FieldValues> foundFields = this.getAllFieldValuesMatchingValueForFieldId(values[i], Integer.parseInt(fields[i]));
+			ArrayList<FieldValues> foundFields = this.getAllFieldValuesMatchingValueForFieldId(s.getSearchValue(), s.getFieldId());
 			for(FieldValues f : foundFields){
 				SearchResult sr = new SearchResult();
 				result.add(sr);
@@ -244,44 +620,269 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 				sr.setFieldId(f.getId());
 				sr.setBatchId(r.getImageId());
 				sr.setImageUrl(this.getStringPathOfImage(image.getProjectId()));
-				sr.setRecordNumber(this.getRowNumberOfRecordIdForProjectId(f.getRecordId(), image.getProjectId()));
+				sr.setRecordNumber(this.getRowNumberOfRecordIdForProjectId(f.getRecordId(), image.getId()));
 			}
 		}
 		return result;
 	}
 
-	private Integer getRowNumberOfRecordIdForProjectId(Integer recordId, Integer projectId) {
-		// TODO Auto-generated method stub
-		return null;
+	private Integer getRowNumberOfRecordIdForProjectId(Integer recordId, Integer imageId) {
+		ArrayList<Records> result = this.getRecordsForImageId(imageId);
+		for(int i = 0; i < result.size(); i++){
+			if(result.get(i).getId() == recordId)
+				return i + 1;
+		}
+		throw new RuntimeException("shouldnt get here, couldnt find record id for row num calculation");
 	}
 
+	@SuppressWarnings("finally")
+	private ArrayList<Records> getRecordsForImageId(Integer imageId) {
+		Connection connection = null;
+	    ArrayList<Records> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from records WHERE imageId = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, imageId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Records.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
+	}
+
+	@SuppressWarnings("finally")
 	private Images getImageById(Integer imageId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Images> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from images WHERE id = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, imageId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Images.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  if(result != null && result.size() == 1)
+	    		  return result.get(0);
+	    	  return null;
+	      }
+	    }
 	}
 
+	@SuppressWarnings("finally")
 	private Records getRecordById(Integer recordId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    ArrayList<Records> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from records WHERE id = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, recordId);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = Records.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  if(result != null && result.size() == 1)
+	    		  return result.get(0);
+	    	  return null;
+	      }
+	    }
 	}
 
-	private ArrayList<FieldValues> getAllFieldValuesMatchingValueForFieldId(String string, int parseInt) {
-		// TODO Auto-generated method stub
-		return null;
-		
+	/*
+	 * CREATE TABLE fieldValues(
+	id 			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	recordId 	Integer 		NOT NULL,
+	fieldId 	Integer 		NOT NULL,
+	value 		String			NOT NULL,
+	FOREIGN KEY(fieldId) 		REFERENCES fields(id),
+	FOREIGN KEY(recordId) 		REFERENCES records(id)
+);
+	 */
+	@SuppressWarnings("finally")
+	private ArrayList<FieldValues> getAllFieldValuesMatchingValueForFieldId(String value, int fieldId) {
+		Connection connection = null;
+	    ArrayList<FieldValues> result = null;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "select * from fieldValues WHERE fieldId = ? AND value = ?";
+	      PreparedStatement statement = connection.prepareStatement(sql);
+	      statement.setInt(1, fieldId);
+	      statement.setString(2, value);
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      ResultSet rs = statement.executeQuery();
+	      result = FieldValues.parseResultSet(rs);
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return result;
+	      }
+	    }
 	}
 
 	@Override
 	public DownloadFileResult downloadFile(DownloadFileParams params)throws FailedException {
-		if(params == null || params.getUsername() == null || params.getUsername().length() < 1 || params.getPassword() == null || params.getPassword().length() < 1)
+		if(params == null || params.getFilename() == null || params.getFilename().length() < 1)
 			throw new FailedException();
-		try{
-			this.getUserByUsernamePassword(params.getUsername(), params.getPassword());// will throw if invalid
-		}catch(InvalidCredentialsException e){
-			// do nothing, should never happen
-			System.out.println("this should never be seen");
-		}
+		// TODO finish this
+		return null;
+	}
+
+	/*
+	 * CREATE TABLE users(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	firstName	String 			NOT NULL,
+	lastName	String			NOT NULL,
+	email 		String			NOT NULL,
+	userName	String			UNIQUE NOT NULL,
+	password	String 			NOT NULL,
+	indexedRecords Integer	default 0	NOT NULL
+);
+	 */
+	@Override
+	public void putUser(Users u) {
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into users SET (firstName, lastName, email, username, password) VALUES (?, ?, ?, ? ,?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setString(1, u.getFirstName());
+	      statement.setString(2, u.getLastName());
+	      // TODO keep finishing this here
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
+	}
+
+	@Override
+	public Integer putProject(Projects p) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer putField(Fields f) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer putImage(Images i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer putRecord(Records r) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer putFieldValue(FieldValues fv, Integer id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

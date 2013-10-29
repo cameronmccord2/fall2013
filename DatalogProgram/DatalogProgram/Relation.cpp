@@ -9,9 +9,20 @@
 #include "Relation.h"
 
 Relation::Relation(){
-    this->tuples = new set<Tuple*>();
+    this->tuples = new set<Tuple>();
     this->variableNames = new vector<string>();
     this->queryParams = new vector<Parameter*>();
+    this->originalQueryParams = new vector<Parameter*>();
+    this->relationsToDelete = new vector<Relation*>();
+}
+
+Relation::Relation(Relation *old){
+    this->tuples = new set<Tuple>(*old->tuples);
+    this->variableNames = new vector<string>(*old->variableNames);
+    this->queryParams = new vector<Parameter*>(*old->queryParams);
+    this->originalQueryParams = new vector<Parameter*>(*old->originalQueryParams);
+    this->relationsToDelete = new vector<Relation*>();
+    this->name = old->name;
 }
 
 Relation::~Relation(){
@@ -21,4 +32,5 @@ Relation::~Relation(){
     delete this->relationsToDelete;
     delete this->result;
     delete this->keys;
+    delete this->originalQueryParams;
 }

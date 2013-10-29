@@ -1,5 +1,11 @@
 package communicator;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import models.Users;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class GetProjectsResult.
@@ -46,5 +52,20 @@ public class GetProjectsResult {
 	 */
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public static ArrayList<GetProjectsResult> parseResultSet(ResultSet resultSet) {
+		ArrayList<GetProjectsResult> responses = new ArrayList<GetProjectsResult>();
+    	try{
+			while(resultSet.next()){
+				GetProjectsResult response = new GetProjectsResult();
+				response.setId(resultSet.getInt("id"));
+				response.setTitle(resultSet.getString("title"));
+				responses.add(response);
+			}
+    	}catch(SQLException e){
+    		throw new RuntimeException(e);
+    	}
+    	return responses;
 	}
 }

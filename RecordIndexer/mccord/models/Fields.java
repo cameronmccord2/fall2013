@@ -1,5 +1,9 @@
 package models;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Fields.
@@ -172,5 +176,36 @@ public class Fields {
 	 */
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
+	}
+
+	/*
+	 * protected Integer id;			
+protected Integer position;	
+protected String title; 		
+protected Integer xcoor;		
+protected Integer width; 		
+protected String helpHtml; 	
+protected String knownData; 	
+protected Integer projectId;
+	 */
+	public static ArrayList<Fields> parseResultSet(ResultSet resultSet) {
+		ArrayList<Fields> responses = new ArrayList<Fields>();
+    	try{
+			while(resultSet.next()){
+				Fields response = new Fields();
+				response.setId(resultSet.getInt("id"));
+				response.setPosition(resultSet.getInt("position"));
+				response.setTitle(resultSet.getString("title"));
+				response.setXcoor(resultSet.getInt("xcoor"));
+				response.setWidth(resultSet.getInt("width"));
+				response.setHelpHtml(resultSet.getString("helpHtml"));
+				response.setKnownData(resultSet.getString("knownData"));
+				response.setProjectId(resultSet.getInt("projectId"));
+				responses.add(response);
+			}
+    	}catch(SQLException e){
+    		throw new RuntimeException(e);
+    	}
+    	return responses;
 	}
 }

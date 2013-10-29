@@ -1,5 +1,7 @@
 package importer;
 
+import dao.JDBCRecordIndexerDAO;
+
 /**
  * The Class Importer.
  */
@@ -15,6 +17,8 @@ public class Importer {
 			throw new RuntimeException("wrong number of inputs, got: " + args.length);
 		}else{
 			DataImporter importer = new DataImporter();
+			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
+			dao.resetDatabase();
 			importer.importArchive(args[0]);
 		}
 	}

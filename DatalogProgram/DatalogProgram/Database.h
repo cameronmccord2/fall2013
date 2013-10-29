@@ -28,5 +28,8 @@ private:
     vector<Relation*>* results;
     void addVariableToSet(int position, string value);
     map<string, vector<int>*>* variablePositions;
+    map<string, vector<int>*>* variablePositions2;
+    vector<Tuple*>* tuplesToDelete;
+    void addVariableToDoneKeys(int position, string value);
 };
 #endif /* defined(__DatalogProgram__Database__) */
