@@ -44,6 +44,7 @@
 /* Begin PBXFileReference section */
 		2158DFEF182196B800342068 /* DParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DParameter.cpp; sourceTree = "<group>"; };
 		2158DFF0182196B800342068 /* DParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DParameter.h; sourceTree = "<group>"; };
+		2158DFF218219DD800342068 /* in40a.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in40a.txt; sourceTree = "<group>"; };
 		21B9168A1820423D007E6AA3 /* in47.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in47.txt; sourceTree = "<group>"; };
 		21B9168B18204316007E6AA3 /* in30.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in30.txt; sourceTree = "<group>"; };
 		21B9168C18204316007E6AA3 /* in33.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in33.txt; sourceTree = "<group>"; };
@@ -152,6 +153,7 @@
 		21CF8AF617F0A77700E9499F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				2158DFF218219DD800342068 /* in40a.txt */,
 				21B9168B18204316007E6AA3 /* in30.txt */,
 				21B9168C18204316007E6AA3 /* in33.txt */,
 				21B9168D18204316007E6AA3 /* in35.txt */,

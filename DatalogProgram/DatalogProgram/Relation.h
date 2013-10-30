@@ -14,6 +14,7 @@
 #include "Tuple.h"
 #include "Schema.h"
 #include "DParameter.h"
+#include <map>
 
 class Database;
 
@@ -28,6 +29,7 @@ public:
     Relation();
     Relation(Relation *old);
     ~Relation();
+    void generateKeysAndVariablePositions( vector<string>* keys, map<string, vector<int>*>* variablePositions, Database *db);
     Relation* project1(vector<int>* indexes);
     Relation* project2(vector<int>* indexes);
     Relation* reduceSideways(Relation *query, Database *db);

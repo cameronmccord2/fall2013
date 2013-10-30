@@ -217,10 +217,36 @@ Relation* Relation::reduceSideways2(Relation *query, Database *db){
     return this;
 }
 
+void Relation::generateKeysAndVariablePositions(vector<string>* keys, map<string, vector<int>*>* variablePositions, Database *db){
+    for (size_t k = 0; k < this->queryParams->size();) {// check each param in the query
+        DParameter parameter = this->queryParams->at(k);
+        if (parameter.valueIsString) {
+            this->selectConstant((int)k, parameter.value);// gives all tuples back that match string for that column
+            k++;
+        }else{// value is a variable
+            //   query column             table column
+            if (parameter.value == this->variableNames->at(k)) {
+                if (variablePositions->find(parameter.value) == variablePositions->end()) {
+                    variablePositions->insert(make_pair(parameter.value, new vector<int>()));
+                }
+                variablePositions->find(parameter.value)->second->push_back((int)k);
+
+                keys->push_back(parameter.value);// add to later check for possible duplicate keys
+                k++;
+            }else{
+                this->rename((int)k, parameter.value);// must need to rename the column name to be the query's variable name
+            }
+        }
+    }
+}
+
 Relation* Relation::reduceSideways(Relation *query, Database *db){
+    vector<string>* keys = new vector<string>();
+    map<string, vector<int>*>* variablePositions = new map<string, vector<int>*>();
+    this->generateKeysAndVariablePositions(keys, variablePositions, db);
     // relation has had all the constants removed, now do variables, find any that are the same
-    for (size_t k = 0; k < query->keys->size(); k++) {
-        vector<int> *positions = db->variablePositions->find(query->keys->at(k))->second;
+    for (size_t k = 0; k < keys->size(); k++) {
+        vector<int> *positions = variablePositions->find(keys->at(k))->second;
         if (positions->size() == 1) {
             continue;
         }
@@ -232,6 +258,12 @@ Relation* Relation::reduceSideways(Relation *query, Database *db){
         }
     }
     
+    delete keys;
+    map<string, vector<int>*>::iterator it;
+    for (it = variablePositions->begin(); it != variablePositions->end(); ++it) {//loop through map and delete variable positions for this query
+        delete it->second;
+    }
+    delete variablePositions;
     
     this->reduceSideways2(query, db);
     
@@ -243,12 +275,10 @@ Relation* Relation::reduceSideways(Relation *query, Database *db){
 }
 
 Relation* Relation::reduceVertical(Relation* query, Database *db){
-    for (size_t a = 0; a < this->variableNames->size(); a++) {// rename the variables to something that will for sure never be given in their test code, helpful?
+    for (size_t a = 0; a < this->variableNames->size(); a++) {
         this->variableNames->at(a) = this->variableNames->at(a) + "Cameron";
     }
-//		for(size_t e = 0; e < this->queryParams->size(); e++){
-//			delete this->queryParams->at(e);
-//		}
+    
     delete this->queryParams;
     this->queryParams = new vector<DParameter>(*query->queryParams);
     query->keys = new vector<string>();// This itemizes the query's variable names, later we can keep all tuples that are the same for keys that have multiple indexes in the result data columns - slam(X, X, A)// make sure Xs are the same
