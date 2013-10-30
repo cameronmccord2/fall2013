@@ -55,12 +55,22 @@ Database::Database(DatalogProgram *dp){
 }
 
 Database::~Database(){
+for(size_t i = 0; i < this->relations->size(); i++){
+	delete this->relations->at(i);
+}
     delete this->relations;
+for(size_t i = 0; i < this->queries->size(); i++){
+	delete this->queries->at(i);
+}
     delete this->queries;
+for(size_t i = 0; i < this->results->size(); i++){
+	delete this->results->at(i);
+}
     delete this->results;
+for(size_t i = 0; i < this->tuplesToDelete->size(); i++){
+	delete this->tuplesToDelete->at(i);
+}
     delete this->tuplesToDelete;
-    delete this->variablePositions;
-    delete this->variablePositions2;
 //    delete this->variablePositions;// always deleted after done using it in run()
 }
 
@@ -181,13 +191,6 @@ void Database::addVariableToSet(int position, string value){
     this->variablePositions->find(value)->second->push_back(position);
 }
 
-void Database::addVariableToDoneKeys(int position, string value){
-    if (this->variablePositions2->find(value) == this->variablePositions2->end()) {
-        this->variablePositions2->insert(make_pair(value, new vector<int>()));
-    }
-    this->variablePositions2->find(value)->second->push_back(position);
-}
-
 Relation* Relation::reduceSideways2(Relation *query, Database *db){
     bool finishedRemovingDuplicates = false;
     while (!finishedRemovingDuplicates) {
@@ -291,6 +294,10 @@ bool Database::run(){
                 break;
             }
         }
+	map<string, vector<int>*>::iterator it;
+    for (it = this->variablePositions->begin(); it != this->variablePositions->end(); ++it) {//loop through map and delete current position
+        delete it->second;
+    }
         delete this->variablePositions;
 //        cout << this->toString();
     }
