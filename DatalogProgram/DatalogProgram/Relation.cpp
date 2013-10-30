@@ -28,16 +28,16 @@ Relation::Relation(Relation *old){
 Relation::~Relation(){
     delete this->tuples;
     delete this->variableNames;
-		for(size_t e = 0; e < this->queryParams->size(); e++){
-			delete this->queryParams->at(e);
-		}
+		//for(size_t e = 0; e < this->queryParams->size(); e++){
+		//	delete this->queryParams->at(e);
+		//}
 		delete this->queryParams;
 	for(size_t i = 0; i < this->relationsToDelete->size(); i++){
 		delete this->relationsToDelete->at(i);
 	}
     delete this->relationsToDelete;
-	for(size_t i = 0; i < this->originalQueryParams->size(); i++){
-		delete this->originalQueryParams->at(i);
-	}
+	//for(size_t i = 0; i < this->originalQueryParams->size(); i++){
+	//	delete this->originalQueryParams->at(i);
+	//}
     delete this->originalQueryParams;
 }
