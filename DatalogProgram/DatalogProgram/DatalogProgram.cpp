@@ -123,11 +123,13 @@ int main(int argc, char* argv[]) {
     Database *d = NULL;
     string temp;
 	try{
-        lex = new Lex(argv[1]);
-        //lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in52.txt");
+//        lex = new Lex(argv[1]);
+        lex = new Lex("/Users/taylormccord/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in52.txt");
         dp = new DatalogProgram(lex->getTokens());
         d = new Database(dp);
-        //cout << d->toString();
+        
+        cout << d->toString();
+//        exit(0);
         //cin >> temp;
         d->writeToFile(argv[2]);
 //        dp->writeToFile(argv[2]);

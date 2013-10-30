@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2158DFF1182196B800342068 /* DParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2158DFEF182196B800342068 /* DParameter.cpp */; };
 		21CF8AE317F09EF700E9499F /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AD617F09EF700E9499F /* Input.cpp */; };
 		21CF8AE417F09EF700E9499F /* Lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8AD817F09EF700E9499F /* Lex.cpp */; };
 		21CF8AE517F09EF700E9499F /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CF8ADA17F09EF700E9499F /* State.cpp */; };
@@ -41,6 +42,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2158DFEF182196B800342068 /* DParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DParameter.cpp; sourceTree = "<group>"; };
+		2158DFF0182196B800342068 /* DParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DParameter.h; sourceTree = "<group>"; };
 		21B9168A1820423D007E6AA3 /* in47.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in47.txt; sourceTree = "<group>"; };
 		21B9168B18204316007E6AA3 /* in30.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in30.txt; sourceTree = "<group>"; };
 		21B9168C18204316007E6AA3 /* in33.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in33.txt; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 				DCEB3B7B181B914700052ADA /* Schema.h */,
 				DCEB3B7D181B915300052ADA /* Tuple.cpp */,
 				DCEB3B7E181B915300052ADA /* Tuple.h */,
+				2158DFEF182196B800342068 /* DParameter.cpp */,
+				2158DFF0182196B800342068 /* DParameter.h */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 				21CF8AEE17F0A73A00E9499F /* DatalogProgram.cpp in Sources */,
 				21CF8AE317F09EF700E9499F /* Input.cpp in Sources */,
 				DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */,
+				2158DFF1182196B800342068 /* DParameter.cpp in Sources */,
 				21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */,
 				21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */,
 				21CF8AFE17F0AEA900E9499F /* FactList.cpp in Sources */,

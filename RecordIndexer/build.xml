@@ -5,7 +5,7 @@
 	<!-- ********** -->	
 	
 	<!-- Directory containing application source code -->
-	<property name="mccord" location="src"/>
+	<property name="src" location="mccord"/>
 	
 	<!-- Directory containing testing source code -->
 	<property name="test" location="test"/>
@@ -17,7 +17,7 @@
 	<property name="build" location="build"/>
 	
 	<!-- Directory containing database files -->
-	<property name="database" location="database"/>
+	<property name="database" location="dbStuff"/>
 
 	<!-- Directory containing demo files -->
 	<property name="demo" location="demo"/>
@@ -43,7 +43,7 @@
 	<!-- *********** -->
 	<path id="lib-classpath">
 		<fileset dir="${lib}">
-			<include name="**/*.jar" />
+			<include name="**/*.jar"/>
 		</fileset>
 	</path>
 	

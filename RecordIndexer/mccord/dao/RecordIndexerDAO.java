@@ -106,7 +106,7 @@ public interface RecordIndexerDAO {
 
 	void resetDatabase();
 
-	public void putUser(Users u);
+	public Integer putUser(Users u);
 
 	public Integer putProject(Projects p);
 

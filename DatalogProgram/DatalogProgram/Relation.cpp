@@ -11,16 +11,16 @@
 Relation::Relation(){
     this->tuples = new set<Tuple>();
     this->variableNames = new vector<string>();
-    this->queryParams = new vector<Parameter*>();// these are bad somewhere
-    this->originalQueryParams = new vector<Parameter*>();
+    this->queryParams = new vector<DParameter>();// these are bad somewhere
+    this->originalQueryParams = new vector<DParameter>();
     this->relationsToDelete = new vector<Relation*>();
 }
 
 Relation::Relation(Relation *old){
     this->tuples = new set<Tuple>(*old->tuples);
     this->variableNames = new vector<string>(*old->variableNames);
-    this->queryParams = new vector<Parameter*>(*old->queryParams);// these are bad somewhere
-    this->originalQueryParams = new vector<Parameter*>(*old->originalQueryParams);
+    this->queryParams = new vector<DParameter>(*old->queryParams);// these are bad somewhere
+    this->originalQueryParams = new vector<DParameter>(*old->originalQueryParams);
     this->relationsToDelete = new vector<Relation*>();
     this->name = old->name;
 }

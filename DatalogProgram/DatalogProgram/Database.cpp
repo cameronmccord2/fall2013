@@ -41,8 +41,8 @@ Database::Database(DatalogProgram *dp){
         Relation *r = new Relation();
         r->name = dp->queryList->list->at(i)->identifier;
         for (size_t j = 0; j < dp->queryList->list->at(i)->parameters->size(); j++) {
-            r->queryParams->push_back(new Parameter(dp->queryList->list->at(i)->parameters->at(j)));
-            r->originalQueryParams->push_back(new Parameter(dp->queryList->list->at(i)->parameters->at(j)));
+            r->queryParams->push_back(DParameter(dp->queryList->list->at(i)->parameters->at(j)));
+            r->originalQueryParams->push_back(DParameter(dp->queryList->list->at(i)->parameters->at(j)));
         }
         this->queries->push_back(r);
     }
@@ -100,7 +100,7 @@ Relation* Relation::selectVariable(int position1, int position2){// return where
 }
 
 Relation* Relation::project1(vector<int>* indexes){
-    vector<Parameter*>* newParameters = new vector<Parameter*>();
+    vector<DParameter>* newParameters = new vector<DParameter>();
     vector<string>* newVariableNames = new vector<string>();
     int count = 0;
     bool keepEverythingElse = false;
@@ -109,7 +109,7 @@ Relation* Relation::project1(vector<int>* indexes){
             keepEverythingElse = true;
         }
         if (keepEverythingElse || i != (unsigned)indexes->at(count)) {
-            newParameters->push_back(new Parameter(this->queryParams->at(i)));// keep the column headers that we need
+            newParameters->push_back(DParameter(this->queryParams->at(i)));// keep the column headers that we need
             newVariableNames->push_back(this->variableNames->at(i));
         }else
             count++;
@@ -118,7 +118,7 @@ Relation* Relation::project1(vector<int>* indexes){
 	//	delete this->queryParams->at(i);
 	//}
     delete this->queryParams;
-    this->queryParams = new vector<Parameter*>(*newParameters);
+    this->queryParams = new vector<DParameter>(*newParameters);
 	//for(size_t i = 0; i < newParameters->size(); i++){
 	//delete newParameters->at(i);
 	//}
@@ -131,8 +131,8 @@ Relation* Relation::project1(vector<int>* indexes){
 
 Relation* Relation::project2(vector<int>* indexes){
     for (size_t i = 0; i < this->queryParams->size(); i++) {// get indexes of non-variables
-        Parameter *p = this->queryParams->at(i);
-        if(p->valueIsString){
+        DParameter p = this->queryParams->at(i);
+        if(p.valueIsString){
             indexes->push_back((int)i);
         }
     }
@@ -246,26 +246,26 @@ Relation* Relation::reduceVertical(Relation* query, Database *db){
     for (size_t a = 0; a < this->variableNames->size(); a++) {// rename the variables to something that will for sure never be given in their test code, helpful?
         this->variableNames->at(a) = this->variableNames->at(a) + "Cameron";
     }
-		for(size_t e = 0; e < this->queryParams->size(); e++){
-			delete this->queryParams->at(e);
-		}
+//		for(size_t e = 0; e < this->queryParams->size(); e++){
+//			delete this->queryParams->at(e);
+//		}
     delete this->queryParams;
-    this->queryParams = new vector<Parameter*>(*query->queryParams);
+    this->queryParams = new vector<DParameter>(*query->queryParams);
     query->keys = new vector<string>();// This itemizes the query's variable names, later we can keep all tuples that are the same for keys that have multiple indexes in the result data columns - slam(X, X, A)// make sure Xs are the same
     
     for (size_t k = 0; k < query->queryParams->size();) {// check each param in the query
-        Parameter *parameter = query->queryParams->at(k);
-        if (parameter->valueIsString) {
-            this->selectConstant((int)k, parameter->value);// gives all tuples back that match string for that column
+        DParameter parameter = query->queryParams->at(k);
+        if (parameter.valueIsString) {
+            this->selectConstant((int)k, parameter.value);// gives all tuples back that match string for that column
             k++;
         }else{// value is a variable
             //   query column             table column
-            if (parameter->value == this->variableNames->at(k)) {
-                db->addVariableToSet((int)k, parameter->value);// variable name in the query is the same as the column name in the fact list
-                query->keys->push_back(parameter->value);// add to later check for possible duplicate keys
+            if (parameter.value == this->variableNames->at(k)) {
+                db->addVariableToSet((int)k, parameter.value);// variable name in the query is the same as the column name in the fact list
+                query->keys->push_back(parameter.value);// add to later check for possible duplicate keys
                 k++;
             }else{
-                this->rename((int)k, parameter->value);// must need to rename the column name to be the query's variable name
+                this->rename((int)k, parameter.value);// must need to rename the column name to be the query's variable name
             }
         }
     }
@@ -341,10 +341,10 @@ string Relation::toStringRemainingTuples(){
 string Relation::toStringOriginalQueryColumns(){
     string output = "";
     for (size_t i = 0; i < this->originalQueryParams->size(); i++) {
-        if(this->originalQueryParams->at(i)->valueIsString)
+        if(this->originalQueryParams->at(i).valueIsString)
             output += "'";
-        output += this->originalQueryParams->at(i)->value;
-        if(this->originalQueryParams->at(i)->valueIsString)
+        output += this->originalQueryParams->at(i).value;
+        if(this->originalQueryParams->at(i).valueIsString)
             output += "'";
         if (i != this->originalQueryParams->size() - 1) {
             output += ",";

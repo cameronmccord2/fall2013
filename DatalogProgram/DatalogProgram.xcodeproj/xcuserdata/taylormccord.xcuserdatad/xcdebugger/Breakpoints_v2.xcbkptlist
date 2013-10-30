@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/DatalogProgram.cpp"
-            timestampString = "404759482.585796"
+            timestampString = "404855112.460383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
@@ -46,9 +46,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "Database::Database(DatalogProgram *dp)"
-            landmarkType = "5">
+            endingLineNumber = "52">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -560,11 +558,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/DatalogProgram.cpp"
-            timestampString = "404759488.434527"
+            timestampString = "404855112.460383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "main(int argc, char* argv[])"
             landmarkType = "7">
          </BreakpointContent>
@@ -576,11 +574,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DatalogProgram/DatalogProgram.cpp"
-            timestampString = "404759495.595697"
+            timestampString = "404855112.460383"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
             landmarkName = "main(int argc, char* argv[])"
             landmarkType = "7">
          </BreakpointContent>
@@ -597,7 +595,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
             endingLineNumber = "54"
-            landmarkName = "Database::Database(DatalogProgram *dp)"
+            landmarkName = "Database::~Database()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -661,7 +659,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "178"
             endingLineNumber = "178"
-            landmarkName = "Database::addVariableToSet(int position, string value)"
+            landmarkName = "Relation::rename(int position, string toValue)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -810,9 +808,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "Relation::selectConstant(int position, string value)"
-            landmarkType = "5">
+            endingLineNumber = "68">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -872,9 +868,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "323"
-            endingLineNumber = "323"
-            landmarkName = "Relation::toStringRemainingTuples()"
-            landmarkType = "5">
+            endingLineNumber = "323">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -1055,7 +1049,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "320"
             endingLineNumber = "320"
-            landmarkName = "Relation::toStringRemainingTuples()"
+            landmarkName = "Relation::deleteTupleValueAtPosition(int pos)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1087,7 +1081,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "303"
             endingLineNumber = "303"
-            landmarkName = "Relation::deleteTupleValueAtPosition(int pos)"
+            landmarkName = "Database::run()"
             landmarkType = "5">
             <Locations>
                <Location
@@ -1161,6 +1155,22 @@
                   offsetFromSymbolStart = "1849">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DatalogProgram/Relation.cpp"
+            timestampString = "404785846.385391"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "Relation::~Relation()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

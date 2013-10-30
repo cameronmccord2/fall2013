@@ -13,7 +13,7 @@
 #include <set>
 #include "Tuple.h"
 #include "Schema.h"
-#include "Parameter.h"
+#include "DParameter.h"
 
 class Database;
 
@@ -21,8 +21,8 @@ class Relation{
 public:
     string name;
     vector<string>* variableNames;
-    vector<Parameter*>* queryParams;
-    vector<Parameter*>* originalQueryParams;
+    vector<DParameter>* queryParams;
+    vector<DParameter>* originalQueryParams;
     set<Tuple>* tuples;
     vector<string>* keys;
     Relation();

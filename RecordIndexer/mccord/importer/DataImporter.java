@@ -5,9 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.zip.*;
 
-import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.*;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import dao.JDBCRecordIndexerDAO;
 import dao.RecordIndexerDAO;
@@ -16,6 +19,7 @@ import models.Fields;
 import models.Images;
 import models.IndexerData;
 import models.Projects;
+import models.ProjectsList;
 import models.Records;
 import models.Users;
 
@@ -30,7 +34,8 @@ public class DataImporter {
 	 * @param path the file path to the zip archive
 	 */
 	public void importArchive(String path) {
-		String ourDataStore = "";
+		System.out.println(path);
+		String ourDataStore = "ourDataStore";
 		// delete previous data
 		try {
 			deleteRecursive(new File(ourDataStore));
@@ -40,11 +45,38 @@ public class DataImporter {
 		}
 		// unzip archive
 		this.unZipIt(path, ourDataStore);
+		System.out.println("unziped to: " + ourDataStore);
 		// xstream
-		XStream xstream = new XStream();
+		XStream xstream = new XStream(new DomDriver());
+		xstream.alias("indexerdata", IndexerData.class);
+		xstream.alias("user", Users.class);
+		xstream.aliasField("firstname", Users.class, "firstName");
+		xstream.aliasField("lastname", Users.class, "lastName");
+		xstream.aliasField("username", Users.class, "userName");
+		xstream.aliasField("indexedrecords", Users.class, "indexedRecords");
+		xstream.alias("projects", ProjectsList.class);
+		xstream.alias("project", Projects.class);
+		xstream.aliasField("recordsperimage", Projects.class, "recordsPerImage");
+		xstream.aliasField("firstycoord", Projects.class, "firstYCoor");
+		xstream.aliasField("recordheight", Projects.class, "recordHeight");
+		xstream.alias("indexerdata", IndexerData.class);
+		xstream.alias("indexerdata", IndexerData.class);
+		xstream.alias("indexerdata", IndexerData.class);
+		String xmlFilePath = "failejd";
 		try {
-			IndexerData indexerData = (IndexerData)xstream.fromXML(this.getPathForXml(path));
+			xmlFilePath = this.getPathForXml(ourDataStore);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println("xml file path: " + xmlFilePath);
+		try {
+			 xmlFilePath = this.getPathForXml(ourDataStore);
+			System.out.println("xml file path: " + xmlFilePath);
+			IndexerData indexerData = (IndexerData)xstream.fromXML(new File(xmlFilePath));
+			System.out.println("xtreamed");
 			this.importXml(indexerData);
+			System.out.println("imported");
 		} catch (FileNotFoundException e) {
 			System.out.println("couldnt find xml file");
 			e.printStackTrace();
@@ -79,15 +111,38 @@ public class DataImporter {
 		}
 	}
 
-	private String getPathForXml(String basePath) throws FileNotFoundException{
-		File f = new File(basePath);
+	private String getPathForXml(String ourDataPath) throws FileNotFoundException{
+		System.out.println(ourDataPath);
+		File f = new File(ourDataPath);
 		if(f.isDirectory()){
 			for(String p : f.list()){
-				// TODO not finished
+				if(p.equals("Records.xml")){
+					System.out.println("found a file thing: " + p);
+					return ourDataPath + File.separator + p;
+				}else if(p.equals("Records")){
+					System.out.println("found a file thing: " + p);
+					return this.getPathForXml(ourDataPath + File.separator + p);
+				}
 			}
-		}else
-			throw new FileNotFoundException();
+		}else{
+			if(f.getPath().equals("Records.xml"))
+				System.out.println("found records.xml");
+				return ourDataPath + File.separator + "Records.xml";
+		}
+			
 		return "";
+	}
+	
+	private boolean executeCommandLine(String command){
+		try{
+		Process tr = Runtime.getRuntime().exec( new String[]{ "cat" } );
+		Writer wr = new OutputStreamWriter( tr.getOutputStream() );
+		wr.write(command);
+		wr.flush();
+		}catch(IOException ioe){
+			return false;
+		}
+		return true;
 	}
 	
     /**
@@ -120,6 +175,7 @@ public class DataImporter {
 	    	}
 	 
 	    	//get the zip file content
+	    	System.out.println(zipFile);
 	    	ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
 	    	//get the zipped file list entry
 	    	ZipEntry ze = zis.getNextEntry();
@@ -127,22 +183,28 @@ public class DataImporter {
 	    	while(ze!=null){
 	 
 	    	   String fileName = ze.getName();
+	    	   
 	           File newFile = new File(OUTPUT_FOLDER + File.separator + fileName);
-	 
-	           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
-	 
-	            //create all non exists folders
-	            //else you will hit FileNotFoundException for compressed folder
-	            new File(newFile.getParent()).mkdirs();
-	 
-	            FileOutputStream fos = new FileOutputStream(newFile);             
-	 
-	            int len;
-	            while ((len = zis.read(buffer)) > 0) {
-	       		fos.write(buffer, 0, len);
-	            }
-	 
-	            fos.close();   
+	           
+	           if(ze.isDirectory()){
+	    		   //System.out.println("creating directory: " + newFile.getAbsolutePath());
+	    	   }else{
+	    		   //System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+	    			 
+		            //create all non exists folders
+		            //else you will hit FileNotFoundException for compressed folder
+		            new File(newFile.getParent()).mkdirs();
+		 
+		            FileOutputStream fos = new FileOutputStream(newFile);             
+		 
+		            int len;
+		            while ((len = zis.read(buffer)) > 0) {
+		            	fos.write(buffer, 0, len);
+		            }
+		 
+		            fos.close();   
+	    	   }
+	           
 	            ze = zis.getNextEntry();
 	    	}
 	 

@@ -797,8 +797,9 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	indexedRecords Integer	default 0	NOT NULL
 );
 	 */
+	@SuppressWarnings("finally")
 	@Override
-	public void putUser(Users u) {
+	public Integer putUser(Users u) {
 		Connection connection = null;
 	    int i = 0;
 	    try{
@@ -832,41 +833,248 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    }
 	}
 
+	
+	/*
+	 * CREATE TABLE projects(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	title 		String 			NOT NULL,
+	recordsPerImage Integer 	NOT NULL,
+	firstYCoor 	Integer			NOT NULL,
+	recordHeight 	Integer		NOT NULL
+);
+	 */
+	@SuppressWarnings("finally")
 	@Override
 	public Integer putProject(Projects p) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into projects SET (title, recordsPerImage, firstYCoor, recordHeight) VALUES (?, ?, ?, ?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setString(1, p.getTitle());
+	      statement.setInt(2, p.getRecordsPerImage());
+	      statement.setInt(3, p.getFirstYCoor());
+	      statement.setInt(4, p.getRecordHeight());
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
+	/*
+	 * CREATE TABLE fields(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	position	Integer 		NOT NULL,
+	title 		String 			NOT NULL,
+	xcoor		Integer 		NOT NULL,
+	width 		Integer 		NOT NULL,
+	helpHtml 	String 			NULL,
+	knownData 	String 			NULL,
+	projectId 	Integer 		NOT NULL,
+	FOREIGN KEY(projectId) 		REFERENCES projects(id)
+);
+	 */
+	@SuppressWarnings("finally")
 	@Override
 	public Integer putField(Fields f) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into fields SET (position, title, xcoor, width, helpHtml, knownData, projectId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setInt(1, f.getPosition());
+	      statement.setString(2, f.getTitle());
+	      statement.setInt(3, f.getXcoor());
+	      statement.setInt(4, f.getWidth());
+	      statement.setString(5, f.getHelpHtml());
+	      statement.setString(6, f.getKnownData());
+	      statement.setInt(7, f.getProjectId());
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
+	
+	/*
+	 * CREATE TABLE images(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	file 		String 			NOT NULL,
+	projectId 	Integer 		NOT NULL,
+	userId 		Integer 		NULL,
+	finished 	Integer default 0 NOT NULL,
+	FOREIGN KEY(projectId) 		REFERENCES projects(id),
+	FOREIGN KEY(userId) 		REFERENCES users(id)
+);
+	 */
+	@SuppressWarnings("finally")
 	@Override
-	public Integer putImage(Images i) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer putImage(Images image) {
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into images SET (file, projectId, userId, finished) VALUES (?, ?, ?, ?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setString(1, image.getFile());
+	      statement.setInt(2, image.getProjectId());
+	      statement.setInt(3, image.getUserId());
+	      statement.setInt(4, image.getFinished());
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
+	
+	/*
+	 * CREATE TABLE records(
+	id			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	imageId 	Integer			NOT NULL,
+	FOREIGN KEY(imageId)		REFERENCES images(id)
+);
+	 */
 
+	@SuppressWarnings("finally")
 	@Override
 	public Integer putRecord(Records r) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into records SET (imageId) VALUES (?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setInt(1, r.getImageId());
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
+	/*
+	 * CREATE TABLE fieldValues(
+	id 			Integer 		PRIMARY KEY AUTOINCREMENT NOT NULL,
+	recordId 	Integer 		NOT NULL,
+	fieldId 	Integer 		NOT NULL,
+	value 		String			NOT NULL,
+	FOREIGN KEY(fieldId) 		REFERENCES fields(id),
+	FOREIGN KEY(recordId) 		REFERENCES records(id)
+);
+	 */
+	@SuppressWarnings("finally")
 	@Override
-	public Integer putFieldValue(FieldValues fv, Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer putFieldValue(FieldValues fv, Integer fieldId) {
+		Connection connection = null;
+	    int i = 0;
+	    try{
+		  Class.forName("org.sqlite.JDBC");
+	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      String sql = "insert into fieldValues SET (recordId, fieldId, value) VALUES (?, ?, ?)";
+	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+	      statement.setInt(1, fv.getRecordId());
+	      statement.setInt(2, fieldId);
+	      statement.setString(3, fv.getValue());
+	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	      i = statement.executeUpdate();
+	      if(i > 0)
+	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+	    }catch(SQLException e){
+	      // if the error message is "out of memory", 
+	      // it probably means no database file is found
+	      System.err.println(e.getMessage());
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}finally{
+	      try{
+	        if(connection != null)
+	          connection.close();
+	      }catch(SQLException e){
+	        // connection close failed.
+	        System.err.println(e);
+	      }finally{
+	    	  return i;
+	      }
+	    }
 	}
 
 }
 
 
 
-
+// java execute command line
 
 
 
