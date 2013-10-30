@@ -24,7 +24,6 @@ public:
     vector<Parameter*>* queryParams;
     vector<Parameter*>* originalQueryParams;
     set<Tuple>* tuples;
-    Relation *result;
     vector<string>* keys;
     Relation();
     Relation(Relation *old);
