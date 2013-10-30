@@ -28,7 +28,7 @@ Relation::Relation(Relation *old){
 Relation::~Relation(){
     delete this->tuples;
     delete this->variableNames;
-    delete  this->queryParams;
+    delete this->queryParams;
     delete this->relationsToDelete;
     delete this->result;
     delete this->keys;

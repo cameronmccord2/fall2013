@@ -59,6 +59,8 @@ Database::~Database(){
     delete this->queries;
     delete this->results;
     delete this->tuplesToDelete;
+    delete this->variablePositions;
+    delete this->variablePositions2;
 //    delete this->variablePositions;// always deleted after done using it in run()
 }
 
