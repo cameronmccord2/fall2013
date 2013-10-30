@@ -1,0 +1,36 @@
+Schemes:
+  c(X,Y)
+m(X,Y)
+s(A,B,C,D)
+Facts:
+  m('z','b').
+m('b','z').
+c('j','z').
+c('n','b').
+c('t','b').
+c('z','z').
+s('j','z','t','z').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+c('G','G').
+s('G','G','G','G').
+s('G','G','G','G').
+s('G','G','G','G').
+s('G','G','G','G').
+s('T','T','G','T').
+Rules:
+  DoNothing(Z) :- Stuff(Z).
+Queries:
+  m(Y,X)?
+c(Y,Y)?
+c(Y,'b')?
+s(A,B,B,A)?
+s(A,C,'G',A)?
+
