@@ -15,6 +15,11 @@ Parameter::Parameter(DatalogProgram *dp){
     this->readParameter(dp);
 }
 
+Parameter::Parameter(Parameter* p){
+	this->value = p->value;
+	this->valueIsString = p->valueIsString;
+}
+
 Parameter::~Parameter(){
     
 }

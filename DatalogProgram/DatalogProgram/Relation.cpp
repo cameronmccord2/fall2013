@@ -11,7 +11,7 @@
 Relation::Relation(){
     this->tuples = new set<Tuple>();
     this->variableNames = new vector<string>();
-    this->queryParams = new vector<Parameter*>();
+    this->queryParams = new vector<Parameter*>();// these are bad somewhere
     this->originalQueryParams = new vector<Parameter*>();
     this->relationsToDelete = new vector<Relation*>();
 }
@@ -19,7 +19,7 @@ Relation::Relation(){
 Relation::Relation(Relation *old){
     this->tuples = new set<Tuple>(*old->tuples);
     this->variableNames = new vector<string>(*old->variableNames);
-    this->queryParams = new vector<Parameter*>(*old->queryParams);
+    this->queryParams = new vector<Parameter*>(*old->queryParams);// these are bad somewhere
     this->originalQueryParams = new vector<Parameter*>(*old->originalQueryParams);
     this->relationsToDelete = new vector<Relation*>();
     this->name = old->name;
@@ -28,18 +28,16 @@ Relation::Relation(Relation *old){
 Relation::~Relation(){
     delete this->tuples;
     delete this->variableNames;
-if(this->queryParams != NULL){
-for(size_t i = 0; i < this->queryParams->size(); i++){
-	delete this->queryParams->at(i);
-}
-    delete this->queryParams;
-}
-for(size_t i = 0; i < this->relationsToDelete->size(); i++){
-	delete this->relationsToDelete->at(i);
-}
+		for(size_t e = 0; e < this->queryParams->size(); e++){
+			delete this->queryParams->at(e);
+		}
+		delete this->queryParams;
+	for(size_t i = 0; i < this->relationsToDelete->size(); i++){
+		delete this->relationsToDelete->at(i);
+	}
     delete this->relationsToDelete;
-for(size_t i = 0; i < this->originalQueryParams->size(); i++){
-	delete this->originalQueryParams->at(i);
-}
+	for(size_t i = 0; i < this->originalQueryParams->size(); i++){
+		delete this->originalQueryParams->at(i);
+	}
     delete this->originalQueryParams;
 }

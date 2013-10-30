@@ -14,7 +14,6 @@
 Database::Database(DatalogProgram *dp){
     this->results = new vector<Relation*>();
     this->relations = new vector<Relation*>();
-    this->tuplesToDelete = new vector<Tuple*>();
     for (size_t i = 0; i < dp->schemeList->list->size(); i++) {// assemble relations
         // create relation and variable names
         Relation *r = new Relation();
@@ -32,7 +31,6 @@ Database::Database(DatalogProgram *dp){
                     t.push_back(dp->factList->list->at(j)->parameters->at(k)->value);
                 }
                 r->tuples->insert(t);
-//                this->tuplesToDelete->push_back(t);
             }
         }
     }
@@ -43,15 +41,13 @@ Database::Database(DatalogProgram *dp){
         Relation *r = new Relation();
         r->name = dp->queryList->list->at(i)->identifier;
         for (size_t j = 0; j < dp->queryList->list->at(i)->parameters->size(); j++) {
-            r->queryParams->push_back(dp->queryList->list->at(i)->parameters->at(j));
-            r->originalQueryParams->push_back(dp->queryList->list->at(i)->parameters->at(j));
+            r->queryParams->push_back(new Parameter(dp->queryList->list->at(i)->parameters->at(j)));
+            r->originalQueryParams->push_back(new Parameter(dp->queryList->list->at(i)->parameters->at(j)));
         }
         this->queries->push_back(r);
     }
     
     this->run();
-//    cout << this->toString();
-//    cout << "asdfasdf";
 }
 
 Database::~Database(){
@@ -67,10 +63,6 @@ for(size_t i = 0; i < this->results->size(); i++){
 	delete this->results->at(i);
 }
     delete this->results;
-for(size_t i = 0; i < this->tuplesToDelete->size(); i++){
-	delete this->tuplesToDelete->at(i);
-}
-    delete this->tuplesToDelete;
 //    delete this->variablePositions;// always deleted after done using it in run()
 }
 
@@ -102,8 +94,7 @@ Relation* Relation::selectVariable(int position1, int position2){// return where
            newTuples->insert(t);
         }
     }
-    this->tuples->clear();
-    delete  this->tuples;
+    delete this->tuples;
     this->tuples = newTuples;
     return this;
 }
@@ -118,19 +109,23 @@ Relation* Relation::project1(vector<int>* indexes){
             keepEverythingElse = true;
         }
         if (keepEverythingElse || i != (unsigned)indexes->at(count)) {
-            newParameters->push_back(this->queryParams->at(i));// keep the column headers that we need
+            newParameters->push_back(new Parameter(this->queryParams->at(i)));// keep the column headers that we need
             newVariableNames->push_back(this->variableNames->at(i));
         }else
             count++;
-        //        else
-        //            delete this->queryParams->at(i);// this is not needed because the parameters will be deleted when we delete dp
     }
-    this->queryParams->clear();
+	//for(size_t i = 0; i < this->queryParams->size(); i++){
+	//	delete this->queryParams->at(i);
+	//}
     delete this->queryParams;
-    this->queryParams = newParameters;
-    this->variableNames->clear();
+    this->queryParams = new vector<Parameter*>(*newParameters);
+	//for(size_t i = 0; i < newParameters->size(); i++){
+	//delete newParameters->at(i);
+	//}
+	delete newParameters;
     delete this->variableNames;
-    this->variableNames = newVariableNames;
+    this->variableNames = new vector<string>(*newVariableNames);
+	delete newVariableNames;
     return this;
 }
 
@@ -171,7 +166,6 @@ Relation* Relation::project(){// removes constants that we have already found
         newTuples->insert(newTuple);
     }
     
-    this->tuples->clear();// remove the tuples because they are referenced in dp still
     delete this->tuples;// delete the old set
     this->tuples = newTuples;
     this->project1(indexes);
@@ -241,10 +235,10 @@ Relation* Relation::reduceSideways(Relation *query, Database *db){
     
     this->reduceSideways2(query, db);
     
-    
-    delete query->keys;
-    query->tuples = this->tuples;
-    query->variableNames = this->variableNames;
+    delete query->tuples;
+    query->tuples = new set<Tuple>(*this->tuples);
+	delete query->variableNames;
+    query->variableNames = new vector<string>(*this->variableNames);
     return query;
 }
 
@@ -252,8 +246,11 @@ Relation* Relation::reduceVertical(Relation* query, Database *db){
     for (size_t a = 0; a < this->variableNames->size(); a++) {// rename the variables to something that will for sure never be given in their test code, helpful?
         this->variableNames->at(a) = this->variableNames->at(a) + "Cameron";
     }
-    
-    this->queryParams = query->queryParams;
+		for(size_t e = 0; e < this->queryParams->size(); e++){
+			delete this->queryParams->at(e);
+		}
+    delete this->queryParams;
+    this->queryParams = new vector<Parameter*>(*query->queryParams);
     query->keys = new vector<string>();// This itemizes the query's variable names, later we can keep all tuples that are the same for keys that have multiple indexes in the result data columns - slam(X, X, A)// make sure Xs are the same
     
     for (size_t k = 0; k < query->queryParams->size();) {// check each param in the query
@@ -289,13 +286,13 @@ bool Database::run(){
                 
                 relation->project();// do projection, remove all constants in the result data, these we dont care about now
                 
-                query = relation->reduceSideways(query, this);
-                
-                break;
+                query = relation->reduceSideways(query, this);// doesnt do anything with query params
+		delete query->keys;
             }
+		delete relation;
         }
 	map<string, vector<int>*>::iterator it;
-    for (it = this->variablePositions->begin(); it != this->variablePositions->end(); ++it) {//loop through map and delete current position
+    for (it = this->variablePositions->begin(); it != this->variablePositions->end(); ++it) {//loop through map and delete variable positions for this query
         delete it->second;
     }
         delete this->variablePositions;

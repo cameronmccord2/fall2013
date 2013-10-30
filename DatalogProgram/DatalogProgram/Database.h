@@ -27,7 +27,6 @@ public:
     vector<Relation*>* results;
     void addVariableToSet(int position, string value);
     map<string, vector<int>*>* variablePositions;
-    vector<Tuple*>* tuplesToDelete;
     void addVariableToDoneKeys(int position, string value);
 private:
     

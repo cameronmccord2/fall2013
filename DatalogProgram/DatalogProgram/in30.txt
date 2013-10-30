@@ -8,6 +8,3 @@ Rules:
 
 Queries:
   SK(A,'c')?
-  SK('b','c')?
-  SK('c','c')?
-  SK(A,B)?

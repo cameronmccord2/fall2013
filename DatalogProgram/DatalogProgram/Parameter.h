@@ -17,6 +17,7 @@ private:
     
 public:
     Parameter(DatalogProgram *dp);
+	Parameter(Parameter* p);
     ~Parameter();
     std::string toString();
     std::string value;
