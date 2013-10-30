@@ -102,10 +102,10 @@ Relation* Relation::project1(vector<int>* indexes){
     int count = 0;
     bool keepEverythingElse = false;
     for (size_t i = 0; i < this->queryParams->size(); i++) {// only keep the column headers for the variable values
-        if (count == indexes->size()) {
+        if (count == (int)indexes->size()) {
             keepEverythingElse = true;
         }
-        if (keepEverythingElse || i != indexes->at(count)) {
+        if (keepEverythingElse || i != (unsigned)indexes->at(count)) {
             newParameters->push_back(this->queryParams->at(i));// keep the column headers that we need
             newVariableNames->push_back(this->variableNames->at(i));
         }else
@@ -148,10 +148,10 @@ Relation* Relation::project(){// removes constants that we have already found
         Tuple newTuple = Tuple();
         bool keepEverythingElse = false;
         for (size_t i = 0; i < this->queryParams->size(); i++) {// for each value in the query param/tuple
-            if (count == indexes->size()) {
+            if (count == (int)indexes->size()) {
                 keepEverythingElse = true;// finished
             }
-            if (keepEverythingElse || i != indexes->at(count)) {
+            if (keepEverythingElse || i != (unsigned)indexes->at(count)) {
                 newTuple.push_back(t.at(i));// keep the values in the tuples that are variables in the query
             }else
                 count++;
@@ -303,7 +303,7 @@ Relation* Relation::deleteTupleValueAtPosition(int pos){
         Tuple tuple = *it;
         Tuple newTuple = Tuple();
         for (size_t i = 0; i < tuple.size(); i++) {
-            if (i != pos) {
+            if (i != (unsigned)pos) {
                 newTuple.push_back(tuple.at(i));
             }
         }
@@ -317,9 +317,7 @@ Relation* Relation::deleteTupleValueAtPosition(int pos){
 string Relation::toStringRemainingTuples(){
     string output = "";
     set<Tuple>::iterator it;
-    int count = 0;
     for (it = this->tuples->begin(); it != this->tuples->end(); ++it) {
-        count = 0;
         if(this->variableNames->size() > 0)
             output += "  ";
         Tuple t = *it;
