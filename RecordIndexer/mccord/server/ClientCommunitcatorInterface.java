@@ -1,22 +1,12 @@
 package server;
 
-import java.util.ArrayList;
-
 import communicator.DownloadBatchParams;
-import communicator.DownloadBatchResult;
 import communicator.DownloadFileParams;
-import communicator.DownloadFileResult;
 import communicator.GetFieldsParams;
-import communicator.GetFieldsResult;
-import communicator.GetProjectsResult;
 import communicator.GetSampleImageParams;
-import communicator.GetSampleImageResult;
 import communicator.SearchParams;
-import communicator.SearchResult;
 import communicator.SubmitBatchParams;
-import communicator.SubmitBatchResult;
 import communicator.ValidateUserParams;
-import communicator.ValidateUserResult;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -31,8 +21,9 @@ public interface ClientCommunitcatorInterface{
 	 * @return the validate user result
 	 * @throws InvalidCredentialsException the invalid credentials exception
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public ValidateUserResult validateUser(ValidateUserParams params) throws InvalidCredentialsException, FailedException;
+	public Object validateUser(ValidateUserParams params, String host, String port) throws InvalidCredentialsException, FailedException, Exception;
 	
 	/**
 	 * Gets the projects.
@@ -40,8 +31,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the projects
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public ArrayList<GetProjectsResult> getProjects(ValidateUserParams params) throws FailedException;
+	public Object getProjects(ValidateUserParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Gets the sample image.
@@ -49,8 +41,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the sample image
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public GetSampleImageResult getSampleImage(GetSampleImageParams params) throws FailedException;
+	public Object getSampleImage(GetSampleImageParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Download batch.
@@ -58,8 +51,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the download batch result
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public DownloadBatchResult downloadBatch(DownloadBatchParams params) throws FailedException;
+	public Object downloadBatch(DownloadBatchParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Submit batch.
@@ -67,8 +61,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the submit batch result
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public SubmitBatchResult submitBatch(SubmitBatchParams params) throws FailedException;
+	public Object submitBatch(SubmitBatchParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Gets the fields.
@@ -76,8 +71,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the fields
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public ArrayList<GetFieldsResult> getFields(GetFieldsParams params) throws FailedException;
+	public Object getFields(GetFieldsParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Search.
@@ -85,8 +81,9 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the array list
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public ArrayList<SearchResult> search(SearchParams params) throws FailedException;
+	public Object search(SearchParams params, String host, String port) throws FailedException, Exception;
 	
 	/**
 	 * Download file.
@@ -94,6 +91,7 @@ public interface ClientCommunitcatorInterface{
 	 * @param params the params
 	 * @return the download file result
 	 * @throws FailedException the failed exception
+	 * @throws Exception 
 	 */
-	public DownloadFileResult downloadFile(DownloadFileParams params) throws FailedException;
+	public Object downloadFile(DownloadFileParams params, String host, String port) throws FailedException, Exception;
 }

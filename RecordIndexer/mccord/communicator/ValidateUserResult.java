@@ -28,6 +28,8 @@ NUM_RECORDS ::= Integer
 	 */
 	public String toString(){
 		StringBuilder sb = new StringBuilder("");
+		sb.append("TRUE");
+		sb.append("\n");
 		sb.append(firstName);
 		sb.append("\n");
 		sb.append(lastName);
@@ -36,6 +38,14 @@ NUM_RECORDS ::= Integer
 		sb.append("\n");
 		
 		return sb.toString();
+	}
+	
+	public boolean equals(Object o){
+		if(o instanceof ValidateUserResult){
+			ValidateUserResult r = (ValidateUserResult)o;
+			return (r.toString().equals(this.toString()));
+		}
+		return false;
 	}
 	
 	/**

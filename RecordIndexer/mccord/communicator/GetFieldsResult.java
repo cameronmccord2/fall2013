@@ -39,6 +39,14 @@ FIELD_TITLE ::= String
 		return sb.toString();
 	}
 	
+	public boolean equals(Object o){
+		if(o instanceof GetFieldsResult){
+			GetFieldsResult r = (GetFieldsResult)o;
+			return (r.toString().equals(this.toString()));
+		}
+		return false;
+	}
+	
 	/**
 	 * Gets the title.
 	 *

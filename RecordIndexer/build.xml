@@ -133,6 +133,9 @@
 	</target>
 	
 	<target name="server-tests" depends="compile" description="run automated server tests">
+		<antcall target="import">
+			<param name="file" value="${database}/record-indexer-data.zip"/>
+		</antcall>
 		<java classname="server.ServerUnitTests" fork="yes">
 			<classpath>
 				<path refid="all-classpath"/>

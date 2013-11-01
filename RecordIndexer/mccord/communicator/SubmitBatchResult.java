@@ -16,6 +16,15 @@ public class SubmitBatchResult {
 		
 		return sb.toString();
 	}
+	
+	public boolean equals(Object o){
+		if(o instanceof SubmitBatchResult){
+			SubmitBatchResult r = (SubmitBatchResult)o;
+			return (r.toString().equals(this.toString()));
+//			}
+		}
+		return false;
+	}
 
 	public String getResult() {
 		return result;

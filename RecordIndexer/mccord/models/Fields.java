@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import dao.JDBCRecordIndexerDAO;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Fields.
@@ -33,6 +35,15 @@ public class Fields {
 	
 	/** The project id. */
 	protected Integer projectId;
+	
+	public boolean equals(Object o){
+		if(o instanceof Fields){
+			Fields r = (Fields)o;
+			return (r.toString().equals(this.toString()));
+//			return (r.getTitle().equals(this.getTitle()) && r.getHelpHtml().equals(this.getHelpHtml()) && r.getKnownData().equals(this.getKnownData()) && r.getId() == this.getId() && r.getPosition() == this.getPosition() && r.getXcoor() == this.getXcoor() && r.getWidth() == this.getWidth() && r.getProjectId() == this.getProjectId());
+		}
+		return false;
+	}
 	
 	/**
 	 * Gets the id.
@@ -190,6 +201,7 @@ protected Integer projectId;
 	 */
 	public static ArrayList<Fields> parseResultSet(ResultSet resultSet) {
 		ArrayList<Fields> responses = new ArrayList<Fields>();
+		JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
     	try{
 			while(resultSet.next()){
 				Fields response = new Fields();
@@ -199,7 +211,11 @@ protected Integer projectId;
 				response.setXcoor(resultSet.getInt("xcoor"));
 				response.setWidth(resultSet.getInt("width"));
 				response.setHelpHtml(resultSet.getString("helpHtml"));
+				if(response.getHelpHtml() != null)
+					response.setHelpHtml(dao.getPartialUrlForImageFile(response.getHelpHtml()));
 				response.setKnownData(resultSet.getString("knownData"));
+				if(response.getKnownData() != null)
+					response.setKnownData(dao.getPartialUrlForImageFile(response.getKnownData()));
 				response.setProjectId(resultSet.getInt("projectId"));
 				responses.add(response);
 			}

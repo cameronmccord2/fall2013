@@ -176,10 +176,11 @@ protected Integer indexedRecords;
 				response.setLastName(resultSet.getString("lastName"));
 				response.setEmail(resultSet.getString("email"));
 				response.setUserName(resultSet.getString("username"));
-				response.setPassword(resultSet.getString("passwrod"));
+				response.setPassword(resultSet.getString("password"));
 				responses.add(response);
 			}
     	}catch(SQLException e){
+    		System.out.println("sql exception users" + e.getLocalizedMessage());
     		throw new RuntimeException(e);
     	}
     	return responses;

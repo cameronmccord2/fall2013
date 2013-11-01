@@ -1,5 +1,7 @@
 package communicator;
 
+import models.SearchesToDo;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class SearchResult.
@@ -45,6 +47,15 @@ FIELD_ID ::= Integer
 		sb.append("\n");
 		
 		return sb.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof SearchesToDo){
+			SearchesToDo r = (SearchesToDo)o;
+			return (r.toString().equals(this.toString()));
+		}
+		return false;
 	}
 	
 	/**

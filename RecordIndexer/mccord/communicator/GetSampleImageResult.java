@@ -16,6 +16,14 @@ public class GetSampleImageResult {
 		
 		return sb.toString();
 	}
+	
+	public boolean equals(Object o){
+		if(o instanceof GetSampleImageResult){
+			GetSampleImageResult r = (GetSampleImageResult)o;
+			return (r.toString().equals(this.toString()));
+		}
+		return false;
+	}
 
 	/**
 	 * Gets the url.

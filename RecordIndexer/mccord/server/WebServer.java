@@ -1,10 +1,12 @@
 package server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import models.FailedResult;
 import models.FalseResult;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -12,7 +14,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import communicator.DownloadBatchParams;
-import communicator.DownloadFileParams;
 import communicator.GetFieldsParams;
 import communicator.GetSampleImageParams;
 import communicator.SearchParams;
@@ -48,7 +49,7 @@ public class WebServer implements WebServerInterface{
 			server.createContext("/submitBatch", submitBatchHandler);
 			server.createContext("/getFields", getFieldsHandler);
 			server.createContext("/search", searchHandler);
-			server.createContext("/downloadFile", downloadFileHandler);
+			server.createContext("/", downloadFileHandler);
 		
 			server.start();
 			System.out.println("running on port: " + port);
@@ -66,16 +67,15 @@ public class WebServer implements WebServerInterface{
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
 			ValidateUserParams params = (ValidateUserParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				xstream.toXML(dao.validateUser(params), exchange.getResponseBody());
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.validateUser(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			} catch (InvalidCredentialsException e) {
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFalseResult(), exchange.getResponseBody());
+			}finally{
+				exchange.getResponseBody().close();
 			}
-			exchange.getResponseBody().close();
 		}
 	};
 
@@ -89,7 +89,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.getProjects(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -106,7 +105,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.getSampleImage(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -123,7 +121,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.downloadBatch(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -140,7 +137,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.submitBatch(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -157,7 +153,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.getFields(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -174,7 +169,6 @@ public class WebServer implements WebServerInterface{
 				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 				xstream.toXML(dao.search(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
 				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
 			exchange.getResponseBody().close();
@@ -186,14 +180,23 @@ public class WebServer implements WebServerInterface{
 		public void handle(HttpExchange exchange)throws IOException{
 			System.out.println("downloadFileHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			DownloadFileParams params = (DownloadFileParams)xstream.fromXML(exchange.getRequestBody());
-			try{
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-				xstream.toXML(dao.downloadFile(params), exchange.getResponseBody());
-			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
-				xstream.toXML(getFailedResult(), exchange.getResponseBody());
-			}
+			String url = exchange.getRequestURI().toString();
+			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+			String filename = "";
+			if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("mages"))
+				filename = dao.getPartialUrlForImageFile("images/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+			else if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("ldhelp"))
+				filename = dao.getPartialUrlForImageFile("fieldhelp/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+			else if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("ndata"))
+				filename = dao.getPartialUrlForImageFile("knowndata/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+			else
+				System.out.println("other type of file not accounted for");
+			System.out.println(filename);
+			FileInputStream f = new FileInputStream(filename);
+			byte[] bFile = new byte[(int) f.available()];
+			f.read(bFile);
+			f.close();
+			exchange.getResponseBody().write(bFile);
 			exchange.getResponseBody().close();
 		}
 	};

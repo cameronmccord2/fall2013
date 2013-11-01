@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import models.Users;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class GetProjectsResult.
@@ -25,6 +23,14 @@ public class GetProjectsResult {
 		sb.append(title);
 		sb.append("\n");
 		return sb.toString();
+	}
+	
+	public boolean equals(Object o){
+		if(o instanceof GetProjectsResult){
+			GetProjectsResult r = (GetProjectsResult)o;
+			return (r.toString().equals(this.toString()));
+		}
+		return false;
 	}
 	
 	/**

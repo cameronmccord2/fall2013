@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import server.FailedException;
@@ -7,7 +8,6 @@ import server.InvalidCredentialsException;
 import communicator.DownloadBatchParams;
 import communicator.DownloadBatchResult;
 import communicator.DownloadFileParams;
-import communicator.DownloadFileResult;
 import communicator.GetFieldsParams;
 import communicator.GetFieldsResult;
 import communicator.GetProjectsResult;
@@ -102,11 +102,11 @@ public interface RecordIndexerDAO {
 	 * @return the download file result
 	 * @throws FailedException the failed exception
 	 */
-	public DownloadFileResult downloadFile(DownloadFileParams params) throws FailedException;
+	public File downloadFile(DownloadFileParams params) throws FailedException;
 
 	void resetDatabase();
 
-	public Integer putUser(Users u);
+	public Integer putUser(Users u) throws FailedException;
 
 	public Integer putProject(Projects p);
 
@@ -117,6 +117,9 @@ public interface RecordIndexerDAO {
 	public Integer putRecord(Records r);
 
 	public Integer putFieldValue(FieldValues fv);
+	
+	public String getPartialUrlForImageFile(String filename);
+
 	
 	
 	

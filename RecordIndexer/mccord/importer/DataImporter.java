@@ -5,27 +5,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.zip.*;
+
+import server.FailedException;
 
 import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import dao.JDBCRecordIndexerDAO;
-import dao.RecordIndexerDAO;
 import models.FieldValues;
 import models.Fields;
-import models.FieldsList;
 import models.Images;
 import models.IndexerData;
 import models.Projects;
-import models.ProjectsList;
-import models.RecordConverter;
 import models.Records;
 import models.Users;
-import models.Values;
 
 /**
  * The Class DataImporter.
@@ -44,7 +38,6 @@ public class DataImporter {
 		try {
 			deleteRecursive(new File(ourDataStore));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// unzip archive
@@ -64,7 +57,6 @@ public class DataImporter {
 		xstream.aliasField("firstycoord", Projects.class, "firstYCoor");
 		xstream.aliasField("recordheight", Projects.class, "recordHeight");
 		xstream.aliasField("fields", Projects.class, "fields");
-//		xstream.alias("fields", FieldsList.class);
 		xstream.alias("field", Fields.class);
 		xstream.aliasField("xcoord", Fields.class, "xcoor");
 		xstream.aliasField("helphtml", Fields.class, "helpHtml");
@@ -76,23 +68,16 @@ public class DataImporter {
 		xstream.aliasField("values", Records.class, "values");
 		xstream.alias("value", String.class);
 		
-//		xstream.registerConverter(new RecordConverter());
 		
 		String xmlFilePath = "failejd";
-//		xstream.ignoreUnknownElements();
 		try {
 			xmlFilePath = this.getPathForXml(ourDataStore);
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.out.println("xml file path: " + xmlFilePath);
 		try {
 			xmlFilePath = this.getPathForXml(ourDataStore);
-//			System.out.println("test line");
 			IndexerData indexerData = (IndexerData)xstream.fromXML(new File(xmlFilePath));
-//			System.out.println("test line2");
-			System.out.println(indexerData);
 			System.out.println("xtreamed");
 			this.importXml(indexerData);
 			System.out.println("imported");
@@ -103,9 +88,13 @@ public class DataImporter {
 	}
 	
 	private void importXml(IndexerData id) {
-		RecordIndexerDAO dao = new JDBCRecordIndexerDAO();
+		JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
 		for(Users u : id.getUsers()){
-			dao.putUser(u);
+			try {
+				dao.putUser(u);
+			} catch (FailedException e) {
+				System.out.println("tried to insert a duplicate username/password possibly");
+			}
 		}
 		for(Projects p : id.getProjects()){
 			p.setId(dao.putProject(p));
@@ -116,7 +105,6 @@ public class DataImporter {
 				f.setId(dao.putField(f));
 				count++;
 			}
-//			System.out.println("images: " + p.getImages().size());
 			for(Images i : p.getImages()){
 				i.setProjectId(p.getId());
 				i.setId(dao.putImage(i));
@@ -126,10 +114,8 @@ public class DataImporter {
 						r.setId(dao.putRecord(r));
 						count = 0;
 						if(r.getValues() != null){
-//							r.setFieldValues(new ArrayList<FieldValues>());
 							
 							for(int j = 0; j < r.getValues().size(); j++){
-//								System.out.println("createing field value" + r.getValues().get(j));
 								FieldValues fv = new FieldValues();
 								fv.setValue(r.getValues().get(j));
 								fv.setFieldId(p.getFields().get(j).getId());
@@ -144,38 +130,34 @@ public class DataImporter {
 	}
 
 	private String getPathForXml(String ourDataPath) throws FileNotFoundException{
-		System.out.println(ourDataPath);
 		File f = new File(ourDataPath);
 		if(f.isDirectory()){
 			for(String p : f.list()){
 				if(p.equals("Records.xml")){
-					System.out.println("found a file thing: " + p);
 					return ourDataPath + File.separator + p;
 				}else if(p.equals("Records")){
-					System.out.println("found a file thing: " + p);
 					return this.getPathForXml(ourDataPath + File.separator + p);
 				}
 			}
 		}else{
 			if(f.getPath().equals("Records.xml"))
-				System.out.println("found records.xml");
 				return ourDataPath + File.separator + "Records.xml";
 		}
 			
 		return "";
 	}
 	
-	private boolean executeCommandLine(String command){
-		try{
-		Process tr = Runtime.getRuntime().exec( new String[]{ "cat" } );
-		Writer wr = new OutputStreamWriter( tr.getOutputStream() );
-		wr.write(command);
-		wr.flush();
-		}catch(IOException ioe){
-			return false;
-		}
-		return true;
-	}
+//	private boolean executeCommandLine(String command){
+//		try{
+//		Process tr = Runtime.getRuntime().exec( new String[]{ "cat" } );
+//		Writer wr = new OutputStreamWriter( tr.getOutputStream() );
+//		wr.write(command);
+//		wr.flush();
+//		}catch(IOException ioe){
+//			return false;
+//		}
+//		return true;
+//	}
 	
     /**
      * By default File#delete fails for non-empty directories, it works like "rm". 
@@ -207,7 +189,7 @@ public class DataImporter {
 	    	}
 	 
 	    	//get the zip file content
-	    	System.out.println(zipFile);
+//	    	System.out.println(zipFile);
 	    	ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
 	    	//get the zipped file list entry
 	    	ZipEntry ze = zis.getNextEntry();
@@ -243,7 +225,7 @@ public class DataImporter {
 	        zis.closeEntry();
 	    	zis.close();
 	 
-	    	System.out.println("Done");
+	    	System.out.println("Done unzipping");
 	 
 	    }catch(IOException ex){
 	       ex.printStackTrace(); 

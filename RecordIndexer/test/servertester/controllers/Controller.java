@@ -1,16 +1,10 @@
 package servertester.controllers;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 import models.FailedResult;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import models.FalseResult;
+import models.Fields;
 
 import communicator.DownloadBatchParams;
 import communicator.DownloadBatchResult;
@@ -25,6 +19,7 @@ import communicator.SubmitBatchParams;
 import communicator.SubmitBatchResult;
 import communicator.ValidateUserParams;
 import communicator.ValidateUserResult;
+import server.ClientCommunicator;
 import servertester.views.*;
 
 public class Controller implements IController {
@@ -121,194 +116,199 @@ public class Controller implements IController {
 		}
 	}
 	
-	private Object sendPost(Object body, String urlPart) throws Exception {
-		 
-		String url = "http://localhost:39640/" + urlPart;
-		URL obj = new URL(url);
-//		HttpURLConnection c = new HttpURLConnection();
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setDoOutput(true);
-//		con.setRequestMethod("POST");
-		XStream xstream = new XStream(new DomDriver());
-		xstream.toXML(body, con.getOutputStream());
-		//add reuqest header
-		
-		
-//		con.addRequestProperty("Content-Type", "application/xml");
-//		con.setRequestProperty("Content-Length", Integer.toString(bodyXml.length()));
-//		con.getOutputStream().write(bodyXml.getBytes("UTF8"));
- 
-		// Send post request
-//		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-//		wr.writeBytes(urlParameters);
-		wr.flush();
-		wr.close();
- 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-//		System.out.println("Post parameters : " + urlParameters);
-		System.out.println("Response Code : " + responseCode);
- 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
- 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
- 
-		//print result
-		System.out.println(response.toString());
-		
-		return xstream.fromXML(response.toString());
-	}
-	
 	private void validateUser(){
+		ClientCommunicator cc = new ClientCommunicator();
 		ValidateUserParams var = new ValidateUserParams();
-		String[] params = getView().getParameterValues();
+		String[] params = getView().getParameterValues();// add checks for no string?
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
+		getView().setRequest(var.toString());
+		String result = "";
 		try {
-			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "validateUser");
+			Object response = cc.validateUser(var, getView().getHost(), getView().getPort());
 			if(response instanceof ValidateUserResult){
 				result = ((ValidateUserResult)response).toString();
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else if(response instanceof FalseResult)
+				result = ((FalseResult)response).toString();
+			else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void getProjects() {
+		ClientCommunicator cc = new ClientCommunicator();
 		ValidateUserParams var = new ValidateUserParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "getProjects");
-			if(response instanceof ValidateUserResult){
-				result = ((ArrayList<GetProjectsResult>)response).toString();
+			Object response = cc.getProjects(var, getView().getHost(), getView().getPort());
+			if(response instanceof ArrayList){
+				for(GetProjectsResult r : (ArrayList<GetProjectsResult>)response){
+					result += r.toString();
+				}
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
 	private void getSampleImage() {
+		ClientCommunicator cc = new ClientCommunicator();
 		GetSampleImageParams var = new GetSampleImageParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
 		var.setProjectId(Integer.parseInt(params[2]));
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "getSampleImage");
-			if(response instanceof ValidateUserResult){
+			Object response = cc.getSampleImage(var, getView().getHost(), getView().getPort());
+			if(response instanceof GetSampleImageResult){
+				((GetSampleImageResult)response).setUrl("http://" + getView().getHost() + ":" + getView().getPort() + "/" + ((GetSampleImageResult)response).getUrl());
 				result = ((GetSampleImageResult)response).toString();
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
 	private void downloadBatch() {
+		ClientCommunicator cc = new ClientCommunicator();
 		DownloadBatchParams var = new DownloadBatchParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
 		var.setProjectId(Integer.parseInt(params[2]));
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "downloadBatch");
-			if(response instanceof ValidateUserResult){
+			Object response = cc.downloadBatch(var, getView().getHost(), getView().getPort());
+			if(response instanceof DownloadBatchResult){
+				((DownloadBatchResult)response).setImageUrl("http://" + getView().getHost() + ":" + getView().getPort() + "/" + ((DownloadBatchResult)response).getImageUrl());
+				for(Fields f : ((DownloadBatchResult)response).getFields()){
+					if(f.getHelpHtml() != null)
+						f.setHelpHtml("http://" + getView().getHost() + ":" + getView().getPort() + "/" + f.getHelpHtml());
+					if(f.getKnownData() != null)
+						f.setKnownData("http://" + getView().getHost() + ":" + getView().getPort() + "/" + f.getKnownData());
+				}
 				result = ((DownloadBatchResult)response).toString();
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void getFields() {
+		ClientCommunicator cc = new ClientCommunicator();
 		GetFieldsParams var = new GetFieldsParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
 		var.setProjectId(Integer.parseInt(params[2]));
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "getFields");
-			if(response instanceof ValidateUserResult){
-				result = ((ArrayList<GetFieldsResult>)response).toString();
+			Object response = cc.getFields(var, getView().getHost(), getView().getPort());
+			if(response instanceof ArrayList){
+				for(GetFieldsResult r : (ArrayList<GetFieldsResult>)response){
+					result += r.toString();
+				}
+//				result = ((ArrayList<GetFieldsResult>)response).toString();
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
 	private void submitBatch() {
+		ClientCommunicator cc = new ClientCommunicator();
 		SubmitBatchParams var = new SubmitBatchParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
 		var.setBatchId(Integer.parseInt(params[2]));
 		var.setFieldValues(params[3]);
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "submitBatch");
-			if(response instanceof ValidateUserResult){
+			
+			Object response = cc.submitBatch(var, getView().getHost(), getView().getPort());
+			if(response instanceof SubmitBatchResult){
 				result = ((SubmitBatchResult)response).toString();
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
+			}else
+				result = "something else" + response.getClass();
 			getView().setResponse(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void search() {
+		ClientCommunicator cc = new ClientCommunicator();
 		SearchParams var = new SearchParams();
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
 		var.setFields(params[2]);
 		var.setSearchValues(params[3]);
+		String result = "";
 		try {
 			getView().setRequest(var.toString());
-			String result = "";
-			Object response = this.sendPost(var, "search");
-			if(response instanceof ValidateUserResult){
-				result = ((ArrayList<SearchResult>)response).toString();
+			Object response = cc.search(var, getView().getHost(), getView().getPort());
+			if(response instanceof ArrayList){
+				for(SearchResult r : (ArrayList<SearchResult>)response){
+					result += r.toString();
+				}
 			}else if(response instanceof FailedResult){
 				result = ((FailedResult)response).toString();
-			}
-			getView().setResponse(result);
+			}else
+				result = "something else" + response.getClass();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			result = "FAILED";
+		}finally{
+			getView().setResponse(result);
 		}
 	}
 }

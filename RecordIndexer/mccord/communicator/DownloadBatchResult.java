@@ -10,6 +10,8 @@ import models.Fields;
  */
 public class DownloadBatchResult {
 	
+	protected Integer batchId;
+	
 	/** The project id. */
 	protected Integer projectId;
 	
@@ -30,6 +32,23 @@ public class DownloadBatchResult {
 	
 	/** The fields. */
 	protected ArrayList<Fields> fields;
+	
+	public boolean equals(Object o){
+		if(o instanceof DownloadBatchResult){
+			DownloadBatchResult r = (DownloadBatchResult)o;
+			return (r.toString().equals(this.toString()));
+//			if(r.getImageUrl().equals(this.getImageUrl()) && r.getProjectId() == this.getProjectId() && r.getFirstYCoor() == this.getFirstYCoor() && r.getRecordHeight() == this.getRecordHeight() && 
+//					r.getNumberOfRecords() == this.getNumberOfRecords() && r.getNumberOfFields() == this.getNumberOfFields()){
+//				System.out.println("DBR good");
+//				for(int i = 0; i < r.getFields().size(); i++){
+//					if(!r.getFields().get(i).equals(this.getFields().get(i)))
+//						return false;
+//				}
+//				return true;
+//			}
+		}
+		return false;
+	}
 	
 	/*
 	 * OUTPUT ::= <BATCH_ID>\n 
@@ -66,6 +85,8 @@ KNOWN_VALUES_URL ::= URL
 	 */
 	public String toString(){
 		StringBuilder sb = new StringBuilder("");
+		sb.append(batchId);
+		sb.append("\n");
 		sb.append(projectId);
 		sb.append("\n");
 		sb.append(imageUrl);
@@ -89,8 +110,11 @@ KNOWN_VALUES_URL ::= URL
 			sb.append("\n");
 			sb.append(f.getWidth());
 			sb.append("\n");
-			sb.append(f.getKnownData());
-			sb.append("\n");
+			if(f.getKnownData() != null){
+				sb.append(f.getKnownData());
+				sb.append("\n");
+			}
+			
 		}
 		
 		return sb.toString();
@@ -220,5 +244,13 @@ KNOWN_VALUES_URL ::= URL
 	 */
 	public void setFields(ArrayList<Fields> fields) {
 		this.fields = fields;
+	}
+
+	public Integer getBatchId() {
+		return batchId;
+	}
+
+	public void setBatchId(Integer batchId) {
+		this.batchId = batchId;
 	}
 }
