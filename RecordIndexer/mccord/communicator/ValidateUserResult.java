@@ -15,6 +15,29 @@ public class ValidateUserResult {
 	/** The count. */
 	protected Integer count;
 	
+	/*
+	 * OUTPUT ::= TRUE\n 
+<USER_FIRST_NAME>\n 
+<USER_LAST_NAME>\n 
+<NUM_RECORDS>\n 
+ 
+USER_FIRST_NAME ::= String 
+USER_LAST_NAME ::= String 
+NUM_RECORDS ::= Integer 
+
+	 */
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(firstName);
+		sb.append("\n");
+		sb.append(lastName);
+		sb.append("\n");
+		sb.append(count);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the first name.
 	 *

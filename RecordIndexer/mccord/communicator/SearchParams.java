@@ -12,6 +12,20 @@ public class SearchParams extends ValidateUserParams {
 	/** The search values. */
 	protected String searchValues;
 	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(username);
+		sb.append("\n");
+		sb.append(password);
+		sb.append("\n");
+		sb.append(fields);
+		sb.append("\n");
+		sb.append(searchValues);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the fields.
 	 *

@@ -26,4 +26,12 @@ public class DownloadFileResult {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(url);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }

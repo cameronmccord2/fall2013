@@ -12,6 +12,20 @@ public class SubmitBatchParams extends ValidateUserParams {
 	/** The field values. */
 	protected String fieldValues;
 	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(username);
+		sb.append("\n");
+		sb.append(password);
+		sb.append("\n");
+		sb.append(batchId);
+		sb.append("\n");
+		sb.append(fieldValues);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the batch id.
 	 *

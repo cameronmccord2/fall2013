@@ -8,6 +8,14 @@ public class GetSampleImageResult {
 	
 	/** The url. */
 	protected String url;
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(url);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 
 	/**
 	 * Gets the url.

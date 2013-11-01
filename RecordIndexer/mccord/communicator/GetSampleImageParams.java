@@ -10,6 +10,18 @@ public class GetSampleImageParams extends ValidateUserParams {
 	
 	/** The project id. */
 	protected Integer projectId;
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(username);
+		sb.append("\n");
+		sb.append(password);
+		sb.append("\n");
+		sb.append(projectId);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 
 	/**
 	 * Gets the project id.

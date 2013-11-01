@@ -31,6 +31,71 @@ public class DownloadBatchResult {
 	/** The fields. */
 	protected ArrayList<Fields> fields;
 	
+	/*
+	 * OUTPUT ::= <BATCH_ID>\n 
+<PROJECT_ID>\n 
+<IMAGE_URL>\n 
+<FIRST_Y_COORD>\n 
+<RECORD_HEIGHT>\n 
+<NUM_RECORDS>\n 
+<NUM_FIELDS>\n 
+<FIELD>+ 
+ 
+FIELD ::= <FIELD_ID>\n 
+<FIELD_NUM>\n 
+<FIELD_TITLE>\n 
+<HELP_URL>\n 
+<X_COORD>\n 
+<PIXEL_WIDTH>\n 
+(<KNOWN_VALUES_URL>\n)? 
+ 
+BATCH_ID ::= Integer 
+PROJECT_ID ::= Integer 
+FIELD_ID ::= Integer 
+IMAGE_URL ::= URL 
+FIRST_Y_COORD ::= Integer 
+RECORD_HEIGHT ::= Integer 
+NUM_RECORDS ::= Integer 
+NUM_FIELDS ::= Integer 
+FIELD_NUM ::= Integer (>= 1) 
+FIELD_TITLE ::= String 
+HELP_URL ::= URL 
+X_COORD ::= Integer 
+PIXEL_WIDTH ::= Integer 
+KNOWN_VALUES_URL ::= URL 
+	 */
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(projectId);
+		sb.append("\n");
+		sb.append(imageUrl);
+		sb.append("\n");
+		sb.append(firstYCoor);
+		sb.append("\n");
+		sb.append(recordHeight);
+		sb.append("\n");
+		sb.append(numberOfRecords);
+		sb.append("\n");
+		sb.append(numberOfFields);
+		sb.append("\n");
+		for(Fields f : fields){
+			sb.append(f.getPosition());
+			sb.append("\n");
+			sb.append(f.getTitle());
+			sb.append("\n");
+			sb.append(f.getHelpHtml());
+			sb.append("\n");
+			sb.append(f.getXcoor());
+			sb.append("\n");
+			sb.append(f.getWidth());
+			sb.append("\n");
+			sb.append(f.getKnownData());
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the project id.
 	 *

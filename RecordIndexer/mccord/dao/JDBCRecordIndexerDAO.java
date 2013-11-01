@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -64,7 +65,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Images> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from images WHERE userId = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, userId);
@@ -92,6 +93,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	
 	@Override
 	public void resetDatabase(){
+		System.out.println("resetting database********************************************************");
 		this.dropAllTables();
 		this.createAllTables();
 	}
@@ -103,7 +105,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    	// load the sqlite-JDBC driver using the current class loader
 		    Class.forName("org.sqlite.JDBC");
 	      // create a database connection
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      statement.executeUpdate("CREATE TABLE users(id Integer PRIMARY KEY AUTOINCREMENT NOT NULL,firstName String NOT NULL,lastName String NOT NULL,email String NOT NULL,userName String UNIQUE NOT NULL,password String NOT NULL,indexedRecords Integer default 0 NOT NULL)");
@@ -117,6 +119,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	      // it probably means no database file is found
 	      System.err.println(e.getMessage());
 	    } catch (ClassNotFoundException e) {
+	    	System.out.println("couldnt find db driver");
 			e.printStackTrace();
 		}finally{
 	      try{
@@ -126,6 +129,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	        // connection close failed.
 	        System.err.println(e);
 	      }finally{
+	    	  System.out.println("created tables");
 	    	  return true;
 	      }
 	    }
@@ -138,7 +142,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    	// load the sqlite-JDBC driver using the current class loader
 		    Class.forName("org.sqlite.JDBC");
 	      // create a database connection
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      Statement statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      
@@ -173,7 +177,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Users> users = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from users WHERE username = ? AND password = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setString(1, username);
@@ -222,7 +226,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<GetProjectsResult> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from projects";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -296,7 +300,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Fields> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from fields WHERE projectId = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, projectId);
@@ -328,7 +332,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Projects> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from projects WHERE id = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, projectId);
@@ -367,23 +371,29 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 			System.out.println("this should never be seen");
 		}
 		SubmitBatchResult result = new SubmitBatchResult();
-		result.setSuccess(false);
+		result.setResult("FAILED");
 		String[] records = params.getFieldValues().split("/;/");
 		for(String r : records){
 			if(!this.insertRecord(r, params.getBatchId()))
 				return result;
 		}
-		result.setSuccess(true);
+		result.setResult("TRUE");
 		return result;
 	}
 
 	private boolean insertRecord(String record, int batchId) {// returns true if success
-		int recordId = insertRecordForBatchId(batchId);
+		Records r = new Records();
+		r.setImageId(batchId);
+		int recordId = this.putRecord(r);
 		String[] fieldValues = record.split("/,/");
 		ArrayList<Fields> fields = this.getFieldsForBatchId(batchId);
 		int count = 0;
 		for(String fv : fieldValues){
-			if(this.insertFieldValueForRecordIdFieldId(fv, recordId, fields.get(count).getId()) < 1)
+			FieldValues f = new FieldValues();
+			f.setRecordId(recordId);
+			f.setValue(fv);
+			f.setFieldId(fields.get(count).getId());
+			if(this.putFieldValue(f) < 1)
 				return false;
 			count++;
 			if(count == fields.size())
@@ -402,7 +412,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		try {
 			throw new RuntimeException("" + generatedKeys.getLong(1));
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("asdf" + e);
 		}
 	}
 
@@ -416,40 +426,40 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	FOREIGN KEY(recordId) 		REFERENCES records(id)
 );
  */
-	@SuppressWarnings("finally")
-	private int insertFieldValueForRecordIdFieldId(String fv, Integer recordId, Integer fieldId) {
-		Connection connection = null;
-	    int i = 0;
-	    try{
-		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into fieldValues SET (recordId, fieldId, value) VALUES (?, ?, ?)";
-	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-	      statement.setInt(1, recordId);
-	      statement.setInt(2, fieldId);
-	      statement.setString(3, fv);
-	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
-	      i = statement.executeUpdate();
-	      if(i > 0)
-	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
-	    }catch(SQLException e){
-	      // if the error message is "out of memory", 
-	      // it probably means no database file is found
-	      System.err.println(e.getMessage());
-	    } catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}finally{
-	      try{
-	        if(connection != null)
-	          connection.close();
-	      }catch(SQLException e){
-	        // connection close failed.
-	        System.err.println(e);
-	      }finally{
-	    	  return i;
-	      }
-	    }
-	}
+//	@SuppressWarnings("finally")
+//	private int insertFieldValueForRecordIdFieldId(String fv, Integer recordId, Integer fieldId) {
+//		Connection connection = null;
+//	    int i = 0;
+//	    try{
+//		  Class.forName("org.sqlite.JDBC");
+//	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+//	      String sql = "insert into fieldValues (recordId, fieldId, value) VALUES (?, ?, ?)";
+//	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+//	      statement.setInt(1, recordId);
+//	      statement.setInt(2, fieldId);
+//	      statement.setString(3, fv);
+//	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+//	      i = statement.executeUpdate();
+//	      if(i > 0)
+//	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+//	    }catch(SQLException e){
+//	      // if the error message is "out of memory", 
+//	      // it probably means no database file is found
+//	      System.err.println(e.getMessage());
+//	    } catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}finally{
+//	      try{
+//	        if(connection != null)
+//	          connection.close();
+//	      }catch(SQLException e){
+//	        // connection close failed.
+//	        System.err.println(e);
+//	      }finally{
+//	    	  return i;
+//	      }
+//	    }
+//	}
 
 	private ArrayList<Fields> getFieldsForBatchId(Integer batchId) {
 		Images i = this.getBatchById(batchId);
@@ -463,7 +473,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Images> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from images WHERE id = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, batchId);
@@ -498,38 +508,38 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	FOREIGN KEY(imageId)		REFERENCES images(id)
 );
 	 */
-	@SuppressWarnings("finally")
-	private int insertRecordForBatchId(int batchId) {
-		Connection connection = null;
-	    int i = 0;
-	    try{
-		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into records SET (imageId) VALUES (?)";
-	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-	      statement.setInt(1, batchId);
-	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
-	      i = statement.executeUpdate();
-	      if(i > 0)
-	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
-	    }catch(SQLException e){
-	      // if the error message is "out of memory", 
-	      // it probably means no database file is found
-	      System.err.println(e.getMessage());
-	    } catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}finally{
-	      try{
-	        if(connection != null)
-	          connection.close();
-	      }catch(SQLException e){
-	        // connection close failed.
-	        System.err.println(e);
-	      }finally{
-	    	  return i;
-	      }
-	    }
-	}
+//	@SuppressWarnings("finally")
+//	private int insertRecordForBatchId(int batchId) {
+//		Connection connection = null;
+//	    int i = 0;
+//	    try{
+//		  Class.forName("org.sqlite.JDBC");
+//	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+//	      String sql = "insert into records (imageId) VALUES (?)";
+//	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+//	      statement.setInt(1, batchId);
+//	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+//	      i = statement.executeUpdate();
+//	      if(i > 0)
+//	    	  i = this.parseFirstInt(statement.getGeneratedKeys(), "id");
+//	    }catch(SQLException e){
+//	      // if the error message is "out of memory", 
+//	      // it probably means no database file is found
+//	      System.err.println(e.getMessage());
+//	    } catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}finally{
+//	      try{
+//	        if(connection != null)
+//	          connection.close();
+//	      }catch(SQLException e){
+//	        // connection close failed.
+//	        System.err.println(e);
+//	      }finally{
+//	    	  return i;
+//	      }
+//	    }
+//	}
 
 	@Override
 	public ArrayList<GetFieldsResult> getFields(GetFieldsParams params)throws FailedException {
@@ -563,7 +573,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Fields> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from fields";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -641,7 +651,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Records> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from records WHERE imageId = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, imageId);
@@ -673,7 +683,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Images> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from images WHERE id = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, imageId);
@@ -707,7 +717,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<Records> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from records WHERE id = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, recordId);
@@ -751,7 +761,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    ArrayList<FieldValues> result = null;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
 	      String sql = "select * from fieldValues WHERE fieldId = ? AND value = ?";
 	      PreparedStatement statement = connection.prepareStatement(sql);
 	      statement.setInt(1, fieldId);
@@ -802,14 +812,17 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	public Integer putUser(Users u) {
 		Connection connection = null;
 	    int i = 0;
+//	    System.out.println(u.getFirstName() + ", " +  u.getLastName() + ", " +  u.getEmail() + ", " +  u.getUserName() + ", " +  u.getPassword());
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into users SET (firstName, lastName, email, username, password) VALUES (?, ?, ?, ? ,?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into users (firstName, lastName, email, username, password) VALUES (?, ?, ?, ? ,?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setString(1, u.getFirstName());
 	      statement.setString(2, u.getLastName());
-	      // TODO keep finishing this here
+	      statement.setString(3, u.getEmail());
+	      statement.setString(4, u.getUserName());
+	      statement.setString(5, u.getPassword());
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      i = statement.executeUpdate();
 	      if(i > 0)
@@ -817,8 +830,9 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    }catch(SQLException e){
 	      // if the error message is "out of memory", 
 	      // it probably means no database file is found
-	      System.err.println(e.getMessage());
+	      System.err.println("sqlexception" + e);
 	    } catch (ClassNotFoundException e) {
+	    	System.err.println("class not found");
 			e.printStackTrace();
 		}finally{
 	      try{
@@ -826,7 +840,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	          connection.close();
 	      }catch(SQLException e){
 	        // connection close failed.
-	        System.err.println(e);
+	        System.err.println("failed to close connection" + e.getLocalizedMessage());
 	      }finally{
 	    	  return i;
 	      }
@@ -850,8 +864,8 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    int i = 0;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into projects SET (title, recordsPerImage, firstYCoor, recordHeight) VALUES (?, ?, ?, ?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into projects (title, recordsPerImage, firstYCoor, recordHeight) VALUES (?, ?, ?, ?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setString(1, p.getTitle());
 	      statement.setInt(2, p.getRecordsPerImage());
@@ -898,10 +912,11 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	public Integer putField(Fields f) {
 		Connection connection = null;
 	    int i = 0;
+//	    System.out.println(f.getPosition() + ", " + f.getTitle() + ", " + f.getXcoor() + ", " + f.getWidth() + ", " + f.getHelpHtml() + ", " + f.getKnownData() + ", " + f.getProjectId());
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into fields SET (position, title, xcoor, width, helpHtml, knownData, projectId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into fields (position, title, xcoor, width, helpHtml, knownData, projectId) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setInt(1, f.getPosition());
 	      statement.setString(2, f.getTitle());
@@ -919,6 +934,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	      // it probably means no database file is found
 	      System.err.println(e.getMessage());
 	    } catch (ClassNotFoundException e) {
+	    	System.out.println("class nto found");
 			e.printStackTrace();
 		}finally{
 	      try{
@@ -950,15 +966,14 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	public Integer putImage(Images image) {
 		Connection connection = null;
 	    int i = 0;
+//	    System.out.println(image.getFile() + ", " + image.getProjectId());
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into images SET (file, projectId, userId, finished) VALUES (?, ?, ?, ?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into images (file, projectId) VALUES (?, ?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setString(1, image.getFile());
 	      statement.setInt(2, image.getProjectId());
-	      statement.setInt(3, image.getUserId());
-	      statement.setInt(4, image.getFinished());
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      i = statement.executeUpdate();
 	      if(i > 0)
@@ -997,8 +1012,8 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    int i = 0;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into records SET (imageId) VALUES (?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into records (imageId) VALUES (?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setInt(1, r.getImageId());
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -1036,16 +1051,17 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	 */
 	@SuppressWarnings("finally")
 	@Override
-	public Integer putFieldValue(FieldValues fv, Integer fieldId) {
+	public Integer putFieldValue(FieldValues fv) {
 		Connection connection = null;
+//		System.out.println(fv.getRecordId() + ", " + fv.getFieldId() + ", " + fv.getValue());
 	    int i = 0;
 	    try{
 		  Class.forName("org.sqlite.JDBC");
-	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-	      String sql = "insert into fieldValues SET (recordId, fieldId, value) VALUES (?, ?, ?)";
+	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
+	      String sql = "insert into fieldValues (recordId, fieldId, value) VALUES (?, ?, ?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setInt(1, fv.getRecordId());
-	      statement.setInt(2, fieldId);
+	      statement.setInt(2, fv.getFieldId());
 	      statement.setString(3, fv.getValue());
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      i = statement.executeUpdate();
@@ -1074,7 +1090,9 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 
 
 
-// java execute command line
+
+
+
 
 
 

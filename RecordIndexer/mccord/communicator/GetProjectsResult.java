@@ -18,6 +18,15 @@ public class GetProjectsResult {
 	/** The id. */
 	protected Integer id;
 	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(id);
+		sb.append("\n");
+		sb.append(title);
+		sb.append("\n");
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the title.
 	 *

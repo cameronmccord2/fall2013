@@ -26,7 +26,7 @@
 	<property name="passoff" location="passoff"/>
 	
 	<!-- Database file used by the server -->
-	<property name="db-file" location="${database}/indexer_server.sqlite"/>
+	<property name="db-file" location="${database}/recordIndexer.sqlite"/>
 	
 	<!-- Database file containing empty tables. -->
 	<property name="empty-db-file" location="${database}/indexer_server_empty.sqlite"/>
@@ -43,7 +43,7 @@
 	<!-- *********** -->
 	<path id="lib-classpath">
 		<fileset dir="${lib}">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 	
@@ -64,6 +64,16 @@
 
 	<!-- TARGETS -->
 	<!-- ******* -->
+	<target name="all" description="do all">
+			<tstamp/>
+			<delete dir="${build}"/>
+			<delete dir="${passoff}"/>
+			<mkdir dir="${build}"/>
+			<mkdir dir="${passoff}"/>
+			<javac srcdir="${src}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
+			<javac srcdir="${test}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
+		</target>
+	
 	<target name="init" description="create build directories">
 		<tstamp/>
 		<mkdir dir="${build}"/>

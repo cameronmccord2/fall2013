@@ -26,4 +26,16 @@ public class GetFieldsParams extends ValidateUserParams {
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(username);
+		sb.append("\n");
+		sb.append(password);
+		sb.append("\n");
+		sb.append(projectId);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }

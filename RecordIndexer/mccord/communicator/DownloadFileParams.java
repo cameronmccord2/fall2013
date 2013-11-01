@@ -26,4 +26,12 @@ public class DownloadFileParams {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(filename);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
 }

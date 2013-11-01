@@ -3,11 +3,8 @@ package server;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
-import java.rmi.ServerException;
-import java.util.ArrayList;
-
-import models.Users;
-
+import models.FailedResult;
+import models.FalseResult;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -15,20 +12,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import communicator.DownloadBatchParams;
-import communicator.DownloadBatchResult;
 import communicator.DownloadFileParams;
-import communicator.DownloadFileResult;
 import communicator.GetFieldsParams;
-import communicator.GetFieldsResult;
-import communicator.GetProjectsResult;
 import communicator.GetSampleImageParams;
-import communicator.GetSampleImageResult;
 import communicator.SearchParams;
-import communicator.SearchResult;
 import communicator.SubmitBatchParams;
-import communicator.SubmitBatchResult;
 import communicator.ValidateUserParams;
-import communicator.ValidateUserResult;
 import dao.JDBCRecordIndexerDAO;
 
 // TODO: Auto-generated Javadoc
@@ -37,7 +26,7 @@ import dao.JDBCRecordIndexerDAO;
  */
 public class WebServer implements WebServerInterface{
 	
-	private static final int SERVER_PORT_NUMBER = 8080;
+//	private static final int SERVER_PORT_NUMBER = 8080;
 	private static final int MAX_WAITING_CONNECTIONS = 10;
 	
 	private HttpServer server;
@@ -47,47 +36,45 @@ public class WebServer implements WebServerInterface{
 		return;
 	}
 	
-	private void run(){
+	private void run(Integer port){
 		try{
-			server = HttpServer.create(new InetSocketAddress(SERVER_PORT_NUMBER), MAX_WAITING_CONNECTIONS);
+			server = HttpServer.create(new InetSocketAddress(port), MAX_WAITING_CONNECTIONS);
+			server.setExecutor(null);
+			
+			server.createContext("/validateUser", validateUserHandler);
+			server.createContext("/getProjects", getProjectsHandler);
+			server.createContext("/getSampleImage", getSampleImageHandler);
+			server.createContext("/downloadBatch", downloadBatchHandler);
+			server.createContext("/submitBatch", submitBatchHandler);
+			server.createContext("/getFields", getFieldsHandler);
+			server.createContext("/search", searchHandler);
+			server.createContext("/downloadFile", downloadFileHandler);
+		
+			server.start();
+			System.out.println("running on port: " + port);
 		}catch(IOException e){
 			System.out.println("could not create http server: " + e.getMessage());
 			e.printStackTrace();
 			return;
 		}
-		
-		server.setExecutor(null);
-		
-		server.createContext("/validateUser", validateUserHandler);
-		server.createContext("/getProjects", getProjectsHandler);
-		server.createContext("/getSampleImage", getSampleImageHandler);
-		server.createContext("/downloadBatch", downloadBatchHandler);
-		server.createContext("/submitBatch", submitBatchHandler);
-		server.createContext("/getFields", getFieldsHandler);
-		server.createContext("/search", searchHandler);
-		server.createContext("/downloadFile", downloadFileHandler);
-	
-		server.start();
 	}
 	
 	private HttpHandler validateUserHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("validateUserHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			ValidateUserResult result = null;
 			ValidateUserParams params = (ValidateUserParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.validateUser(params);
+				xstream.toXML(dao.validateUser(params), exchange.getResponseBody());
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			} catch (InvalidCredentialsException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFalseResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -95,18 +82,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler getProjectsHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("getProjectsHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			ArrayList<GetProjectsResult> result = null;
 			ValidateUserParams params = (ValidateUserParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.getProjects(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.getProjects(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -114,18 +99,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler getSampleImageHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("getSampleImageHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			GetSampleImageResult result = null;
 			GetSampleImageParams params = (GetSampleImageParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.getSampleImage(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.getSampleImage(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -133,18 +116,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler downloadBatchHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("downloadBatchHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			DownloadBatchResult result = null;
 			DownloadBatchParams params = (DownloadBatchParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.downloadBatch(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.downloadBatch(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -152,18 +133,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler submitBatchHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("submitBatchHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			SubmitBatchResult result = null;
 			SubmitBatchParams params = (SubmitBatchParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.submitBatch(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.submitBatch(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -171,18 +150,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler getFieldsHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("getFieldsHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			ArrayList<GetFieldsResult> result = null;
 			GetFieldsParams params = (GetFieldsParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.getFields(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.getFields(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -190,18 +167,16 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler searchHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("searchHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			ArrayList<SearchResult> result = null;
 			SearchParams params = (SearchParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.search(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.search(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
@@ -209,21 +184,31 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler downloadFileHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			System.out.println("downloadFileHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			DownloadFileResult result = null;
 			DownloadFileParams params = (DownloadFileParams)xstream.fromXML(exchange.getRequestBody());
 			try{
-				result = dao.downloadFile(params);
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+				xstream.toXML(dao.downloadFile(params), exchange.getResponseBody());
 			}catch(FailedException e){
-				exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-				return;
+				exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+				xstream.toXML(getFailedResult(), exchange.getResponseBody());
 			}
-			
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			xstream.toXML(result, exchange.getResponseBody());
 			exchange.getResponseBody().close();
 		}
 	};
+	
+	private FailedResult getFailedResult(){
+		FailedResult f = new FailedResult();
+		f.setValue("FAILED");
+		return f;
+	}
+	
+	private FalseResult getFalseResult(){
+		FalseResult f = new FalseResult();
+		f.setValue("FALSE");
+		return f;
+	}
 
 
 
@@ -237,6 +222,7 @@ public class WebServer implements WebServerInterface{
 		if(args.length != 1)
 			throw new RuntimeException("invalid number of args passed web server: " + args.length);
 		int port = Integer.parseInt(args[0]);
-		
+		WebServer server = new WebServer();
+		server.run(port);
 	}
 }

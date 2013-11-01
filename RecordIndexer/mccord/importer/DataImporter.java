@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.zip.*;
 
 import com.thoughtworks.xstream.*;
@@ -16,12 +17,15 @@ import dao.JDBCRecordIndexerDAO;
 import dao.RecordIndexerDAO;
 import models.FieldValues;
 import models.Fields;
+import models.FieldsList;
 import models.Images;
 import models.IndexerData;
 import models.Projects;
 import models.ProjectsList;
+import models.RecordConverter;
 import models.Records;
 import models.Users;
+import models.Values;
 
 /**
  * The Class DataImporter.
@@ -54,15 +58,28 @@ public class DataImporter {
 		xstream.aliasField("lastname", Users.class, "lastName");
 		xstream.aliasField("username", Users.class, "userName");
 		xstream.aliasField("indexedrecords", Users.class, "indexedRecords");
-		xstream.alias("projects", ProjectsList.class);
+		xstream.aliasField("projects", IndexerData.class, "projects");
 		xstream.alias("project", Projects.class);
 		xstream.aliasField("recordsperimage", Projects.class, "recordsPerImage");
 		xstream.aliasField("firstycoord", Projects.class, "firstYCoor");
 		xstream.aliasField("recordheight", Projects.class, "recordHeight");
-		xstream.alias("indexerdata", IndexerData.class);
-		xstream.alias("indexerdata", IndexerData.class);
-		xstream.alias("indexerdata", IndexerData.class);
+		xstream.aliasField("fields", Projects.class, "fields");
+//		xstream.alias("fields", FieldsList.class);
+		xstream.alias("field", Fields.class);
+		xstream.aliasField("xcoord", Fields.class, "xcoor");
+		xstream.aliasField("helphtml", Fields.class, "helpHtml");
+		xstream.aliasField("knowndata", Fields.class, "knownData");
+		xstream.aliasField("images", Projects.class, "images");
+		xstream.alias("image", Images.class);
+		xstream.aliasField("records", Images.class, "records");
+		xstream.alias("record", Records.class);
+		xstream.aliasField("values", Records.class, "values");
+		xstream.alias("value", String.class);
+		
+//		xstream.registerConverter(new RecordConverter());
+		
 		String xmlFilePath = "failejd";
+//		xstream.ignoreUnknownElements();
 		try {
 			xmlFilePath = this.getPathForXml(ourDataStore);
 		} catch (FileNotFoundException e1) {
@@ -71,9 +88,11 @@ public class DataImporter {
 		}
 		System.out.println("xml file path: " + xmlFilePath);
 		try {
-			 xmlFilePath = this.getPathForXml(ourDataStore);
-			System.out.println("xml file path: " + xmlFilePath);
+			xmlFilePath = this.getPathForXml(ourDataStore);
+//			System.out.println("test line");
 			IndexerData indexerData = (IndexerData)xstream.fromXML(new File(xmlFilePath));
+//			System.out.println("test line2");
+			System.out.println(indexerData);
 			System.out.println("xtreamed");
 			this.importXml(indexerData);
 			System.out.println("imported");
@@ -90,21 +109,34 @@ public class DataImporter {
 		}
 		for(Projects p : id.getProjects()){
 			p.setId(dao.putProject(p));
+			int count = 0;
 			for(Fields f : p.getFields()){
 				f.setProjectId(p.getId());
+				f.setPosition(count);
 				f.setId(dao.putField(f));
+				count++;
 			}
+//			System.out.println("images: " + p.getImages().size());
 			for(Images i : p.getImages()){
 				i.setProjectId(p.getId());
 				i.setId(dao.putImage(i));
-				for(Records r : i.getRecords()){
-					r.setImageId(i.getId());
-					r.setId(dao.putRecord(r));
-					int count = 0;
-					for(FieldValues fv : r.getFieldValues()){
-						fv.setRecordId(r.getId());
-						fv.setId(dao.putFieldValue(fv, p.getFields().get(count).getId()));
-						count++;
+				if(i.getRecords() != null){
+					for(Records r : i.getRecords()){
+						r.setImageId(i.getId());
+						r.setId(dao.putRecord(r));
+						count = 0;
+						if(r.getValues() != null){
+//							r.setFieldValues(new ArrayList<FieldValues>());
+							
+							for(int j = 0; j < r.getValues().size(); j++){
+//								System.out.println("createing field value" + r.getValues().get(j));
+								FieldValues fv = new FieldValues();
+								fv.setValue(r.getValues().get(j));
+								fv.setFieldId(p.getFields().get(j).getId());
+								fv.setRecordId(r.getId());
+								fv.setId(dao.putFieldValue(fv));
+							}
+						}
 					}
 				}
 			}

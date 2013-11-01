@@ -7,23 +7,23 @@ package communicator;
 public class SubmitBatchResult {
 	
 	/** The success. */
-	protected boolean success;
-
-	/**
-	 * Checks if is success.
-	 *
-	 * @return true, if is success
-	 */
-	public boolean isSuccess() {
-		return success;
+	protected String result;
+	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(result);
+		sb.append("\n");
+		
+		return sb.toString();
 	}
 
-	/**
-	 * Sets the success.
-	 *
-	 * @param success the new success
-	 */
-	public void setSuccess(boolean success) {
-		this.success = success;
+	public String getResult() {
+		return result;
 	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	
 }

@@ -15,6 +15,30 @@ public class GetFieldsResult {
 	/** The field id. */
 	protected Integer fieldId;
 	
+	/*
+	 * OUTPUT ::= <FIELD_INFO>+ 
+ 
+FIELD_INFO ::= <PROJECT_ID>\n 
+<FIELD_ID>\n 
+<FIELD_TITLE>\n 
+ 
+PROJECT_ID ::= Integer 
+FIELD_ID ::= Integer 
+FIELD_TITLE ::= String 
+
+	 */
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(projectId);
+		sb.append("\n");
+		sb.append(fieldId);
+		sb.append("\n");
+		sb.append(title);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the title.
 	 *

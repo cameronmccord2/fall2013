@@ -18,6 +18,8 @@ public class Records {
 	
 	protected ArrayList<FieldValues> fieldValues;
 	
+	protected ArrayList<String> values;
+	
 	/**
 	 * Gets the id.
 	 *
@@ -75,5 +77,13 @@ public class Records {
 
 	public void setFieldValues(ArrayList<FieldValues> fieldValues) {
 		this.fieldValues = fieldValues;
+	}
+
+	public ArrayList<String> getValues() {
+		return values;
+	}
+
+	public void setValues(ArrayList<String> values) {
+		this.values = values;
 	}
 }

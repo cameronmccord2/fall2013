@@ -12,6 +12,16 @@ public class ValidateUserParams {
 	/** The password. */
 	protected String password;
 	
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(username);
+		sb.append("\n");
+		sb.append(password);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the username.
 	 *

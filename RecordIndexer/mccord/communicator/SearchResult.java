@@ -18,6 +18,35 @@ public class SearchResult {
 	/** The field id. */
 	protected Integer fieldId;
 	
+	/*
+	 * OUTPUT ::= <SEARCH_RESULT>* 
+ 
+SEARCH_RESULT ::= 
+<BATCH_ID>\n 
+<IMAGE_URL>\n 
+<RECORD_NUM>\n 
+<FIELD_ID>\n 
+ 
+BATCH_ID ::= Integer 
+IMAGE_URL ::= URL 
+RECORD_NUM ::= Integer (>= 1) 
+FIELD_ID ::= Integer 
+
+	 */
+	public String toString(){
+		StringBuilder sb = new StringBuilder("");
+		sb.append(batchId);
+		sb.append("\n");
+		sb.append(imageUrl);
+		sb.append("\n");
+		sb.append(recordNumber);
+		sb.append("\n");
+		sb.append(fieldId);
+		sb.append("\n");
+		
+		return sb.toString();
+	}
+	
 	/**
 	 * Gets the batch id.
 	 *

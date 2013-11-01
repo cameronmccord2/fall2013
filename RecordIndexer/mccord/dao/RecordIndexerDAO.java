@@ -116,7 +116,7 @@ public interface RecordIndexerDAO {
 
 	public Integer putRecord(Records r);
 
-	public Integer putFieldValue(FieldValues fv, Integer id);
+	public Integer putFieldValue(FieldValues fv);
 	
 	
 	
