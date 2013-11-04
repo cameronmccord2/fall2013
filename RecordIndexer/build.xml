@@ -134,7 +134,7 @@
 	
 	<target name="server-tests" depends="compile" description="run automated server tests">
 		<antcall target="import">
-			<param name="file" value="${database}/record-indexer-data.zip"/>
+			<param name="file" value="${database}/Records/Records.xml"/>
 		</antcall>
 		<java classname="server.ServerUnitTests" fork="yes">
 			<classpath>

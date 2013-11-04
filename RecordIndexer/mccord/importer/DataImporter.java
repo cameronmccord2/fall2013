@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.*;
 
 import server.FailedException;
@@ -38,11 +41,23 @@ public class DataImporter {
 		try {
 			deleteRecursive(new File(ourDataStore));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			// continue
 		}
 		// unzip archive
-		this.unZipIt(path, ourDataStore);
-		System.out.println("unziped to: " + ourDataStore);
+//		this.unZipIt(path, ourDataStore);
+		
+//		File dir = new File(path);
+//		dir.c
+		
+		System.out.println("path: " + path);
+		
+		
+		
+		
+		
+		
+		
+		System.out.println("coppied to: " + ourDataStore);
 		// xstream
 		XStream xstream = new XStream(new DomDriver());
 		xstream.alias("indexerdata", IndexerData.class);
@@ -69,25 +84,56 @@ public class DataImporter {
 		xstream.alias("value", String.class);
 		
 		
-		String xmlFilePath = "failejd";
-		try {
-			xmlFilePath = this.getPathForXml(ourDataStore);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			xmlFilePath = this.getPathForXml(ourDataStore);
-			IndexerData indexerData = (IndexerData)xstream.fromXML(new File(xmlFilePath));
-			System.out.println("xtreamed");
-			this.importXml(indexerData);
-			System.out.println("imported");
-		} catch (FileNotFoundException e) {
-			System.out.println("couldnt find xml file");
-			e.printStackTrace();
-		}
+//			xmlFilePath = this.getPathForXml(ourDataStore);
+		IndexerData indexerData = (IndexerData)xstream.fromXML(new File(path));
+		System.out.println("xtreamed");
+		this.importXml(indexerData, path, ourDataStore);
+		System.out.println("imported");
 	}
 	
-	private void importXml(IndexerData id) {
+	private String copyFile(String parentPath, String endPath, String ourDataStore){
+		File currentFile = new File(parentPath + File.separator + endPath);
+		
+		File newFile = new File(ourDataStore + File.separator + endPath);
+        new File(newFile.getParent()).mkdirs();
+
+        FileOutputStream fos = null;
+        FileInputStream fis = null;
+		try {
+			fos = new FileOutputStream(newFile);
+			fis = new FileInputStream(currentFile);
+			int len;
+            byte[] buffer = new byte[1024];
+            try {
+				while ((len = fis.read(buffer)) > 0){
+					fos.write(buffer, 0, len);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				fos.close();
+				fis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+//         System.out.println(newFile.getPath());
+//         System.out.println(f.getHelpHtml());
+//         f.setHelpHtml(newFile.getPath());
+         return newFile.getPath();
+	}
+	
+	private void importXml(IndexerData id, String path, String ourDataStore) {
+		File file = new File(path);
+		String parentPath = file.getParent();
+		
 		JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
 		for(Users u : id.getUsers()){
 			try {
@@ -102,11 +148,20 @@ public class DataImporter {
 			for(Fields f : p.getFields()){
 				f.setProjectId(p.getId());
 				f.setPosition(count);
+				if(f.getHelpHtml() != null){
+					f.setHelpHtml(this.copyFile(parentPath, f.getHelpHtml(), ourDataStore));
+				}
+				if(f.getKnownData() != null){
+					f.setKnownData(this.copyFile(parentPath, f.getKnownData(), ourDataStore));
+				}
 				f.setId(dao.putField(f));
 				count++;
 			}
 			for(Images i : p.getImages()){
 				i.setProjectId(p.getId());
+				if(i.getFile() != null){
+					i.setFile(this.copyFile(parentPath, i.getFile(), ourDataStore));
+				}
 				i.setId(dao.putImage(i));
 				if(i.getRecords() != null){
 					for(Records r : i.getRecords()){

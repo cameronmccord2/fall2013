@@ -74,6 +74,6 @@ public class ClientCommunicator implements ClientCommunitcatorInterface{
 
 	@Override
 	public Object downloadFile(DownloadFileParams params, String host, String port)throws Exception {
-		return this.sendPost(params, "downloadFile", host, port);
+		return this.sendPost(params, params.getFilename(), host, port);
 	}
 }

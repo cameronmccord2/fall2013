@@ -1,9 +1,11 @@
 package server;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+
 import models.FailedResult;
 import models.FalseResult;
 
@@ -178,17 +180,20 @@ public class WebServer implements WebServerInterface{
 	private HttpHandler downloadFileHandler = new HttpHandler(){
 		@Override
 		public void handle(HttpExchange exchange)throws IOException{
+			String url = "";
+			try{
 			System.out.println("downloadFileHandler");
 			JDBCRecordIndexerDAO dao = new JDBCRecordIndexerDAO();
-			String url = exchange.getRequestURI().toString();
+			url = exchange.getRequestURI().toString();
 			exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-			String filename = "";
+			String filename = "ourDataStore" + File.separator;
+			System.out.println(url);
 			if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("mages"))
-				filename = dao.getPartialUrlForImageFile("images/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+				filename += dao.getPartialUrlForImageFile("images/" + url.substring( url.lastIndexOf('/')+1, url.length()));
 			else if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("ldhelp"))
-				filename = dao.getPartialUrlForImageFile("fieldhelp/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+				filename += dao.getPartialUrlForImageFile("fieldhelp/" + url.substring( url.lastIndexOf('/')+1, url.length()));
 			else if(url.substring( url.lastIndexOf('/')-6, url.lastIndexOf('/')).endsWith("ndata"))
-				filename = dao.getPartialUrlForImageFile("knowndata/" + url.substring( url.lastIndexOf('/')+1, url.length()));
+				filename += dao.getPartialUrlForImageFile("knowndata/" + url.substring( url.lastIndexOf('/')+1, url.length()));
 			else
 				System.out.println("other type of file not accounted for");
 			System.out.println(filename);
@@ -198,6 +203,10 @@ public class WebServer implements WebServerInterface{
 			f.close();
 			exchange.getResponseBody().write(bFile);
 			exchange.getResponseBody().close();
+			}catch(IOException e){
+				System.out.println(url);
+				e.printStackTrace();
+			}
 		}
 	};
 	

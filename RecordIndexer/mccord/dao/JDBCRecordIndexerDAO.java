@@ -43,6 +43,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		vur.setFirstName(u.getFirstName());
 		vur.setLastName(u.getLastName());
 		vur.setCount(this.getNumberOfFinishedRecordsForUserId(u.getId()));
+		vur.setCount(vur.getCount() + u.getIndexedRecords());
 		return vur;
 	}
 
@@ -52,6 +53,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		for(Images i : images){
 			count += this.getProjectById(i.getProjectId()).getRecordsPerImage();
 		}
+		
 		return count;
 	}
 	
@@ -286,7 +288,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	
 	@Override
 	public String getPartialUrlForImageFile(String filename){
-		return "ourDataStore" + File.separator + "Records" + File.separator + filename;
+		return filename;
 	}
 
 	@Override
@@ -892,13 +894,14 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 	    try{
 		  Class.forName("org.sqlite.JDBC");
 	      connection = DriverManager.getConnection("jdbc:sqlite:dbStuff" + File.separator + "indexer_server.sqlite");
-	      String sql = "insert into users (firstName, lastName, email, username, password) VALUES (?, ?, ?, ? ,?)";
+	      String sql = "insert into users (firstName, lastName, email, username, password, indexedRecords) VALUES (?, ?, ?, ? ,?, ?)";
 	      PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 	      statement.setString(1, u.getFirstName());
 	      statement.setString(2, u.getLastName());
 	      statement.setString(3, u.getEmail());
 	      statement.setString(4, u.getUserName());
 	      statement.setString(5, u.getPassword());
+	      statement.setInt(6, u.getIndexedRecords());
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      i = statement.executeUpdate();
 	      if(i > 0)

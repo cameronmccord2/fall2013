@@ -177,6 +177,7 @@ protected Integer indexedRecords;
 				response.setEmail(resultSet.getString("email"));
 				response.setUserName(resultSet.getString("username"));
 				response.setPassword(resultSet.getString("password"));
+				response.setIndexedRecords(Integer.parseInt(resultSet.getString("indexedRecords")));
 				responses.add(response);
 			}
     	}catch(SQLException e){

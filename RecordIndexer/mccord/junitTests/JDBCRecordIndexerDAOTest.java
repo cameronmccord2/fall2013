@@ -94,6 +94,7 @@ public class JDBCRecordIndexerDAOTest {
 		 u.setLastName("lastName");
 		 u.setPassword("asdfasdfasdf");
 		 u.setUserName("qwerqwerqwer");
+		 u.setIndexedRecords(0);
 		 try {
 			assert(dao.putUser(u) > 0);
 			assert true;
@@ -169,7 +170,7 @@ public class JDBCRecordIndexerDAOTest {
 		expected.setBatchId(41);
 		expected.setFieldId(10);
 		expected.setRecordNumber(1);
-		expected.setImageUrl("ourDataStore/Records/images/draft_image0.png");
+		expected.setImageUrl("ourDataStore/images/draft_image0.png");
 		assert(expected.toString().equals(list.get(0).toString()));
 	}
 	
@@ -182,7 +183,7 @@ public class JDBCRecordIndexerDAOTest {
 		DownloadBatchResult expected = new DownloadBatchResult();
 		expected.setBatchId(1);
 		expected.setProjectId(1);
-		expected.setImageUrl("ourDataStore/Records/images/1890_image0.png");
+		expected.setImageUrl("ourDataStore/images/1890_image0.png");
 		expected.setFirstYCoor(199);
 		expected.setRecordHeight(60);
 		expected.setNumberOfRecords(8);
@@ -191,31 +192,31 @@ public class JDBCRecordIndexerDAOTest {
 		Fields f1 = new Fields();
 		f1.setPosition(0);
 		f1.setTitle("Last Name");
-		f1.setHelpHtml("ourDataStore/Records/fieldhelp/last_name.html");
+		f1.setHelpHtml("ourDataStore/fieldhelp/last_name.html");
 		f1.setXcoor(60);
 		f1.setWidth(300);
-		f1.setKnownData("ourDataStore/Records/knowndata/1890_last_names.txt");
+		f1.setKnownData("ourDataStore/knowndata/1890_last_names.txt");
 		fields.add(f1);
 		Fields f2 = new Fields();
 		f2.setPosition(1);
 		f2.setTitle("First Name");
-		f2.setHelpHtml("ourDataStore/Records/fieldhelp/first_name.html");
+		f2.setHelpHtml("ourDataStore/fieldhelp/first_name.html");
 		f2.setXcoor(360);
 		f2.setWidth(280);
-		f2.setKnownData("ourDataStore/Records/knowndata/1890_first_names.txt");
+		f2.setKnownData("ourDataStore/knowndata/1890_first_names.txt");
 		fields.add(f2);
 		Fields f3 = new Fields();
 		f3.setPosition(2);
 		f3.setTitle("Gender");
-		f3.setHelpHtml("ourDataStore/Records/fieldhelp/gender.html");
+		f3.setHelpHtml("ourDataStore/fieldhelp/gender.html");
 		f3.setXcoor(640);
 		f3.setWidth(205);
-		f3.setKnownData("ourDataStore/Records/knowndata/genders.txt");
+		f3.setKnownData("ourDataStore/knowndata/genders.txt");
 		fields.add(f3);
 		Fields f4 = new Fields();
 		f4.setPosition(3);
 		f4.setTitle("Age");
-		f4.setHelpHtml("ourDataStore/Records/fieldhelp/age.html");
+		f4.setHelpHtml("ourDataStore/fieldhelp/age.html");
 		f4.setXcoor(845);
 		f4.setWidth(120);
 		fields.add(f4);
@@ -299,8 +300,8 @@ public class JDBCRecordIndexerDAOTest {
 		v.setProjectId(1);
 		GetSampleImageResult result = dao.getSampleImage(v);
 		GetSampleImageResult expected = new GetSampleImageResult();
-		expected.setUrl("ourDataStore/Records/images/1890_image0.png");
-		assert(result.equals(expected));
+		expected.setUrl("ourDataStore/images/1890_image0.png");
+		assert(result.equals(expected)) : result.getUrl();
 		expected.setUrl("crap");
 		assertFalse(result.equals(expected));
 		
