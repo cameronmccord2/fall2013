@@ -234,7 +234,10 @@ public class Controller implements IController {
 		String[] params = getView().getParameterValues();
 		var.setUsername(params[0]);
 		var.setPassword(params[1]);
-		var.setProjectId(Integer.parseInt(params[2]));
+		if(params[2].length() > 0)
+			var.setProjectId(Integer.parseInt(params[2]));
+		else
+			var.setProjectId(0);
 		String result = "";
 		try {
 			getView().setRequest(var.toString());
@@ -298,6 +301,7 @@ public class Controller implements IController {
 			Object response = cc.search(var, getView().getHost(), getView().getPort());
 			if(response instanceof ArrayList){
 				for(SearchResult r : (ArrayList<SearchResult>)response){
+					r.setImageUrl("http://" + getView().getHost() + ":" + getView().getPort() + "/" + r.getImageUrl());
 					result += r.toString();
 				}
 			}else if(response instanceof FailedResult){

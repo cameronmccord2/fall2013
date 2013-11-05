@@ -100,6 +100,8 @@ KNOWN_VALUES_URL ::= URL
 		sb.append(numberOfFields);
 		sb.append("\n");
 		for(Fields f : fields){
+			sb.append(f.getId());
+			sb.append("\n");
 			sb.append(f.getPosition());
 			sb.append("\n");
 			sb.append(f.getTitle());

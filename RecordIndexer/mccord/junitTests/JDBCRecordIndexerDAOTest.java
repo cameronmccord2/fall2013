@@ -190,6 +190,7 @@ public class JDBCRecordIndexerDAOTest {
 		expected.setNumberOfFields(4);
 		ArrayList<Fields> fields = new ArrayList<Fields>();
 		Fields f1 = new Fields();
+		f1.setId(1);
 		f1.setPosition(0);
 		f1.setTitle("Last Name");
 		f1.setHelpHtml("ourDataStore/fieldhelp/last_name.html");
@@ -198,6 +199,7 @@ public class JDBCRecordIndexerDAOTest {
 		f1.setKnownData("ourDataStore/knowndata/1890_last_names.txt");
 		fields.add(f1);
 		Fields f2 = new Fields();
+		f2.setId(2);
 		f2.setPosition(1);
 		f2.setTitle("First Name");
 		f2.setHelpHtml("ourDataStore/fieldhelp/first_name.html");
@@ -206,6 +208,7 @@ public class JDBCRecordIndexerDAOTest {
 		f2.setKnownData("ourDataStore/knowndata/1890_first_names.txt");
 		fields.add(f2);
 		Fields f3 = new Fields();
+		f3.setId(3);
 		f3.setPosition(2);
 		f3.setTitle("Gender");
 		f3.setHelpHtml("ourDataStore/fieldhelp/gender.html");
@@ -214,6 +217,7 @@ public class JDBCRecordIndexerDAOTest {
 		f3.setKnownData("ourDataStore/knowndata/genders.txt");
 		fields.add(f3);
 		Fields f4 = new Fields();
+		f4.setId(4);
 		f4.setPosition(3);
 		f4.setTitle("Age");
 		f4.setHelpHtml("ourDataStore/fieldhelp/age.html");
@@ -221,7 +225,7 @@ public class JDBCRecordIndexerDAOTest {
 		f4.setWidth(120);
 		fields.add(f4);
 		expected.setFields(fields);
-		assert(result.equals(expected));
+		assert(result.equals(expected)) : result.toString() + "?????????????????" + expected.toString();
 		try{
 			dao.downloadBatch(v);// already have a batch
 			assert false;

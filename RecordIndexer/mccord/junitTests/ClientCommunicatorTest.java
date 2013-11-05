@@ -59,7 +59,7 @@ public class ClientCommunicatorTest {
 	
 	@Test
 	public void mainTest() throws Exception{
-//		try{
+		try{
 			this.validateUser();
 			this.getProjects();
 			this.getFields();
@@ -67,11 +67,11 @@ public class ClientCommunicatorTest {
 			this.search();
 			this.downloadBatch();
 //			this.downloadFile();
-//		}catch(Exception e){
-//			System.out.println("start up a server in order to run these tests");
-//			System.err.println("start up a server in order to run these tests");
-//			assert true;// THis is if you didnt start up a server first
-//		}
+		}catch(Exception e){
+			System.out.println("start up a server in order to run these tests");
+			System.err.println("start up a server in order to run these tests");
+			assert true;// THis is if you didnt start up a server first
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -113,6 +113,7 @@ public class ClientCommunicatorTest {
 		expected.setNumberOfFields(4);
 		ArrayList<Fields> fields = new ArrayList<Fields>();
 		Fields f1 = new Fields();
+		f1.setId(1);
 		f1.setPosition(0);
 		f1.setTitle("Last Name");
 		f1.setHelpHtml("ourDataStore/fieldhelp/last_name.html");
@@ -121,6 +122,7 @@ public class ClientCommunicatorTest {
 		f1.setKnownData("ourDataStore/knowndata/1890_last_names.txt");
 		fields.add(f1);
 		Fields f2 = new Fields();
+		f2.setId(2);
 		f2.setPosition(1);
 		f2.setTitle("First Name");
 		f2.setHelpHtml("ourDataStore/fieldhelp/first_name.html");
@@ -129,6 +131,7 @@ public class ClientCommunicatorTest {
 		f2.setKnownData("ourDataStore/knowndata/1890_first_names.txt");
 		fields.add(f2);
 		Fields f3 = new Fields();
+		f3.setId(3);
 		f3.setPosition(2);
 		f3.setTitle("Gender");
 		f3.setHelpHtml("ourDataStore/fieldhelp/gender.html");
@@ -137,6 +140,7 @@ public class ClientCommunicatorTest {
 		f3.setKnownData("ourDataStore/knowndata/genders.txt");
 		fields.add(f3);
 		Fields f4 = new Fields();
+		f4.setId(4);
 		f4.setPosition(3);
 		f4.setTitle("Age");
 		f4.setHelpHtml("ourDataStore/fieldhelp/age.html");
@@ -144,7 +148,7 @@ public class ClientCommunicatorTest {
 		f4.setWidth(120);
 		fields.add(f4);
 		expected.setFields(fields);
-		assert(result.equals(expected)) : result.toString() + expected.toString();
+		assert(result.equals(expected)) : result.toString() + "????????????????" + expected.toString();
 		
 		if(cc.downloadBatch(v, host, port) instanceof FailedResult)// already have a batch
 			assert true;
