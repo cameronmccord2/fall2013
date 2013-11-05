@@ -645,8 +645,10 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 			GetFieldsResult r = new GetFieldsResult();
 			result.add(r);
 			r.setFieldId(f.getId());
-			r.setProjectId(params.getProjectId());
+			r.setProjectId(f.getProjectId());
 			r.setTitle(f.getTitle());
+//			System.out.println("project id: " + f.getProjectId());
+//			System.out.println(r.toString());
 		}
 		if(result.size() < 1)
 			throw new FailedException("" + fields.size() + " " + params.getProjectId());

@@ -21,9 +21,11 @@ public:
     ~Database();
     bool run();
     void writeToFile(char* filename);
+    void runRules();
     string toString();
     vector<Relation*>* relations;
     vector<Relation*>* queries;
+    vector<Relation*>* rules;
     vector<Relation*>* results;
     void addVariableToSet(int position, string value);
     map<string, vector<int>*>* variablePositions;

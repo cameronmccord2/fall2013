@@ -46,8 +46,12 @@ Database::Database(DatalogProgram *dp){
         }
         this->queries->push_back(r);
     }
-    
+    this->runRules();
     this->run();
+}
+
+void Database::runRules(){
+    
 }
 
 Database::~Database(){
