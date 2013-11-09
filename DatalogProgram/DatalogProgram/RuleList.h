@@ -17,7 +17,7 @@ class DatalogProgram;
 class Predicate;
 class RuleList{
 private:
-    std::vector<Rule*>* list;
+    
 public:
     RuleList();
     ~RuleList();
@@ -25,6 +25,7 @@ public:
     std::string toString();
     void parseRuleList(DatalogProgram* dp);
     void parseRuleList2(DatalogProgram *dp, Rule *rule);
+    std::vector<Rule*>* list;
 };
 
 #endif /* defined(__DatalogProgram__RuleList__) */

@@ -27,6 +27,7 @@
 		DCEB3B79181B913D00052ADA /* Relation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B77181B913D00052ADA /* Relation.cpp */; };
 		DCEB3B7C181B914700052ADA /* Schema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7A181B914700052ADA /* Schema.cpp */; };
 		DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7D181B915300052ADA /* Tuple.cpp */; };
+		E43F343E182DD31E00DD3B47 /* DataRule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E43F343C182DD31E00DD3B47 /* DataRule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +103,17 @@
 		DCEB3B7B181B914700052ADA /* Schema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Schema.h; sourceTree = "<group>"; };
 		DCEB3B7D181B915300052ADA /* Tuple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tuple.cpp; sourceTree = "<group>"; };
 		DCEB3B7E181B915300052ADA /* Tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tuple.h; sourceTree = "<group>"; };
+		E43F343C182DD31E00DD3B47 /* DataRule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataRule.cpp; sourceTree = "<group>"; };
+		E43F343D182DD31E00DD3B47 /* DataRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataRule.h; sourceTree = "<group>"; };
+		E43F343F182DF89000DD3B47 /* in44.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in44.txt; sourceTree = "<group>"; };
+		E43F3440182DF89000DD3B47 /* in45.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in45.txt; sourceTree = "<group>"; };
+		E43F3441182DF89000DD3B47 /* in46.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in46.txt; sourceTree = "<group>"; };
+		E43F3442182DF89000DD3B47 /* in49.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in49.txt; sourceTree = "<group>"; };
+		E43F3443182DF89000DD3B47 /* out40.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out40.txt; sourceTree = "<group>"; };
+		E43F3444182DF89000DD3B47 /* out44.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out44.txt; sourceTree = "<group>"; };
+		E43F3445182DF89000DD3B47 /* out45.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out45.txt; sourceTree = "<group>"; };
+		E43F3446182DF89000DD3B47 /* out46.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out46.txt; sourceTree = "<group>"; };
+		E43F3447182DF89000DD3B47 /* out49.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out49.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +165,15 @@
 		21CF8AF617F0A77700E9499F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E43F343F182DF89000DD3B47 /* in44.txt */,
+				E43F3440182DF89000DD3B47 /* in45.txt */,
+				E43F3441182DF89000DD3B47 /* in46.txt */,
+				E43F3442182DF89000DD3B47 /* in49.txt */,
+				E43F3443182DF89000DD3B47 /* out40.txt */,
+				E43F3444182DF89000DD3B47 /* out44.txt */,
+				E43F3445182DF89000DD3B47 /* out45.txt */,
+				E43F3446182DF89000DD3B47 /* out46.txt */,
+				E43F3447182DF89000DD3B47 /* out49.txt */,
 				2158DFF218219DD800342068 /* in40a.txt */,
 				21B9168B18204316007E6AA3 /* in30.txt */,
 				21B9168C18204316007E6AA3 /* in33.txt */,
@@ -233,6 +254,8 @@
 				DCEB3B7E181B915300052ADA /* Tuple.h */,
 				2158DFEF182196B800342068 /* DParameter.cpp */,
 				2158DFF0182196B800342068 /* DParameter.h */,
+				E43F343C182DD31E00DD3B47 /* DataRule.cpp */,
+				E43F343D182DD31E00DD3B47 /* DataRule.h */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -300,6 +323,7 @@
 				21CF8AEE17F0A73A00E9499F /* DatalogProgram.cpp in Sources */,
 				21CF8AE317F09EF700E9499F /* Input.cpp in Sources */,
 				DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */,
+				E43F343E182DD31E00DD3B47 /* DataRule.cpp in Sources */,
 				2158DFF1182196B800342068 /* DParameter.cpp in Sources */,
 				21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */,
 				21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */,
