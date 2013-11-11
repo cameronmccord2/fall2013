@@ -103,7 +103,7 @@ void Database::joinRule(DataRule *dr){
     for (size_t i = 1; i < dr->predicates->size(); i++) {
         Relation *r2 = new Relation(dr->predicates->at(i));
         // generate matching columns
-        set<pair<int, int>>* matches = this->findMatchingColumns(r1, r2);
+        set<pair<int, int> >* matches = this->findMatchingColumns(r1, r2);
         unsigned long size = r1->variableNames->size() + r2->variableNames->size() - matches->size();
 //        cout << "generated matches: " << matches->size() << endl;
         // keep only the columns that match in the tuples
@@ -178,8 +178,8 @@ void Database::insertTuplesIntoRelation(Relation *r, set<Tuple>* tuples){
     }
 }
 
-set<pair<int, int>>* Database::findMatchingColumns(Relation *r1, Relation *r2){
-    set<pair<int, int>>* matches = new set<pair<int, int>>();
+set<pair<int, int> >* Database::findMatchingColumns(Relation *r1, Relation *r2){
+    set<pair<int, int> >* matches = new set<pair<int, int> >();
     for (size_t i = 0; i < r1->variableNames->size(); i++) {
         string name1 = r1->variableNames->at(i);
         for (size_t j = 0; j < r2->variableNames->size(); j++) {
@@ -192,7 +192,7 @@ set<pair<int, int>>* Database::findMatchingColumns(Relation *r1, Relation *r2){
     return matches;
 }
 
-Relation* Database::keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int>>* matches){
+Relation* Database::keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int> >* matches){
     Relation *r = new Relation();
     r->variableNames = new vector<string>(*r1->variableNames);// make sure this isnt broken - variable names !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     bool doVariableNames = true;
@@ -208,7 +208,7 @@ Relation* Database::keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int
             
             set<int> ints = set<int>();
             bool keepTuple = true;
-            set<pair<int, int>>::iterator it1;
+            set<pair<int, int> >::iterator it1;
             for (it1 = matches->begin(); it1 != matches->end(); ++it1) {
                 pair<int, int> pair = *it1;
                 

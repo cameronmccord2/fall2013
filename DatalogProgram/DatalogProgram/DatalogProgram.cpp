@@ -123,16 +123,16 @@ int main(int argc, char* argv[]) {
     Database *d = NULL;
     string temp;
 	try{
-//        lex = new Lex(argv[1]);
+        lex = new Lex(argv[1]);
         cout << "started" << endl;
-        lex = new Lex("/Users/cameronmccord2/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in49.txt");
+//        lex = new Lex("/Users/cameronmccord2/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in49.txt");
         dp = new DatalogProgram(lex->getTokens());
         d = new Database(dp);
         
-        cout << d->toString();
+//        cout << d->toString();
         //cin >> temp;
 //        d->writeToFile(argv[2]);
-//        dp->writeToFile(argv[2]);
+        dp->writeToFile(argv[2]);
         //cout << dp->toString();
 	}catch(exception& e){
 		e.what();
