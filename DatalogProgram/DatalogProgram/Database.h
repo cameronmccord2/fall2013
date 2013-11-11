@@ -37,13 +37,15 @@ public:
     void copyRules();
     void deleteRulesCopy();
     void joinRule(DataRule *dr);
-    set<pair<int, int>>* findMatchingColumns(Relation *r1, Relation *r2);
+    set<pair<int, int> >* findMatchingColumns(Relation *r1, Relation *r2);
     void simplifyToHeadAndAddToFacts(DataRule *dr, Relation *r);
-    Relation* keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int>>* matches);
+    Relation* keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int> >* matches);
     string tupleToString(Tuple t);
     void insertTuplesIntoRelation(Relation *r, set<Tuple>* tuples);
     unsigned long getFactsCount();
     void printTuplesForRelation(vector<Relation*>* list, string schemaName);
+    void runRulesLoop();
+	bool keepGoodTuples2(set<pair<int, int> >* matches, Relation *r, bool doVariableNames, Tuple t2, Tuple t1, Relation *r2);
 private:
     
 };

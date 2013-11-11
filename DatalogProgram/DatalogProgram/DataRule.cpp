@@ -13,7 +13,11 @@ DataRule::DataRule(){
 }
 
 DataRule::~DataRule(){
+for (size_t i = 0; i < this->predicates->size(); i++) {
+        delete this->predicates->at(i);
+    }
     delete this->predicates;
+delete this->head;
 }
 
 DataRule::DataRule(DataRule *dr){
