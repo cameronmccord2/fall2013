@@ -20,6 +20,7 @@ class Database {
 public:
     Database(DatalogProgram *dp);
     ~Database();
+    bool doVariableNames;
     int passesThroughRules;
     bool run(vector<Relation*>* list, bool doProject);
     void writeToFile(char* filename);
@@ -45,7 +46,7 @@ public:
     unsigned long getFactsCount();
     void printTuplesForRelation(vector<Relation*>* list, string schemaName);
     void runRulesLoop();
-	bool keepGoodTuples2(set<pair<int, int> >* matches, Relation *r, bool doVariableNames, Tuple t2, Tuple t1, Relation *r2);
+	void keepGoodTuples2(set<pair<int, int> >* matches, Relation *r, Tuple t2, Tuple t1, Relation *r2);
 private:
     
 };

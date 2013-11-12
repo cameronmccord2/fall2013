@@ -114,6 +114,8 @@
 		E43F3445182DF89000DD3B47 /* out45.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out45.txt; sourceTree = "<group>"; };
 		E43F3446182DF89000DD3B47 /* out46.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out46.txt; sourceTree = "<group>"; };
 		E43F3447182DF89000DD3B47 /* out49.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out49.txt; sourceTree = "<group>"; };
+		E4A2158B18320A3500F59C65 /* in42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in42.txt; sourceTree = "<group>"; };
+		E4A2158C18320A3500F59C65 /* out42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out42.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,8 @@
 		21CF8AF617F0A77700E9499F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E4A2158B18320A3500F59C65 /* in42.txt */,
+				E4A2158C18320A3500F59C65 /* out42.txt */,
 				E43F343F182DF89000DD3B47 /* in44.txt */,
 				E43F3440182DF89000DD3B47 /* in45.txt */,
 				E43F3441182DF89000DD3B47 /* in46.txt */,

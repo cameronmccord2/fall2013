@@ -49,7 +49,6 @@ Database::Database(DatalogProgram *dp){
     this->generateRules(dp);
     this->runRulesLoop();
     this->run(this->queries, true);
-    this->printTuplesForRelation(this->relations, "cn");
 }
 
 void Database::runRulesLoop(){
@@ -63,14 +62,13 @@ void Database::runRulesLoop(){
 }
 
 void Database::printTuplesForRelation(vector<Relation*>* list, string schemaName){
-//    cout << "tuples for schema: " << schemaName << endl;
     for (size_t i = 0; i < list->size(); i++) {
         
         if (list->at(i)->name == schemaName) {
             set<Tuple>::iterator it;
             for (it = list->at(i)->tuples->begin(); it != list->at(i)->tuples->end(); ++it) {
                 Tuple t = *it;
-//                cout << this->tupleToString(t) << endl;
+                cout << this->tupleToString(t) << endl;
             }
             break;
         }
@@ -97,19 +95,13 @@ void Database::runRules(){
 }
 
 void Database::joinRule(DataRule *dr){
-//    cout << "join rule: " << dr->head->name << endl;
     Relation *r1 = new Relation(dr->predicates->at(0));
     for (size_t i = 1; i < dr->predicates->size(); i++) {
         Relation *r2 = new Relation(dr->predicates->at(i));
         // generate matching columns
         set<pair<int, int> >* matches = this->findMatchingColumns(r1, r2);
-//        unsigned long size = r1->variableNames->size() + r2->variableNames->size() - matches->size();
-//        cout << "generated matches: " << matches->size() << endl;
         // keep only the columns that match in the tuples
         r1 = this->keepGoodTuples(r1, r2, matches);
-//        cout << "tuples returned: " << r1->tuples->size() << endl;
-//        if(r1->variableNames->size() != size)
-//            cout << "r1 variable names size: " << r1->variableNames->size() << ", should be: " << size << ", is this a valid assumpsion?" << endl;
         delete r2;
         delete matches;
     }
@@ -121,41 +113,26 @@ void Database::joinRule(DataRule *dr){
 void Database::simplifyToHeadAndAddToFacts(DataRule *dr, Relation *r){
     vector<unsigned long> indexes = vector<unsigned long>();
     set<unsigned long> indexesSet = set<unsigned long>();
-//    cout << "dr head variable names size: " << dr->head->variableNames->size() << endl;
-//    cout << "relation variable names size: " << r->variableNames->size() << endl;
     for (size_t i = 0; i < dr->head->variableNames->size(); i++) {
         for (size_t j = 0; j < r->variableNames->size(); j++) {
             if (dr->head->variableNames->at(i) == r->variableNames->at(j)) {
                 indexes.push_back(j);
                 indexesSet.insert(j);
-//                cout << "index kept: " << j << ", for variable name: " << dr->head->variableNames->at(i) << endl;
                 break;
             }
         }
     }
-//    cout << "index set size:" << indexesSet.size() << ", indxes size: " << indexes.size() << endl;
     set<Tuple>* newTuples = new set<Tuple>();
     set<Tuple>::iterator it;
     for (it = r->tuples->begin(); it != r->tuples->end(); ++it) {
         Tuple t = *it;
         Tuple newTuple = Tuple();
-//        cout << this->tupleToString(t) << endl;
         
         for (size_t i = 0; i < indexes.size(); i++) {
-//            cout << "kept value: " << t.at(indexes.at(i)) << ", at index: " << indexes.at(i) << endl;
             newTuple.push_back(t.at(indexes.at(i)));
         }
-//        cout << "new tuple: " << this->tupleToString(newTuple) << endl;
-//        for (size_t i = 0; i < t.size(); i++) {
-//            if (indexesSet.find(i) != indexesSet.end()) {
-//                cout << "index: " << i << endl;
-//                newTuple.push_back(t.at(i));
-//            }
-//        }
         newTuples->insert(newTuple);
-//        cout << "result tuple: " << this->tupleToString(newTuple) << endl;
     }
-//    cout << "new tuples after simplify: " << newTuples->size() << endl;
     this->insertTuplesIntoRelation(dr->head, newTuples);
     newTuples->empty();
     delete newTuples;
@@ -164,14 +141,11 @@ void Database::simplifyToHeadAndAddToFacts(DataRule *dr, Relation *r){
 void Database::insertTuplesIntoRelation(Relation *r, set<Tuple>* tuples){
     for (size_t i = 0; i < this->relations->size(); i++) {
         if (this->relations->at(i)->name == r->name) {// find the relation/schema these have to go to
-//            cout << "schema: " << r->name << ", tuple count before: " << this->relations->at(i)->tuples->size() << endl;
-//            cout << "tupes to insert: " << tuples->size() << endl;
             set<Tuple>::iterator it;
             for (it = tuples->begin(); it != tuples->end(); ++it) {
                 Tuple t = *it;
                 this->relations->at(i)->tuples->insert(t);
             }
-//            cout << "tuple count after: " << this->relations->at(i)->tuples->size() << endl;
             break;
         }
     }
@@ -183,7 +157,6 @@ set<pair<int, int> >* Database::findMatchingColumns(Relation *r1, Relation *r2){
         string name1 = r1->variableNames->at(i);
         for (size_t j = 0; j < r2->variableNames->size(); j++) {
             if (name1 == r2->variableNames->at(j)) {
-//                cout << "matches at: " << i << ", " << j << endl;
                 matches->insert(pair<int, int>(i, j));
             }
         }
@@ -195,7 +168,7 @@ Relation* Database::keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int
     Relation *r = new Relation();
 delete r->variableNames;
     r->variableNames = new vector<string>(*r1->variableNames);// make sure this isnt broken - variable names !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    bool doVariableNames = true;
+    this->doVariableNames = true;
     
     set<Tuple>::iterator it2;
     for (it2 = r1->tuples->begin(); it2 != r1->tuples->end(); ++it2) {
@@ -206,7 +179,7 @@ delete r->variableNames;
            
             Tuple t2 = *it3;
             
-            doVariableNames = this->keepGoodTuples2(matches, r, doVariableNames, t2, t1, r2);
+            this->keepGoodTuples2(matches, r, t2, t1, r2);
             
         }
     }
@@ -214,33 +187,32 @@ delete r->variableNames;
     return r;
 }
 
-bool Database::keepGoodTuples2(set<pair<int, int> >* matches, Relation *r, bool doVariableNames, Tuple t2, Tuple t1, Relation *r2){
+void Database::keepGoodTuples2(set<pair<int, int> >* matches, Relation *r, Tuple t2, Tuple t1, Relation *r2){
 	set<int> ints = set<int>();
-            bool keepTuple = true;
-            set<pair<int, int> >::iterator it1;
-            for (it1 = matches->begin(); it1 != matches->end(); ++it1) {
-                pair<int, int> pair = *it1;
-                
-                ints.insert(pair.second);
-                if (t1.at(pair.first) != t2.at(pair.second)) {
-                    keepTuple = false;
-		break;
-                }
-            }
+    bool keepTuple = true;
+    set<pair<int, int> >::iterator it1;
+    for (it1 = matches->begin(); it1 != matches->end(); ++it1) {
+        pair<int, int> pair = *it1;
+        
+        ints.insert(pair.second);
+        if (t1.at(pair.first) != t2.at(pair.second)) {
+            keepTuple = false;
+            break;
+        }
+    }
 	if (keepTuple) {
-                Tuple t = Tuple(t1);
-                for (size_t i = 0; i < t2.size(); i++) {
-                    if (ints.find((int)i) == ints.end()) {
-                        t.push_back(t2.at(i));
-                        if (doVariableNames) {
-                            r->variableNames->push_back(r2->variableNames->at(i));
-                        }
-                    }
+        Tuple t = Tuple(t1);
+        for (size_t i = 0; i < t2.size(); i++) {
+            if (ints.find((int)i) == ints.end()) {// == here means not found
+                t.push_back(t2.at(i));
+                if (this->doVariableNames) {
+                    r->variableNames->push_back(r2->variableNames->at(i));
                 }
-                r->tuples->insert(t);
- 		doVariableNames = false;
             }
-return false;
+        }
+        r->tuples->insert(t);
+ 		this->doVariableNames = false;
+    }
 }
 
 
@@ -283,7 +255,6 @@ void Database::generateRules(DatalogProgram *dp){
             d->predicates->push_back(r);
         }
         this->masterRules->push_back(d);
-//        cout << "dr head variable names size: " << d->head->variableNames->size() << endl;
     }
 }
 
@@ -549,17 +520,12 @@ bool Database::run(vector<Relation*>* list, bool doProject){
     for (size_t i = 0; i < list->size(); i++) {// run all queries
         Relation *query = list->at(i);
         this->variablePositions = new map<string, vector<int>*>();
-        
         for (size_t j = 0; j < this->relations->size(); j++) {// find the relation matching this query
             Relation *relation = new Relation(this->relations->at(j));
-            
             if (relation->name == query->name) {// this should only ever happen once
-                //cout << "run ran" << relation->name << endl;
                 relation->reduceVertical(query, this);
-                
                 if(doProject)
                     relation->project();// do projection, remove all constants in the result data, these we dont care about now
-                
                 query = relation->reduceSideways(query, this);// doesnt do anything with query params
                 delete query->keys;
             }
@@ -570,9 +536,7 @@ bool Database::run(vector<Relation*>* list, bool doProject){
             delete it->second;
         }
         delete this->variablePositions;
-//        cout << this->toString();
     }
-//    cout << this->toString();
     return true;
 }
 
