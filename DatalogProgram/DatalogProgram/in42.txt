@@ -1,0 +1,232 @@
+Schemes:
+  snap(S,N,A,P)
+  csg(C,S,G)
+  cn(C,N)
+  ncg(N,C,G)
+  a(x)
+  b(x)
+  c(x)
+  d(x)
+  e(x)
+  f(x)
+  g(x)
+  h(x)
+  i(x)
+  j(x)
+  blarg(Animal,Country,Name)
+  blarg2(Food,Name)
+  superblarg(Name,Country,Food)
+  superblarg2(Name, Food)
+  superblarg3(Country, Food)
+  superblarg4(Animal, Food)
+
+Facts:
+  snap('12345','C. Brown','12 Apple St.','555-1234').
+  snap('22222','P. Patty','56 Grape Blvd','555-9999').
+  snap('33333','Snoopy','12 Apple St.','555-1234').
+  snap('120345','C.D Brown','12 Apple St.','555-1234').
+  snap('222212','P.D Patty','56 Grape Blvd','555-9999').
+  snap('333233','Snoopy D','12 Apple St.','555-1234').
+  snap('123455','C. D Brown','12 Apple St.','555-1234').
+  snap('222222','P. D Patty','56 Grape Blvd','555-9999').
+  snap('33334','Snoopy D','12 Apple St.','555-1234').
+  snap('12343','C. Brown D','12 Apple St.','555-1234').
+  snap('22221','P. Patty D','56 Grape Blvd','555-9999').
+  snap('33332','Snoopy D','12 Apple St.','555-1234').
+  snap('00200','J-Dog','121 Apple St.','555-1234').
+  blarg('Monkey', 'China', 'Melo').
+  blarg('Monkey', 'Africa', 'Melo').
+  blarg('Monkey', 'US', 'Melo').
+  blarg('Monkey', 'Brazil', 'Melo').
+  blarg('Monkey', 'Austrailia', 'Melo').
+  blarg('Monkey', 'Japan', 'Melo').
+  blarg('Monkey', 'Korea', 'Melo').
+  blarg('Monkey', 'The Moon', 'Melo').
+  blarg('Monkey', 'Sun', 'Melo').
+  blarg('Monkey', 'Axwy', 'Melo').
+  blarg('Monkey', 'Antartica', 'Melo').
+  blarg('Monkey', 'None', 'Melo').
+  blarg('Monkey', 'Wohoo', 'Melo').
+  blarg('Doggy', 'China', 'Melo').
+  blarg('Dog', 'China', 'Melo').
+  blarg('Bear', 'China', 'Melo').
+  blarg('Man', 'China', 'Melo').
+  blarg('Chinaman', 'China', 'Melo').
+  blarg('Man Bear Pig', 'China', 'Melo').
+  blarg('Whale', 'China', 'Melo').
+  blarg('KillerWhale', 'China', 'Melo').
+  blarg('Bohead Whale', 'China', 'Melo').
+  blarg('Dr. Reese', 'China', 'Melo').
+  blarg('Monkey', 'China', 'Michael').
+  blarg('Monkey', 'China', 'Melo1').
+  blarg('Monkey', 'China', 'Melo2').
+  blarg('Monkey', 'China', 'Melo3').
+  blarg('Monkey', 'China', 'Melo4').
+  blarg('Monkey', 'China', 'Melo5').
+  blarg('Monkey', 'China', 'Melo6').
+  blarg('Monkey', 'China', 'Melo7').
+  blarg('Monkey', 'China', 'Melo8').
+  blarg('Monkey', 'China', 'Melo9').
+  blarg('Monkey', 'China', 'Melo10').
+  blarg('Monkey', 'China', 'Mel').
+  blarg('Monkey', 'China', 'Me').
+  blarg('Monkey', 'China', 'M').
+  blarg('Monkey', 'China', 'Nelo').
+  blarg('Monkey', 'China', '1Melo').
+  blarg('Monkey', 'China', '13423465677Melo').
+  blarg('Monkey', 'China', '2Melo').
+  blarg('Monkey', 'China', '3Melo').
+  blarg('Monkey', 'China', '4Melo').
+  blarg('Monkey', 'China', '5Melo').
+  blarg('Monkey', 'China', '6Melo').
+  blarg('Monkey', 'China', '7Melo').
+  blarg('Monkey', 'China', '8Melo').
+  blarg('Monkey', 'China', '9Melo').
+  blarg('Monkey', 'China', '0Melo').
+  blarg('Monkey', 'China', 'Meldo').
+  blarg('Monkey', 'China', 'Melro').
+  blarg('Monkey', 'China', 'Melto').
+  blarg('Monkey', 'China', 'Meluo').
+  blarg('Monkey', 'China', 'Meloo').
+  blarg('Monkey', 'China', 'Melpo').
+  blarg('Monkey', 'China', 'Melao').
+  blarg('Monkey', 'China', 'Melso').
+  blarg('Monkey', 'China', 'Meldo').
+  blarg('Monkey', 'China', 'Meslfo').
+  blarg('Monkey', 'China', 'Medlo').
+  blarg('Monkey', 'China', 'Mehlo').
+  blarg('Monkey', 'China', 'Meklo').
+  blarg('Monkey', 'China', 'Mello').
+  blarg('Monkey', 'China', 'Meqlo').
+  blarg('Monkey', 'China', 'aMelo').
+  blarg('Monkey', 'China', 'dMelo').
+  blarg('Monkey', 'China', 'fMelo').
+  blarg('Monkey', 'China', 'hMelo').
+
+  blarg2('Monkey9','Melo').
+  blarg2('Monkey8', 'lo').
+  blarg2('Monkey7', 'Melo').
+  blarg2('Monkey6', 'Melo').
+  blarg2('Monkey5', 'Melo').
+  blarg2('Monkey4', 'Melo').
+  blarg2('Monkey3', 'Melo').
+  blarg2('Monkey2', 'elo').
+  blarg2('food1', 'Melo').
+  blarg2('food', 'Melo').
+  blarg2('everything', 'Melo').
+  blarg2('veggy', 'Melo').
+  blarg2('Doggy', 'Melo').
+  blarg2('Dog','Chlo').
+  blarg2('sauage','Celo').
+  blarg2('Man','Chlo').
+  blarg2('beef','Melo').
+  blarg2('soup','Melo').
+  blarg2('Whale','Melo').
+  blarg2('KillerWhana','Melo').
+  blarg2('Bohead Whina','Melo').
+  blarg2('Dr. Reese', 'Melo').
+  blarg2('Brains', 'Michael').
+  blarg2('Brains', 'Melo1').
+  blarg2('Brains', 'Melo2').
+  blarg2('Brains', 'Melo3').
+  blarg2('Brains', 'Melo4').
+  blarg2('Stew', 'Melo5').
+  blarg2('Po', 'Melo6').
+  blarg2('Dog', 'Melo7').
+  blarg2('Dog', 'Melo8').
+  blarg2('peanut', 'Melo9').
+  blarg2('Banana', 'Melo10').
+
+  csg('CS101','12345','A').
+  csg('CS101','22222','B').
+  csg('CS101','33333','C').
+  csg('EE200','12345','B+').
+  csg('EE200','22222','B').
+  csg('CS101','12345','D').
+  csg('CS101','22222','D').
+  csg('CS101','33333','D').
+  csg('EE200','12345','D+').
+  csg('EE200','22222','F').
+  csg('CS105','00200','A').
+  csg('CS104','00200','B').
+  csg('CS103','00200','C').
+  csg('EE202','00200','B+').
+  csg('EE201','00200','B').
+  csg('CS101','00200','D').
+  csg('CS102','00200','D').
+  csg('CS103','00200','D').
+  csg('EE204','00200','D+').
+  csg('EE205','00200','F').
+  a('a').
+  a('b').
+  a('c').
+  a('d').
+  a('e').
+  a('f').
+  a('g').
+  a('h').
+  a('j').
+  a('k').
+  a('l').
+  a('q').
+  a('w').
+  a('e').
+  a('t').
+  a('y').
+  a('u').
+  a('i').
+  a('o').
+  a('p').
+
+
+Rules:
+  cn(c,n) :- snap(S,n,A,P),csg(c,S,G).
+  ncg(n,c,g) :- snap(S,n,A,P),csg(c,S,g).
+  j(x) :- i(x).
+  i(x) :- h(x).
+  h(x) :- g(x).
+  g(x) :- f(x).
+  f(x) :- e(x).
+  e(x) :- d(x).
+  d(x) :- c(x).
+  c(x) :- b(x).
+  b(x) :- a(x).
+  superblarg(Name, Country, Food) :- blarg(Animal, Country, Name),blarg2(Food,Name).
+  superblarg2(Name, Food) :- blarg(Animal, Country, Name),blarg2(Food,Name).
+  superblarg3(Country, Food) :- blarg(Animal, Country, Name),blarg2(Food,Name).
+  superblarg4(Animal, Food) :- blarg(Animal, Country, Name),blarg2(Food,Name).
+
+Queries:
+  cn('CS101',Name)?
+  ncg('Snoopy',Course,Grade)?
+  cn(C,'J-Dawg')?
+  ncg('J-Dog',Course,Grade)?
+  cn(C,'Snoopy')?
+  cn(C,'Austin')?
+  cn(C,N)?
+  j('a')?
+  j('b')?
+  j('c')?
+  j('d')?
+  j('e')?
+  j('f')?
+  j('g')?
+  j('h')?
+  j('i')?
+  j('j')?
+  j('k')?
+  j('l')?
+  j('m')?
+  j('n')?
+  j('o')?
+  j('p')?
+  j('q')?
+  j('r')?
+  j('s')?
+  j('t')?
+  superblarg(N,C,'Monkey')?
+  superblarg('Melo',C,F)?
+  superblarg2('Melo', Food)?
+  superblarg3('China', Food)?
+  superblarg4('Monkey', Food)?
+
