@@ -190,12 +190,12 @@ public class SearchGUI extends JFrame implements ListSelectionListener{
 			            	
 			            	
 			            	int type = myPicture.getType() == 0? BufferedImage.TYPE_INT_ARGB : myPicture.getType();
-			            	BufferedImage resizedImage = new BufferedImage(500, 500, type);
+			            	BufferedImage resizedImage = new BufferedImage(600, 600, type);
 			            	Graphics2D g = resizedImage.createGraphics();
-			            	g.drawImage(myPicture, 0, 0, 500, 500, null);
+			            	g.drawImage(myPicture, 0, 0, 600, 600, null);
 			            	g.dispose();
 			            	picLabel = new JLabel(new ImageIcon(resizedImage));
-							picLabel.setPreferredSize(new Dimension(500, 500));
+							picLabel.setPreferredSize(new Dimension(600, 600));
 			            	picLabel.setVisible(true);
 			            	
 			            	
@@ -203,7 +203,7 @@ public class SearchGUI extends JFrame implements ListSelectionListener{
 			            	pane.remove(centerPanel);
 			            	centerPanel = new JPanel();
 //			            	centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
-			            	centerPanel.setPreferredSize(new Dimension(500, 500));
+			            	centerPanel.setPreferredSize(new Dimension(600, 600));
 			            	centerPanel.setVisible(true);
 			            	centerPanel.add(picLabel);
 			            	pane.add(centerPanel, BorderLayout.CENTER);
