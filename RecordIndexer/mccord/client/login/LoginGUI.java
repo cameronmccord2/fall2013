@@ -2,6 +2,7 @@ package client.login;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -18,10 +19,9 @@ import javax.swing.JTextField;
 import models.FailedResult;
 import models.FalseResult;
 import server.ClientCommunicator;
-
 import communicator.ValidateUserParams;
 import communicator.ValidateUserResult;
-
+import client.SearchGUI;
 import client.TextPrompt;
 import client.TextPrompt.Show;
 
@@ -83,6 +83,12 @@ public class LoginGUI extends JFrame{
 		c.gridy = 1;
 		pane.add(port, c);
 		
+		username.setText("test1");
+		password.setText("test1");
+		host.setText("localhost");
+		port.setText("39640");
+		
+		
 		JButton loginButton = new JButton("Login");
 		c.weightx = 1;
 		c.gridx = 2;
@@ -131,6 +137,8 @@ public class LoginGUI extends JFrame{
 			Object response = cc.validateUser(var, host, port);
 			if(response instanceof ValidateUserResult){
 				this.setVisible(false);
+				SearchGUI sg = new SearchGUI(host, port, username, password);
+				
 			}else if(response instanceof FailedResult){
 //				result = ((FailedResult)response).toString();
 			}else if(response instanceof FalseResult){
@@ -143,5 +151,19 @@ public class LoginGUI extends JFrame{
 		}finally{
 //			getView().setResponse(result);
 		}
+	}
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {		
+			public void run() {
+				LoginGUI loginGui = new LoginGUI();
+				loginGui.setVisible(true);
+//				// Create the frame window object
+//				SimpleFrame frame = new SimpleFrame();
+//
+//				// Make the frame window visible
+//				frame.setVisible(true);
+			}
+		});
 	}
 }

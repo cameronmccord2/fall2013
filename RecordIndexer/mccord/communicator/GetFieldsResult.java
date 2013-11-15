@@ -29,12 +29,12 @@ FIELD_TITLE ::= String
 	 */
 	public String toString(){
 		StringBuilder sb = new StringBuilder("");
-		sb.append(projectId);
-		sb.append("\n");
-		sb.append(fieldId);
-		sb.append("\n");
+//		sb.append(projectId);
+//		sb.append("\n");
+//		sb.append(fieldId);
+//		sb.append("\n");
 		sb.append(title);
-		sb.append("\n");
+//		sb.append("\n");
 		
 		return sb.toString();
 	}

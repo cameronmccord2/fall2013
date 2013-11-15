@@ -18,10 +18,10 @@ public class GetProjectsResult {
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder("");
-		sb.append(id);
-		sb.append("\n");
+//		sb.append(id);
+//		sb.append("\n");
 		sb.append(title);
-		sb.append("\n");
+//		sb.append("\n");
 		return sb.toString();
 	}
 	
