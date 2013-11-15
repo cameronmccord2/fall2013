@@ -691,6 +691,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 		this.throwIfUsernamePasswordNotValid(params);
 		if(params.getFields() == null || params.getFields().length() < 1 || params.getSearchValues() == null || params.getSearchValues().length() < 1)
 			throw new FailedException();
+		System.out.println("got herje" + params.getSearchValues());
 		ArrayList<SearchResult> result = new ArrayList<SearchResult>();
 		String[] fields = params.getFields().split("\\,");
 		String[] values = params.getSearchValues().split("\\,");
@@ -703,6 +704,7 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 				searches.add(std);
 			}
 		}
+		System.out.println("got asdf");
 		for(SearchesToDo s : searches){
 			ArrayList<FieldValues> foundFields = this.getAllFieldValuesMatchingValueForFieldId(s.getSearchValue(), s.getFieldId());
 			for(FieldValues f : foundFields){
@@ -713,7 +715,9 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 				sr.setFieldId(f.getFieldId());
 				sr.setBatchId(r.getImageId());
 				sr.setImageUrl(this.getPartialUrlForImageFile(image.getFile()));
+				System.out.println(";lkj;ljk" + f.getRecordId() + " " + image.getId());
 				sr.setRecordNumber(this.getRowNumberOfRecordIdForProjectId(f.getRecordId(), image.getId()));
+				System.out.println("qwerpoiu");
 			}
 		}
 		return result;
@@ -721,10 +725,13 @@ public class JDBCRecordIndexerDAO implements RecordIndexerDAO {
 
 	private Integer getRowNumberOfRecordIdForProjectId(Integer recordId, Integer imageId) {
 		ArrayList<Records> result = this.getRecordsForImageId(imageId);
+		System.out.println("zxcvzxcv" + result.size());
 		for(int i = 0; i < result.size(); i++){
-			if(result.get(i).getId() == recordId)
+			System.out.println(result.get(i).getId() + " " + recordId);
+			if(result.get(i).getId().equals(recordId))
 				return i + 1;
 		}
+		System.out.println("couldnt find it");
 		throw new RuntimeException("shouldnt get here, couldnt find record id for row num calculation");
 	}
 
