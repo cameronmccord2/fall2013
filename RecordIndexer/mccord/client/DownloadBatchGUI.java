@@ -48,7 +48,7 @@ public class DownloadBatchGUI extends JFrame {
 		c.gridx = 0;
 		c.gridy = 0;
 		label.setVisible(true);
-		pane.add(label);
+		pane.add(label, c);
 		
 		JComboBox projectList = new JComboBox();// add array of things here
 		projectList.setSelectedIndex(0);
@@ -62,7 +62,7 @@ public class DownloadBatchGUI extends JFrame {
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
-		pane.add(projectList);
+		pane.add(projectList, c);
 		
 		JButton viewSampleButton = new JButton("View Sample");
 		c.weightx = 1;
@@ -79,9 +79,9 @@ public class DownloadBatchGUI extends JFrame {
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(viewSampleButton);
+		pane.add(viewSampleButton, c);
 		
-		JButton cancelButton = new JButton("Cancel");
+		JButton cancelButton = new JButton("Download");
 		c.weightx = 1;
 		c.gridx = 0;
 		c.gridy = 1;
@@ -89,14 +89,15 @@ public class DownloadBatchGUI extends JFrame {
 		cancelButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				cancel();// success pane
+				//download batch
+				cg.downloadedBatch(null);
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(cancelButton);
+		pane.add(cancelButton, c);
 		
 		JButton downloadButton = new JButton("Cancel");
 		c.weightx = 1;
@@ -113,6 +114,6 @@ public class DownloadBatchGUI extends JFrame {
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(downloadButton);
+		pane.add(downloadButton, c);
 	}
 }

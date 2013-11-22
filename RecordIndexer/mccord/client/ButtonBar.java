@@ -2,6 +2,8 @@ package client;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -10,18 +12,20 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class ButtonBar extends JFrame {
+public class ButtonBar extends JPanel {
 
 	private static final long serialVersionUID = 6247849090182044473L;
 
 	public ButtonBar(ClientGUI cg){
-		super("");
+		super();
 		
 //		JPanel buttonBar = new JPanel();
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setSize(new Dimension(this.getSize().width, 30));
 		this.setPreferredSize(new Dimension(this.getSize().width, 30));
-		Container pane = this.getContentPane();
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		this.setLayout(new GridBagLayout());
+		
 		
 		JButton zoomInButton = new JButton("Zoom In");
 		zoomInButton.addMouseListener(new MouseListener(){
@@ -94,13 +98,21 @@ public class ButtonBar extends JFrame {
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(zoomInButton);
-		pane.add(zoomOutButton);
-		pane.add(invertImageButton);
-		pane.add(toggleHighlightsButton);
-		pane.add(saveButton);
-		pane.add(submitButton);
-		pane.setVisible(true);
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		this.add(zoomInButton, c);
+		c.gridx++;
+		this.add(zoomOutButton, c);
+		c.gridx++;
+		this.add(invertImageButton, c);
+		c.gridx++;
+		this.add(toggleHighlightsButton, c);
+		c.gridx++;
+		this.add(saveButton, c);
+		c.gridx++;
+		this.add(submitButton, c);
+		this.setVisible(true);
 		
 //		this.add(buttonBar);
 //		this.setVisible(true);

@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class HelpView extends JFrame {
+public class HelpView extends JPanel {
 	public HelpView(ClientGUI cg){
-		super("");
+		super();
 		
 		JTabbedPane helpView = new JTabbedPane();
 		helpView.setVisible(true);

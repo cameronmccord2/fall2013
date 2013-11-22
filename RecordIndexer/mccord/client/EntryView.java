@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,7 +29,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-public class EntryView extends JFrame{
+public class EntryView extends JPanel{
 
 	private JList rowList;
 	private ArrayList<ArrayList<String>> rows;
@@ -36,10 +37,11 @@ public class EntryView extends JFrame{
 	private JScrollPane rowScrollPane;
 	private JScrollPane formScrollPane;
 	private Integer selectedRow;
+	private JTabbedPane entryView;
 	
-	public EntryView(final ClientGUI cg){
-		super("");
-		
+	public void populateTabs(final ClientGUI cg){
+		entryView.removeTabAt(0);
+		entryView.removeTabAt(1);
 		
 		// data model
 		rows = new ArrayList<ArrayList<String>>();
@@ -50,11 +52,6 @@ public class EntryView extends JFrame{
 				rows.get(i).add("");
 			}
 		}
-		
-		JTabbedPane entryView = new JTabbedPane();
-		entryView.setVisible(true);
-		
-		
 		TableModel dataModel = new AbstractTableModel() {
 	        public int getColumnCount() { return cg.batch.getNumberOfFields() + 1; }
 	        public int getRowCount() { return cg.batch.getNumberOfRecords();}
@@ -99,14 +96,6 @@ public class EntryView extends JFrame{
 		
 		entryView.addTab("Table Entry", tableScrollPane);
 		entryView.setMnemonicAt(0, KeyEvent.VK_1);
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		class RowListListener implements ListSelectionListener {
 			public void valueChanged(ListSelectionEvent e) {
@@ -183,6 +172,24 @@ public class EntryView extends JFrame{
 		formEntry.setResizeWeight(0.4d);
 		entryView.addTab("Form Entry", formEntry);
 		entryView.setMnemonicAt(1, KeyEvent.VK_2);
+	}
+	
+	public EntryView(final ClientGUI cg){
+		super();
+		
+		JScrollPane tempPane = new JScrollPane();
+		tempPane.setBackground(Color.white);
+//		tempPane.setPreferredSize(new Dimension(200, 200));
+//		tempPane.setSize(new Dimension(200, 200));
+		tempPane.setVisible(true);
+		
+		entryView = new JTabbedPane();
+		
+		entryView.addTab("Table Entry", tempPane);
+
+		entryView.addTab("Form Entry", tempPane);
+		entryView.setVisible(true);
+		System.out.println("build entry view ran");
 	}
 
 }
