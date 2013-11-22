@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -21,6 +22,7 @@ import models.FalseResult;
 import server.ClientCommunicator;
 import communicator.ValidateUserParams;
 import communicator.ValidateUserResult;
+import client.ClientGUI;
 import client.SearchGUI;
 import client.TextPrompt;
 import client.TextPrompt.Show;
@@ -30,11 +32,14 @@ public class LoginGUI extends JFrame{
 	private static final long serialVersionUID = -3795015357219531829L;
 	private JTextField username;
 	private JTextField password;
-	private JTextField host;
-	private JTextField port;
+	private String host;
+	private String port;
 	
-	public LoginGUI(){
+	public LoginGUI(final String host, final String port){
 		super("Login GUI");
+		
+		this.host = host;
+		this.port = port;
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension panelSize = new Dimension(400, 100);
@@ -64,29 +69,8 @@ public class LoginGUI extends JFrame{
 		c.gridy = 0;
 		pane.add(password, c);
 		
-		
-		host = new JTextField();
-		TextPrompt hostPrompt = new TextPrompt("Host", host);
-		hostPrompt.changeAlpha(.75f);
-		hostPrompt.setShow(Show.FOCUS_LOST);
-		c.weightx = 1;
-		c.gridx = 0;
-		c.gridy = 1;
-		pane.add(host, c);
-		
-		port = new JTextField();
-		TextPrompt portPrompt = new TextPrompt("port", port);
-		portPrompt.changeAlpha(.75f);
-		portPrompt.setShow(Show.FOCUS_LOST);
-		c.weightx = 1;
-		c.gridx = 1;
-		c.gridy = 1;
-		pane.add(port, c);
-		
 		username.setText("test1");
 		password.setText("test1");
-		host.setText("localhost");
-		port.setText("39640");
 		
 		
 		JButton loginButton = new JButton("Login");
@@ -97,8 +81,8 @@ public class LoginGUI extends JFrame{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(username.getText().length() > 0 && password.getText().length() > 0 && host.getText().length() > 0 && port.getText().length() > 0) 
-					validateUser(username.getText(), password.getText(), host.getText(), port.getText());
+				if(username.getText().length() > 0 && password.getText().length() > 0) 
+					validateUser(username.getText(), password.getText(), host, port);
 			}
 
 			@Override
@@ -127,6 +111,146 @@ public class LoginGUI extends JFrame{
 		this.pack();
 	}
 	
+	public void loadClient(){
+		System.out.println("logingui loading client");
+		this.setVisible(false);
+		ClientGUI cg = new ClientGUI(username.getText(), password.getText(), host, port);
+	}
+	
+	public class LoginSuccess extends JFrame{
+		private static final long serialVersionUID = -3174658209839081083L;
+		
+		LoginGUI lg = null;
+		
+		LoginSuccess(ValidateUserResult vur, LoginGUI lg){
+			super("Welcome to Indexer");
+			System.out.println("Login Success");
+			this.lg = lg;
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			Dimension panelSize = new Dimension(400, 100);
+			this.setSize(panelSize);
+			this.setMinimumSize(panelSize);
+			this.setMaximumSize(panelSize);
+			Container pane = this.getContentPane();
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			pane.setLayout(new GridBagLayout());
+			
+			JLabel label = new JLabel("Welcome, " + vur.getFirstName() + " " + vur.getLastName() + ".\nYou have indexed " + vur.getCount() + " records.");
+			label.setVisible(true);
+			
+			JButton button = new JButton("OK");
+			c.weightx = 1;
+			c.gridx = 2;
+			c.gridy = 0;
+			button.setVisible(true);
+			button.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					loadClient();// success pane
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+				}
+				
+			});
+			
+			pane.add(button);
+			pane.add(label);
+			this.setVisible(true);
+		}
+		
+		public void loadClient(){
+			this.setVisible(false);
+			lg.loadClient();
+		}
+	}
+	
+	public class LoginError extends JFrame{
+		
+		LoginGUI lg = null;
+		
+		LoginError(ValidateUserResult vur, LoginGUI lg){
+			super("Login Failed");
+			System.out.println("Login Error");
+			this.lg = lg;
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			Dimension panelSize = new Dimension(400, 100);
+			this.setSize(panelSize);
+			this.setMinimumSize(panelSize);
+			this.setMaximumSize(panelSize);
+			Container pane = this.getContentPane();
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			pane.setLayout(new GridBagLayout());
+			
+			JLabel label = new JLabel("Invalid Username and/or Password.");
+			label.setVisible(true);
+			
+			JButton button = new JButton("OK");
+			c.weightx = 1;
+			c.gridx = 2;
+			c.gridy = 0;
+			button.setVisible(true);
+			button.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					System.out.println("mouse clicked");
+					closeSelf();
+				}
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					
+				}
+				
+			});
+			
+			pane.add(button);
+			pane.add(label);
+			this.setVisible(true);
+		}
+		
+		public void closeSelf(){
+			System.out.println("close self");
+			this.setVisible(false);
+		}
+	}
+	
 	private void validateUser(String username, String password, String host, String port){
 		System.out.println("validating user");
 		ClientCommunicator cc = new ClientCommunicator();
@@ -137,15 +261,13 @@ public class LoginGUI extends JFrame{
 			Object response = cc.validateUser(var, host, port);
 			if(response instanceof ValidateUserResult){
 				this.setVisible(false);
-				SearchGUI sg = new SearchGUI(host, port, username, password);
+				LoginSuccess ls = new LoginSuccess((ValidateUserResult)response, this);
 				
 			}else if(response instanceof FailedResult){
-//				result = ((FailedResult)response).toString();
+				LoginError le = new LoginError((ValidateUserResult)response, this);
 			}else if(response instanceof FalseResult){
-				
+				LoginError le = new LoginError((ValidateUserResult)response, this);
 			}
-//				result = ((FalseResult)response).toString();
-//			getView().setResponse(result);
 		} catch (Exception e) {
 //			result = "FAILED";
 		}finally{
@@ -153,10 +275,11 @@ public class LoginGUI extends JFrame{
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		EventQueue.invokeLater(new Runnable() {		
 			public void run() {
-				LoginGUI loginGui = new LoginGUI();
+//				LoginGUI loginGui = new LoginGUI(args[0], args[1]);
+				LoginGUI loginGui = new LoginGUI("localhost", "39640");
 				loginGui.setVisible(true);
 //				// Create the frame window object
 //				SimpleFrame frame = new SimpleFrame();
