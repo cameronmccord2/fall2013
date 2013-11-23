@@ -28,6 +28,8 @@
 	<!-- Database file used by the server -->
 	<property name="db-file" location="${database}/recordIndexer.sqlite"/>
 	
+	<property name="built-db-file" location="${database}/importedDB.sqlite"/>
+	
 	<!-- Database file containing empty tables. -->
 	<property name="empty-db-file" location="${database}/indexer_server_empty.sqlite"/>
 	
@@ -65,14 +67,14 @@
 	<!-- TARGETS -->
 	<!-- ******* -->
 	<target name="all" description="do all">
-			<tstamp/>
-			<delete dir="${build}"/>
-			<delete dir="${passoff}"/>
-			<mkdir dir="${build}"/>
-			<mkdir dir="${passoff}"/>
-			<javac srcdir="${src}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
-			<javac srcdir="${test}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
-		</target>
+		<tstamp/>
+		<delete dir="${build}"/>
+		<delete dir="${passoff}"/>
+		<mkdir dir="${build}"/>
+		<mkdir dir="${passoff}"/>
+		<javac srcdir="${src}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
+		<javac srcdir="${test}" classpathref="lib-classpath" destdir="${build}" debug="true" includeantruntime="true" />
+	</target>
 	
 	<target name="init" description="create build directories">
 		<tstamp/>
@@ -110,6 +112,21 @@
 	<!-- If port number is omitted, run on default port. -->
 	<!-- EXAMPLE: ant server -->
 	<target name="server" depends="compile" description="run server on specified port">
+		<java classname="server.WebServer" fork="yes">
+			<classpath>
+				<path refid="all-classpath"/>
+			</classpath>
+			<arg value="${port}"/>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+	
+	<target name="serverC" depends="compile" description="run server on specified port">
+		<antcall target="import">
+			<param name="file" value="${database}/Records/Records.xml"/>
+		</antcall>
 		<java classname="server.WebServer" fork="yes">
 			<classpath>
 				<path refid="all-classpath"/>

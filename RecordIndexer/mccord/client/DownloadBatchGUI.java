@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,24 +16,29 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import models.FailedResult;
+import models.Fields;
+import server.ClientCommunicator;
+import communicator.DownloadBatchParams;
+import communicator.DownloadBatchResult;
+import communicator.GetProjectsResult;
+import communicator.ValidateUserParams;
 import client.TextPrompt.Show;
 
 public class DownloadBatchGUI extends JFrame {
 	
+	private ClientGUI cg;
+	private Integer projectId;
+	private ArrayList<GetProjectsResult> projects;
+	private JComboBox projectList;
+	
 	private void viewSample(){
 		
 	}
-	
-	private void cancel(){
-		
-	}
-	
-	private void download(){
-		
-	}
 
-	public DownloadBatchGUI(ClientGUI cg){
+	public DownloadBatchGUI(final ClientGUI cg){
 		super("Download Batch");
+		this.cg = cg;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension panelSize = new Dimension(400, 200);
 		this.setSize(panelSize);
@@ -50,15 +56,27 @@ public class DownloadBatchGUI extends JFrame {
 		label.setVisible(true);
 		pane.add(label, c);
 		
-		JComboBox projectList = new JComboBox();// add array of things here
-		projectList.setSelectedIndex(0);
+		projects = this.getProjects();
+		System.out.println(projects.size());
+		String[] names = new String[projects.size()];
+		for(int i = 0; i < projects.size(); i++){
+			names[i] = projects.get(i).getTitle();
+		}
+		
+		projectList = new JComboBox(names);
+		projectId = -1;
 		projectList.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				if(projectList.getSelectedIndex() == -1){
+					// nothing selected
+				}else{
+					projectId = projects.get(projectList.getSelectedIndex()).getId();
+					System.out.println("projectid is now: " + projectId);
+				}
 			}
 		});
+		projectList.setSelectedIndex(0);// load initial thing
 		c.weightx = 1;
 		c.gridx = 1;
 		c.gridy = 0;
@@ -89,8 +107,10 @@ public class DownloadBatchGUI extends JFrame {
 		cancelButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//download batch
-				cg.downloadedBatch(null);
+				if(projectId != -1){
+					cg.downloadedBatch(downloadBatch(projectId));
+					setVisible(false);
+				}
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -107,7 +127,7 @@ public class DownloadBatchGUI extends JFrame {
 		downloadButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				download();// success pane
+				cg.closeDownloadBatchGUI();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -115,5 +135,70 @@ public class DownloadBatchGUI extends JFrame {
 			@Override public void mouseExited(MouseEvent e) {}
 		});
 		pane.add(downloadButton, c);
+	}
+	
+	@SuppressWarnings("finally")
+	private DownloadBatchResult downloadBatch(int projectId) {
+		ClientCommunicator cc = new ClientCommunicator();
+		DownloadBatchParams var = new DownloadBatchParams();
+		DownloadBatchResult result = null;
+		var.setUsername(cg.username);
+		var.setPassword(cg.password);
+		var.setProjectId(projectId);
+		try {
+			System.out.println("making request");
+			Object response = cc.downloadBatch(var, cg.host, cg.port);
+			System.out.println("got a response");
+			if(response instanceof DownloadBatchResult){
+				((DownloadBatchResult)response).setImageUrl("http://" + cg.host + ":" + cg.port + "/" + ((DownloadBatchResult)response).getImageUrl());
+				for(Fields f : ((DownloadBatchResult)response).getFields()){
+					if(f.getHelpHtml() != null)
+						f.setHelpHtml("http://" + cg.host + ":" + cg.port + "/" + f.getHelpHtml());
+					if(f.getKnownData() != null)
+						f.setKnownData("http://" + cg.host + ":" + cg.port + "/" + f.getKnownData());
+				}
+				System.out.println("setting response");
+				result = (DownloadBatchResult)response;
+			}else if(response instanceof FailedResult){
+				System.out.println("failed to get batch");
+			}else
+				System.out.println("something else" + response.getClass());
+		} catch (Exception e) {
+
+		}finally{
+			System.out.println("returning result");
+			return result;
+		}
+	}
+	
+	@SuppressWarnings({ "finally", "unchecked" })
+	private ArrayList<GetProjectsResult> getProjects() {
+		ArrayList<GetProjectsResult> result = null;
+		ClientCommunicator cc = new ClientCommunicator();
+		ValidateUserParams vup = new ValidateUserParams();
+		vup.setPassword(cg.password);
+		vup.setUsername(cg.username);
+		try {
+			Object response = cc.getProjects(vup, cg.host, cg.port);
+			if(response instanceof ArrayList){
+				System.out.println("is array list");
+				result = (ArrayList<GetProjectsResult>)response;
+			}else if(response instanceof FailedResult){
+				System.out.println("failedResult");
+//				result = ((FailedResult)response).toString();
+			}else
+				System.out.println("something selse");
+//			else
+//				result = "something else" + response.getClass();
+//			getView().setResponse(result);
+		} catch (Exception e) {
+			System.out.println("exception");
+			e.printStackTrace();
+//			result = "FAILED";
+		}finally{
+//			getView().setResponse(result);
+			System.out.println("finally");
+			return result;
+		}
 	}
 }
