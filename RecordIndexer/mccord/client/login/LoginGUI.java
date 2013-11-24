@@ -34,6 +34,7 @@ public class LoginGUI extends JFrame{
 	private JTextField password;
 	private String host;
 	private String port;
+	private ClientGUI cg;
 	
 	public LoginGUI(final String host, final String port){
 		super("Login GUI");
@@ -114,7 +115,7 @@ public class LoginGUI extends JFrame{
 	public void loadClient(){
 		System.out.println("logingui loading client");
 		this.setVisible(false);
-		ClientGUI cg = new ClientGUI(username.getText(), password.getText(), host, port);
+		this.cg = new ClientGUI(username.getText(), password.getText(), host, port, this);
 	}
 	
 	public class LoginSuccess extends JFrame{
@@ -288,5 +289,19 @@ public class LoginGUI extends JFrame{
 //				frame.setVisible(true);
 			}
 		});
+	}
+
+	public void resetView() {
+		this.cg.setVisible(false);
+		this.cg = null;
+		this.loadClient();
+	}
+
+	public void logout() {
+		this.username.setText("");
+		this.password.setText("");
+		this.setVisible(true);
+		this.cg.setVisible(false);
+		this.cg = null;
 	}
 }

@@ -250,4 +250,18 @@ public class EntryView extends JPanel{
 		System.out.println("build entry view ran");
 	}
 
+	public String getFieldValuesForSubmit() {
+		StringBuilder sb = new StringBuilder("");
+		for(int i = 0; i < this.rows.size(); i++){
+			for(int j = 1; j < this.rows.get(i).size(); j++){
+				sb.append(this.rows.get(i).get(j));
+				if(j != this.rows.get(i).size() - 1)
+					sb.append(",");
+			}
+			if(i != this.rows.size() - 1)
+				sb.append(";");
+		}
+		return sb.toString();
+	}
+
 }

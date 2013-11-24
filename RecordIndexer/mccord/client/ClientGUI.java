@@ -21,8 +21,13 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 
+import client.login.LoginGUI;
+import server.ClientCommunicator;
+import models.FailedResult;
 import models.Fields;
 import communicator.DownloadBatchResult;
+import communicator.SubmitBatchParams;
+import communicator.SubmitBatchResult;
 
 public class ClientGUI extends JFrame {
 
@@ -39,14 +44,17 @@ public class ClientGUI extends JFrame {
 	private Center center;
 	private JSplitPane lowerView;
 	private JSplitPane mainSplitPane;
+	private JMenuBar menuBar;
+	private LoginGUI lg;
 	
 	
-	public ClientGUI(String username, String password, String host, String port){
+	public ClientGUI(String username, String password, String host, String port, LoginGUI lg){
 		super("Client GUI");
 		this.username = username;
 		this.password = password;
 		this.host = host;
 		this.port = port;
+		this.lg = lg;
 		
 		this.downloadBatchGUI = new DownloadBatchGUI(this);
 
@@ -77,7 +85,6 @@ public class ClientGUI extends JFrame {
 		
 		// menu
 		//Where the GUI is created:
-		JMenuBar menuBar;
 		JMenu menu, submenu;
 		JMenuItem menuItem;
 		JRadioButtonMenuItem rbMenuItem;
@@ -111,6 +118,8 @@ public class ClientGUI extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("logout clicked");
+				save();
+				logout();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseClicked(MouseEvent e) {}
@@ -124,6 +133,8 @@ public class ClientGUI extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				System.out.println("exit clicked");
+				save();
+				System.exit(1);
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseClicked(MouseEvent e) {}
@@ -139,6 +150,8 @@ public class ClientGUI extends JFrame {
 	}
 	
 	public void openDownloadBatchGUI(){
+		if(this.batch != null)
+			return;
 		System.out.println("opening download batch gui");
 		downloadBatchGUI.setVisible(true);
 	}
@@ -164,19 +177,89 @@ public class ClientGUI extends JFrame {
 		this.helpView.populateTabs(this);
 		this.center.loadImage(result.getImageUrl());
 		this.mainSplitPane.setDividerLocation(0.61d);
+		this.setDownloadBatchEnabledTo(false);
 	}
 
-	public void changeSelectedCell(int selectedColumn, int selectedRow) {// TODO adjust this to allow for adjusting the size of the color rect for changing column widths
-		System.out.println("change selected cell, col: " + selectedColumn + ", row: " + selectedRow);
+	public void changeSelectedCell(int selectedColumn, int selectedRow) {
+		this.center.updateLastColumn(selectedColumn);
 		this.helpView.changeSelectedField(selectedColumn);
-		Integer x = 0;
-		for(int i = 1; i < this.batch.getFields().size(); i++){
-			if(i == selectedColumn)
-				break;
-			x += this.batch.getFields().get(i).getWidth();
+		if(selectedColumn != 0){
+			System.out.println("change selected cell, col: " + selectedColumn + ", row: " + selectedRow);
+			Integer x = this.batch.getFields().get(selectedColumn).getXcoor();
+			Integer y = selectedRow * this.batch.getRecordHeight() + this.batch.getFirstYCoor();
+			Integer width = this.batch.getFields().get(selectedColumn).getWidth();
+			System.out.println("x: " + x + ", y: " + y + ", width: " + width);
+			this.center.adjustSquarePosition(x, y, width, this.batch.getRecordHeight());
 		}
-		Integer y = selectedRow * this.batch.getRecordHeight() + this.batch.getFirstYCoor();
-		System.out.println("x: " + x + ", y: " + y);
-		this.center.adjustSquarePosition(x, y);// this size is getting calculated incorrectly
+	}
+
+	public void zoomIn() {
+		this.center.zoomIn();
+	}
+
+	public void zoomOut() {
+		this.center.zoomOut();
+	}
+
+	public void invert() {
+		this.center.invert();
+	}
+
+	public void toggleHighlights() {
+		this.center.toggleHighlights();
+	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void submit() {
+		SubmitBatchParams sbp = new SubmitBatchParams();
+		sbp.setFieldValues(this.entryView.getFieldValuesForSubmit());
+		sbp.setPassword(this.password);
+		sbp.setUsername(this.username);
+		sbp.setBatchId(this.batch.getBatchId());
+		SubmitBatchResult r = this.submitBatch(sbp);
+		if("TRUE".equalsIgnoreCase(r.getResult())){
+			System.out.println("goodly submitted a batch");
+			this.lg.resetView();
+		}else{
+			System.out.println("expected TRUE, got : " + r.getResult());
+		}
+	}
+	
+	public void logout() {
+		this.lg.logout();
+	}
+	
+	public void quitProgram() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@SuppressWarnings("finally")
+	private SubmitBatchResult submitBatch(SubmitBatchParams sbp) {
+		ClientCommunicator cc = new ClientCommunicator();
+		SubmitBatchResult result = null;
+		try {
+			Object response = cc.submitBatch(sbp, this.host, this.port);
+			if(response instanceof SubmitBatchResult){
+				result = (SubmitBatchResult)response;
+				System.out.println(result.getResult());
+			}else if(response instanceof FailedResult){
+				System.out.println("submit batch failed result");
+				result = new SubmitBatchResult();
+				result.setResult("FAILED");
+//				result = ((FailedResult)response).toString();
+			}else
+				System.out.println("submit batch something else");
+//				result = "something else" + response.getClass();
+		} catch (Exception e) {
+			System.out.println("FAILED");
+//			result = "FAILED";
+		}finally{
+			return result;
+		}
 	}
 }

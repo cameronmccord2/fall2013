@@ -14,8 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import models.FailedResult;
 import models.Fields;
 import server.ClientCommunicator;
@@ -23,23 +21,18 @@ import communicator.DownloadBatchParams;
 import communicator.DownloadBatchResult;
 import communicator.GetProjectsResult;
 import communicator.ValidateUserParams;
-import client.TextPrompt.Show;
 
 public class DownloadBatchGUI extends JFrame {
-	
+	private static final long serialVersionUID = 8227044344356048883L;
 	private ClientGUI cg;
 	private Integer projectId;
 	private ArrayList<GetProjectsResult> projects;
 	private JComboBox projectList;
-	
-	private void viewSample(){
-		
-	}
 
 	public DownloadBatchGUI(final ClientGUI cg){
 		super("Download Batch");
 		this.cg = cg;
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Dimension panelSize = new Dimension(400, 200);
 		this.setSize(panelSize);
 		this.setMinimumSize(panelSize);
@@ -90,7 +83,8 @@ public class DownloadBatchGUI extends JFrame {
 		viewSampleButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				viewSample();// success pane
+				SampleImage si = new SampleImage(projects.get(projectList.getSelectedIndex()).getTitle(), projectId, cg);
+				si.setVisible(true);
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}

@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -17,7 +16,7 @@ import javax.swing.JTabbedPane;
 import models.Fields;
 
 public class HelpView extends JPanel {
-	
+	private static final long serialVersionUID = 5471293015492136017L;
 	private ClientGUI cg;
 	private JTabbedPane helpView;
 	
@@ -53,15 +52,23 @@ public class HelpView extends JPanel {
 		String finalLabel = "";
 		String labelPiece;
 		try {
-			URL helpFieldURL = new URL(field.getHelpHtml());
-			BufferedReader in = new BufferedReader(new InputStreamReader(helpFieldURL.openStream()));
-			
-			while((labelPiece = in.readLine()) != null){
-				finalLabel += labelPiece;
-				continue;
-			}
-			finalLabel = finalLabel.substring(15);
-			in.close();
+			if(fieldIndex != 0){
+				if(field.getHelpText() == null){
+					System.out.println("Field Index: " + fieldIndex);
+					URL helpFieldURL = new URL(field.getHelpHtml());
+					BufferedReader in = new BufferedReader(new InputStreamReader(helpFieldURL.openStream()));
+					
+					while((labelPiece = in.readLine()) != null){
+						finalLabel += labelPiece;
+						continue;
+					}
+					finalLabel = finalLabel.substring(15);
+					in.close();
+					field.setHelpText(finalLabel);
+				}else
+					finalLabel = field.getHelpText();
+			}else
+				System.out.println("field index 0");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

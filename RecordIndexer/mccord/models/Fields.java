@@ -13,8 +13,18 @@ import dao.JDBCRecordIndexerDAO;
 public class Fields {
 	
 	/** The id. */
-	protected Integer id;			
+	protected Integer id;	
 	
+	protected String helpText;
+	
+	public String getHelpText() {
+		return helpText;
+	}
+
+	public void setHelpText(String helpText) {
+		this.helpText = helpText;
+	}
+
 	/** The position. */
 	protected Integer position;	
 	

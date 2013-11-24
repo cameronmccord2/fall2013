@@ -1,23 +1,22 @@
 package client;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ButtonBar extends JPanel {
 
 	private static final long serialVersionUID = 6247849090182044473L;
-
-	public ButtonBar(ClientGUI cg){
+	private ClientGUI cg;
+	
+	public ButtonBar(final ClientGUI cg){
 		super();
+		this.cg = cg;
 		
 //		JPanel buttonBar = new JPanel();
 		this.setSize(new Dimension(this.getSize().width, 30));
@@ -32,6 +31,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click zoom in");
+				cg.zoomIn();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -44,6 +44,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click zoom out");
+				cg.zoomOut();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -56,6 +57,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click invert image");
+				cg.invert();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -68,6 +70,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click toggle highlights");
+				cg.toggleHighlights();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -80,6 +83,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click save");
+				cg.save();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -92,6 +96,7 @@ public class ButtonBar extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("mouse click submit");
+				cg.submit();
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
