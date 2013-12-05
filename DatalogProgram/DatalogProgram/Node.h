@@ -30,9 +30,13 @@ public:
     Node *backwardEdge;
     int postOrderNumber;
     map<string, string> backwardsEdges;// used only by query type
-    vector<pair<string, int>> postOrderPairs;
+    vector<pair<string, int> > postOrderPairs;
+    vector<pair<string, int> > postOrderPairsRules;
     vector<string> rulesEvaluated;
     vector<string> ruleEvaluationOrder;
+    bool alreadyVisited;
+    vector<string> backwardsEdgesList;
+    map<Node*, vector<string> > childNodesWithBackwardsEdges;
 private:
 };
 #endif /* defined(__DatalogProgram__Node__) */

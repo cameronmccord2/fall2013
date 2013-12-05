@@ -61,17 +61,22 @@ Database::Database(DatalogProgram *dp){
     this->run(this->queries, true);
 }
 
+bool sortNodes(Node* n1, Node* n2){
+    return (n1->identifier < n2->identifier);
+}
+
 void Database::runQueries(){
     // run queries one at a time
     bool runningAgain = false;
-    for (size_t a = 0; a < this->queries->size(); a++) {
+    for (size_t a = 0; a < this->nodes.size(); a++) {
+        cout << "run: " << this->nodes.at(a)->identifier << endl;
         unsigned long count = this->getFactsCount();
         this->postOrderNumber = 1;
         this->cycleFound = false;
-        ostringstream os = ostringstream();
-        os << "Q" << (a + 1);
-        Node* queryNode = this->nodeMap.find(os.str())->second;
-        queryNode->postOrderPairs = vector<pair<string, int>>();// reset this everytime so we dont get duplicate pairs
+        Node* queryNode = this->nodes.at(a);
+        queryNode->postOrderPairs = vector<pair<string, int> >();// reset this everytime so we dont get duplicate pairs
+        queryNode->postOrderPairsRules = vector<pair<string, int> >();
+        queryNode->childNodesWithBackwardsEdges = map<Node*, vector<string> >();
         this->clearPostOrderNumbers();
         queryNode->ruleEvaluationOrder = vector<string>();
         if (!runningAgain) {
@@ -90,6 +95,7 @@ void Database::runQueries(){
 void Database::clearPostOrderNumbers(){
     for (size_t i = 0; i < this->nodes.size(); i++) {
         this->nodes.at(i)->postOrderNumber = 0;
+        this->nodes.at(i)->alreadyVisited = false;
     }
 }
 
@@ -97,21 +103,43 @@ void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
     for (size_t i = 0; i < node->dependencies.size(); i++) {
         string dependencyString = node->dependencies.at(i);
         Node* ruleNode = this->nodeMap.find(dependencyString)->second;
+        node->alreadyVisited = true;
         if (ruleNode->postOrderNumber != 0) {
             continue;// already been seen
-        }
-        if (ruleJustCameFrom == dependencyString) {
-            this->currentQuery->backwardsEdges.insert(pair<string, string>(dependencyString, ruleJustCameFrom));
-            
+        }else if (ruleJustCameFrom == ruleNode->identifier) {// backwards edge found
+//            this->currentQuery->backwardsEdges.insert(pair<string, string>(dependencyString, ruleJustCameFrom));
+            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
+                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
+            }
+            this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
+//            this->currentQuery->childNodesWithBackwardsEdges.insert(node);
+//            node->backwardsEdgesList.push_back(dependencyString);
             node->hasBackwardEdge = true;
             node->backwardEdge = ruleNode;
             this->cycleFound = true;
-        }else{
-            this->runRuleDepthFirstSearch(ruleNode, dependencyString);
+        }else if(find(node->backwardsEdgesList.begin(), node->backwardsEdgesList.end(), dependencyString) != node->backwardsEdgesList.end()){
+            // found in backwards edges list, dont go there
+            cout << "found: " << dependencyString;
+        }else if (ruleNode->alreadyVisited) {
+            cout << "already visited: " << ruleNode->identifier << endl;
+            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
+                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
+            }
+            this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
+//            node->backwardsEdgesList.push_back(ruleNode->identifier);
+            node->hasBackwardEdge = true;
+            node->backwardEdge = ruleNode;
+            this->cycleFound = true;
+            continue;
+        }else {
+            this->runRuleDepthFirstSearch(ruleNode, node->identifier);
         }
     }
     node->postOrderNumber = this->postOrderNumber;
-    this->currentQuery->postOrderPairs.push_back(pair<string, int>(node->identifier, this->postOrderNumber));
+    if (node->isQuery) {
+        this->currentQuery->postOrderPairs.push_back(pair<string, int>(node->identifier, this->postOrderNumber));
+    }else
+        this->currentQuery->postOrderPairsRules.push_back(pair<string, int>(node->identifier, this->postOrderNumber));
     this->postOrderNumber++;
     
     // run this rule
@@ -211,16 +239,16 @@ Node* Database::getOrMakeNodeForDataRule(DataRule *dr, int ruleNum){
 }
 
 void Database::runRulesLoop(DataRule *rule, int ruleNum){
-	unsigned long count = this->getFactsCount();
-    this->passesThroughRules = 0;
-    do {
-        this->passesThroughRules++;
-        count = this->getFactsCount();
+//	unsigned long count = this->getFactsCount();
+//    this->passesThroughRules = 0;
+//    do {
+//        this->passesThroughRules++;
+//        count = this->getFactsCount();
         this->runRules(rule, ruleNum);
 //        if (count != this->getFactsCount()) {
 //            this->currentQuery->rulesEvaluated.push_back(rule->toString());
 //        }
-    } while (count != this->getFactsCount());// run until no more facts are generated
+//    } while (count != this->getFactsCount());// run until no more facts are generated
 }
 
 void Database::printTuplesForRelation(vector<Relation*>* list, string schemaName){
@@ -782,7 +810,18 @@ void Database::writeToFile(char *filename){
     try{
         ofstream myfile;
         myfile.open(filename);
-        myfile << this->toString();
+        myfile << this->lab5Output();
+        myfile.close();
+    }catch(exception& e){
+        e.what();
+    }
+}
+
+void Database::writeToFileS(string filename){
+    try{
+        ofstream myfile;
+        myfile.open(filename);
+        myfile << this->lab5Output();
         myfile.close();
     }catch(exception& e){
         e.what();
@@ -798,6 +837,8 @@ string Database::tupleToString(Tuple t){
     return output;
 }
 
+
+
 string Database::dependencyGraphToString(){
     vector<string> v;
     ostringstream os = ostringstream();
@@ -807,12 +848,16 @@ string Database::dependencyGraphToString(){
 //        v.push_back(it->first);
 //        cout << it->first << "\n";
 //    }
-//    sort(v.begin(), v.end());
+    sort(this->nodes.begin(), this->nodes.end(), sortNodes);
     for(Node *n : this->nodes){
         string s = n->identifier;
-        os << "  " << s << ": ";
+        os << "  " << s << ":";
         Node *node = this->nodeMap.at(s);
+        sort(node->dependencies.begin(), node->dependencies.end());
         for (size_t i = 0; i < node->dependencies.size(); i++) {
+            if (i == 0) {
+                os << " ";
+            }
             os << node->dependencies.at(i);
             if (i != node->dependencies.size() - 1) {
                 os << " ";
@@ -824,9 +869,17 @@ string Database::dependencyGraphToString(){
     return os.str();
 }
 
+bool sortNodesNormal(Node* n1, Node* n2){
+    int a = stoi(n1->identifier.substr(1));
+    int b = stoi(n2->identifier.substr(1));
+    //    cout << "rules: " << p1.first << " " << p2.first << endl;
+    return (a < b);
+}
+
 string Database::lab5Output(){
     ostringstream os = ostringstream();
     os << this->dependencyGraphToString();
+    sort(this->nodes.begin(), this->nodes.end(), sortNodesNormal);
     for (size_t i = 0; i < this->nodes.size(); i++) {
         Node *node = this->nodes.at(i);
         if (node->isQuery) {
@@ -841,22 +894,45 @@ string Database::lab5Output(){
                 os << "Yes(" << query->tuples->size() << ")" << "\n" << query->toStringRemainingTuples();
             }else
                 os << "NO\n";
-            os << "\n\n";
+            os << "\n";
         }
     }
     return os.str();
 }
 
+bool sortPostOrderPairs(pair<string, int> p1, pair<string, int> p2){
+    int a = stoi(p1.first.substr(1));
+    int b = stoi(p2.first.substr(1));
+//    cout << "rules: " << p1.first << " " << p2.first << endl;
+    return (a > b);
+}
+
+bool sortThesePostOrderPairsQueries(pair<string, int> p1, pair<string, int> p2){
+//    cout << "queries: " << p1.first << " " << p2.first << endl;
+    return (p1.first > p2.first);
+}
+
 string Database::postOrderNumbersToString(Node *node){
     ostringstream os = ostringstream();
     os << "  Postorder Numbers\n";
-    for (int i = (int)node->postOrderPairs.size() - 1; i >= 0; i--) {
+    // sort thing
+//    sort(node->postOrderPairs.begin(), node->postOrderPairs.end(), sortThesePostOrderPairsQueries);
+    sort(node->postOrderPairsRules.begin(), node->postOrderPairsRules.end(), sortPostOrderPairs);
+    
+    for (int i = (int)node->postOrderPairs.size() - 1; i >= 0; i--) {// do queries first
         pair<string, int> pair = node->postOrderPairs.at(i);
+        os << "    " << pair.first << ": " << pair.second << "\n";
+//        cout << pair.first << endl;
+    }
+    for (int i = (int)node->postOrderPairsRules.size() - 1; i >= 0; i--) {// do rules second
+        pair<string, int> pair = node->postOrderPairsRules.at(i);
         os << "    " << pair.first << ": " << pair.second << "\n";
     }
     os << "\n";
     return os.str();
 }
+
+
 
 string Database::ruleEvaluationOrderToString(Node *node){
     ostringstream os = ostringstream();
@@ -870,12 +946,26 @@ string Database::ruleEvaluationOrderToString(Node *node){
 
 string Database::backwardsEdgesToString(Node *node){
     ostringstream os = ostringstream();
+//    os << "  Backward Edges\n";
+//    typedef std::map<string, string>::iterator it_type;
+//    for(it_type it = node->backwardsEdges.begin(); it != node->backwardsEdges.end(); it++) {
+//        os << "    " << it->first << ": " << it->second << "\n";
+//    }
+//    os << "\n";
+
     os << "  Backward Edges\n";
-    typedef std::map<string, string>::iterator it_type;
-    for(it_type it = node->backwardsEdges.begin(); it != node->backwardsEdges.end(); it++) {
-        os << "    " << it->first << ": " << it->second << "\n";
+    typedef std::map<Node*, vector<string> >::iterator it_type;
+    for(it_type it = node->childNodesWithBackwardsEdges.begin(); it != node->childNodesWithBackwardsEdges.end(); it++) {
+        Node* node = it->first;
+        os << "    " << node->identifier << ":";
+        sort(it->second.begin(), it->second.end());
+        for (size_t i = 0; i < it->second.size(); i++) {
+            os << " " << it->second.at(i);
+        }
+        os << "\n";
     }
     os << "\n";
+    
     return os.str();
 }
 

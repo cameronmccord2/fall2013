@@ -118,6 +118,22 @@
 		E49D69CC184FA5DD00B32EA1 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		E49D69CD184FA5DD00B32EA1 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		E49D69CF184FEE2F00B32EA1 /* inFinal.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = inFinal.txt; sourceTree = "<group>"; };
+		E49D69D01850D33300B32EA1 /* in50.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in50.txt; sourceTree = "<group>"; };
+		E49D69D11850D33300B32EA1 /* in54.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in54.txt; sourceTree = "<group>"; };
+		E49D69D21850D33300B32EA1 /* in55.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in55.txt; sourceTree = "<group>"; };
+		E49D69D31850D33300B32EA1 /* in56.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in56.txt; sourceTree = "<group>"; };
+		E49D69D41850D33300B32EA1 /* in58.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in58.txt; sourceTree = "<group>"; };
+		E49D69D51850D33300B32EA1 /* in59.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in59.txt; sourceTree = "<group>"; };
+		E49D69D61850D33300B32EA1 /* in61.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in61.txt; sourceTree = "<group>"; };
+		E49D69D71850D33300B32EA1 /* in62.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in62.txt; sourceTree = "<group>"; };
+		E49D69D81850D33C00B32EA1 /* out50.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out50.txt; sourceTree = "<group>"; };
+		E49D69D91850D33C00B32EA1 /* out54.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out54.txt; sourceTree = "<group>"; };
+		E49D69DA1850D33C00B32EA1 /* out55.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out55.txt; sourceTree = "<group>"; };
+		E49D69DB1850D33C00B32EA1 /* out56.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out56.txt; sourceTree = "<group>"; };
+		E49D69DC1850D33C00B32EA1 /* out58.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out58.txt; sourceTree = "<group>"; };
+		E49D69DD1850D33C00B32EA1 /* out59.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out59.txt; sourceTree = "<group>"; };
+		E49D69DE1850D33C00B32EA1 /* out61.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out61.txt; sourceTree = "<group>"; };
+		E49D69DF1850D33C00B32EA1 /* out62.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out62.txt; sourceTree = "<group>"; };
 		E4A2158B18320A3500F59C65 /* in42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in42.txt; sourceTree = "<group>"; };
 		E4A2158C18320A3500F59C65 /* out42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out42.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,6 +187,22 @@
 		21CF8AF617F0A77700E9499F /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E49D69D81850D33C00B32EA1 /* out50.txt */,
+				E49D69D91850D33C00B32EA1 /* out54.txt */,
+				E49D69DA1850D33C00B32EA1 /* out55.txt */,
+				E49D69DB1850D33C00B32EA1 /* out56.txt */,
+				E49D69DC1850D33C00B32EA1 /* out58.txt */,
+				E49D69DD1850D33C00B32EA1 /* out59.txt */,
+				E49D69DE1850D33C00B32EA1 /* out61.txt */,
+				E49D69DF1850D33C00B32EA1 /* out62.txt */,
+				E49D69D01850D33300B32EA1 /* in50.txt */,
+				E49D69D11850D33300B32EA1 /* in54.txt */,
+				E49D69D21850D33300B32EA1 /* in55.txt */,
+				E49D69D31850D33300B32EA1 /* in56.txt */,
+				E49D69D41850D33300B32EA1 /* in58.txt */,
+				E49D69D51850D33300B32EA1 /* in59.txt */,
+				E49D69D61850D33300B32EA1 /* in61.txt */,
+				E49D69D71850D33300B32EA1 /* in62.txt */,
 				E4A2158B18320A3500F59C65 /* in42.txt */,
 				E4A2158C18320A3500F59C65 /* out42.txt */,
 				E43F343F182DF89000DD3B47 /* in44.txt */,

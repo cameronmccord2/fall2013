@@ -16,6 +16,7 @@ Node::Node(string identifier){
     this->identifier = identifier;
     this->postOrderNumber = 0;
     this->rulesEvaluated = vector<string>();
+    this->alreadyVisited = false;
 }
 
 Node::~Node(){
