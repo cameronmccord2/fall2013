@@ -10,6 +10,7 @@
 #include "Predicate.h"
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 Database::Database(DatalogProgram *dp){
     this->results = new vector<Relation*>();
