@@ -69,7 +69,6 @@ void Database::runQueries(){
     // run queries one at a time
     bool runningAgain = false;
     for (size_t a = 0; a < this->nodes.size(); a++) {
-        cout << "run: " << this->nodes.at(a)->identifier << endl;
         unsigned long count = this->getFactsCount();
         this->postOrderNumber = 1;
         this->cycleFound = false;
@@ -135,7 +134,6 @@ void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
             // found in backwards edges list, dont go there
             cout << "found: " << dependencyString;
         }else if (ruleNode->alreadyVisited) {
-            cout << "already visited: " << ruleNode->identifier << endl;
 //            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
 //                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
 //            }
