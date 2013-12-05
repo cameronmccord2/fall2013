@@ -107,7 +107,7 @@ void Database::addToChildNodesWithBackwardsEdges(Node* node, string dependencySt
 }
 
 bool isStringInVector(vector<string> v, string s){
-    for (int i =0; i < v.size(); i++) {
+    for (int i =0; i < (int)v.size(); i++) {
         if (v.at(i) == s) {
             return true;
         }
@@ -179,7 +179,7 @@ void Database::makeGraph(){
 }
 
 void Database::makeNodeFromQueryRelation(Relation* query, int queryNum){
-    ostringstream os = ostringstream("");
+    ostringstream os = ostringstream();
     os << "Q" << (queryNum + 1);
     // find or make the node from the datarule
     map<string, Node*>::iterator it = this->nodeMap.find(os.str());
@@ -201,7 +201,7 @@ void Database::makeNodeFromQueryRelation(Relation* query, int queryNum){
 }
 
 void Database::makeNodeFromRule(DataRule *dr, int ruleNum){
-    ostringstream os = ostringstream("");
+    ostringstream os = ostringstream();
     os << "R" << (ruleNum + 1);
     // find or make the node from the datarule
     map<string, Node*>::iterator it = this->nodeMap.find(os.str());
@@ -240,8 +240,7 @@ vector<string> Database::getAllRuleIdsForName(string name){
 }
 
 Node* Database::getOrMakeNodeForDataRule(DataRule *dr, int ruleNum){
-    ostringstream os = ostringstream("");
-    os = ostringstream("");
+    ostringstream os = ostringstream();
     os << "R" << ruleNum;
     string nodeIdentifier = os.str();
     for (size_t i = 0; i < this->nodes.size(); i++) {
