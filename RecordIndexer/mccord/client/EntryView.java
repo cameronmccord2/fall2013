@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -31,10 +32,16 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 public class EntryView extends JPanel{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3430815999308823613L;
 	private JList rowList;
 	private ArrayList<ArrayList<String>> rows;
 	private ArrayList<JTextField> textFields;
@@ -63,14 +70,14 @@ public class EntryView extends JPanel{
 		}
 		System.out.println("number of fields: " + cg.batch.getFields().size());
 		TableModel dataModel = new AbstractTableModel() {
-	        public int getColumnCount() { System.out.println("columns: " + cg.batch.getFields().size()); return cg.batch.getFields().size(); }
+			private static final long serialVersionUID = 8694837859047259727L;
+			public int getColumnCount() { System.out.println("columns: " + cg.batch.getFields().size()); return cg.batch.getFields().size(); }
 	        public int getRowCount() { return cg.batch.getNumberOfRecords();}
 	        public Object getValueAt(int row, int col) {return rows.get(row).get(col); }
 	        public String getColumnName(int col){ return cg.batch.getFields().get(col).getTitle();}
 	        public boolean isCellEditable(int row, int col){ 
 	        	return (col != 0);
 	        }
-
 			public void setValueAt(Object value, int row, int col){
 	        	System.out.println("saving value for row: " + row + ", col: " + col);
 	        	rows.get(row).set(col, (String)value);
@@ -78,7 +85,18 @@ public class EntryView extends JPanel{
 //	        	buildFormTab(cg);
 	        }
 		};
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer(){
+			private static final long serialVersionUID = -2531370875465975474L;
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				Component render = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//				render.setBackground(c);
+				return this;
+			}
+			
+		};
 		final JTable table = new JTable(dataModel);
+		table.setDefaultRenderer(String.class, renderer);// im not sure which class to put here
 		table.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {

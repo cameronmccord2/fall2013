@@ -28,6 +28,7 @@
 		DCEB3B7C181B914700052ADA /* Schema.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7A181B914700052ADA /* Schema.cpp */; };
 		DCEB3B7F181B915300052ADA /* Tuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCEB3B7D181B915300052ADA /* Tuple.cpp */; };
 		E43F343E182DD31E00DD3B47 /* DataRule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E43F343C182DD31E00DD3B47 /* DataRule.cpp */; };
+		E49D69CE184FA5DD00B32EA1 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E49D69CC184FA5DD00B32EA1 /* Node.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -114,6 +115,9 @@
 		E43F3445182DF89000DD3B47 /* out45.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out45.txt; sourceTree = "<group>"; };
 		E43F3446182DF89000DD3B47 /* out46.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out46.txt; sourceTree = "<group>"; };
 		E43F3447182DF89000DD3B47 /* out49.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out49.txt; sourceTree = "<group>"; };
+		E49D69CC184FA5DD00B32EA1 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
+		E49D69CD184FA5DD00B32EA1 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
+		E49D69CF184FEE2F00B32EA1 /* inFinal.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = inFinal.txt; sourceTree = "<group>"; };
 		E4A2158B18320A3500F59C65 /* in42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = in42.txt; sourceTree = "<group>"; };
 		E4A2158C18320A3500F59C65 /* out42.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = out42.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,6 +201,7 @@
 				21CF8B1217F2336800E9499F /* in22.txt */,
 				21D353E2181F4BDD0082C06E /* in40.txt */,
 				21B9168A1820423D007E6AA3 /* in47.txt */,
+				E49D69CF184FEE2F00B32EA1 /* inFinal.txt */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -260,6 +265,8 @@
 				2158DFF0182196B800342068 /* DParameter.h */,
 				E43F343C182DD31E00DD3B47 /* DataRule.cpp */,
 				E43F343D182DD31E00DD3B47 /* DataRule.h */,
+				E49D69CC184FA5DD00B32EA1 /* Node.cpp */,
+				E49D69CD184FA5DD00B32EA1 /* Node.h */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -330,6 +337,7 @@
 				E43F343E182DD31E00DD3B47 /* DataRule.cpp in Sources */,
 				2158DFF1182196B800342068 /* DParameter.cpp in Sources */,
 				21CF8B0417F0AEC700E9499F /* QueryList.cpp in Sources */,
+				E49D69CE184FA5DD00B32EA1 /* Node.cpp in Sources */,
 				21CF8B0117F0AEBC00E9499F /* RuleList.cpp in Sources */,
 				21CF8AFE17F0AEA900E9499F /* FactList.cpp in Sources */,
 				21CF8AE517F09EF700E9499F /* State.cpp in Sources */,

@@ -47,17 +47,179 @@ Database::Database(DatalogProgram *dp){
         this->queries->push_back(r);
     }
     this->generateRules(dp);
-    this->runRulesLoop();
+    this->makeGraph();
+//    cout << this->dependencyGraphToString();
+    
+    this->runQueries();
+    
+    
+    
+    
+    
+    
+//    this->runRulesLoop();
     this->run(this->queries, true);
 }
 
-void Database::runRulesLoop(){
+void Database::runQueries(){
+    // run queries one at a time
+    bool runningAgain = false;
+    for (size_t a = 0; a < this->queries->size(); a++) {
+        unsigned long count = this->getFactsCount();
+        this->postOrderNumber = 1;
+        this->cycleFound = false;
+        ostringstream os = ostringstream();
+        os << "Q" << (a + 1);
+        Node* queryNode = this->nodeMap.find(os.str())->second;
+        queryNode->postOrderPairs = vector<pair<string, int>>();// reset this everytime so we dont get duplicate pairs
+        this->clearPostOrderNumbers();
+        queryNode->ruleEvaluationOrder = vector<string>();
+        if (!runningAgain) {
+            queryNode->backwardsEdges = map<string, string>();
+            this->currentQuery = queryNode;
+        }
+        this->runRuleDepthFirstSearch(queryNode, "doesnt matter");
+        if (this->cycleFound && count != this->getFactsCount()) {// rerun if cycle was found and if the number of facts changed on the last pass through
+            a--;// rerun this query again
+            runningAgain = true;
+        }else
+            runningAgain = false;
+    }
+}
+
+void Database::clearPostOrderNumbers(){
+    for (size_t i = 0; i < this->nodes.size(); i++) {
+        this->nodes.at(i)->postOrderNumber = 0;
+    }
+}
+
+void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
+    for (size_t i = 0; i < node->dependencies.size(); i++) {
+        string dependencyString = node->dependencies.at(i);
+        Node* ruleNode = this->nodeMap.find(dependencyString)->second;
+        if (ruleNode->postOrderNumber != 0) {
+            continue;// already been seen
+        }
+        if (ruleJustCameFrom == dependencyString) {
+            this->currentQuery->backwardsEdges.insert(pair<string, string>(dependencyString, ruleJustCameFrom));
+            
+            node->hasBackwardEdge = true;
+            node->backwardEdge = ruleNode;
+            this->cycleFound = true;
+        }else{
+            this->runRuleDepthFirstSearch(ruleNode, dependencyString);
+        }
+    }
+    node->postOrderNumber = this->postOrderNumber;
+    this->currentQuery->postOrderPairs.push_back(pair<string, int>(node->identifier, this->postOrderNumber));
+    this->postOrderNumber++;
+    
+    // run this rule
+    if (!node->isQuery) {
+        this->runRulesLoop(node->dataRule, 0);
+    }
+}
+
+
+
+void Database::makeGraph(){
+    this->nodes = vector<Node*>();
+    this->nodeMap = map<string, Node*>();
+    
+    for (size_t i = 0; i < this->queries->size(); i++) {
+        this->makeNodeFromQueryRelation(this->queries->at(i), (int)i);
+    }
+    for (size_t i = 0; i < this->masterRules->size(); i++) {
+        this->makeNodeFromRule(this->masterRules->at(i), (int)i);
+    }
+    
+}
+
+void Database::makeNodeFromQueryRelation(Relation* query, int queryNum){
+    ostringstream os = ostringstream("");
+    os << "Q" << (queryNum + 1);
+    // find or make the node from the datarule
+    map<string, Node*>::iterator it = this->nodeMap.find(os.str());
+    if (it == this->nodeMap.end()) {// not found, make it
+        Node *node = new Node(os.str());
+        // resolve dependency stuff
+        node->query = query;
+        node->isQuery = true;
+        node->dependencies = vector<string>();
+        // make dependencies
+        vector<string> ids = this->getAllRuleIdsForName(query->name);
+        for (size_t j = 0; j < ids.size(); j++) {// add them to the dependency graph for this node, may be none
+            node->dependencies.push_back(ids.at(j));
+        }
+        this->nodeMap.insert(pair<string, Node*>(os.str(), node));
+        this->nodes.push_back(node);
+    }else
+        return; // found it so we dont have to make it. all of it's dependency stuff should have already been done
+}
+
+void Database::makeNodeFromRule(DataRule *dr, int ruleNum){
+    ostringstream os = ostringstream("");
+    os << "R" << (ruleNum + 1);
+    // find or make the node from the datarule
+    map<string, Node*>::iterator it = this->nodeMap.find(os.str());
+    if (it == this->nodeMap.end()) {// not found, make it
+        Node *node = new Node(os.str());
+        // resolve dependency stuff
+        node->dataRule = dr;
+        node->isQuery = false;
+        node->dependencies = vector<string>();
+        // make dependencies
+        for (size_t i = 0; i < dr->predicates->size(); i++) {
+            Relation *predicate = dr->predicates->at(i);
+            vector<string> ids = this->getAllRuleIdsForName(predicate->name);
+            for (size_t j = 0; j < ids.size(); j++) {// add them to the dependency graph for this node, may be none
+                node->dependencies.push_back(ids.at(j));
+            }
+        }
+        this->nodeMap.insert(pair<string, Node*>(os.str(), node));
+        this->nodes.push_back(node);
+    }else
+        return; // found it so we dont have to make it. all of it's dependency stuff should have already been done
+    
+}
+
+vector<string> Database::getAllRuleIdsForName(string name){
+    vector<string> rules = vector<string>();
+    ostringstream os = ostringstream();
+    for (size_t i = 0;  i < this->masterRules->size(); i++) {
+        if (this->masterRules->at(i)->head->name == name) {
+            os = ostringstream();
+            os << "R" << (i + 1);
+            rules.push_back(os.str());
+        }
+    }
+    return rules;
+}
+
+Node* Database::getOrMakeNodeForDataRule(DataRule *dr, int ruleNum){
+    ostringstream os = ostringstream("");
+    os = ostringstream("");
+    os << "R" << ruleNum;
+    string nodeIdentifier = os.str();
+    for (size_t i = 0; i < this->nodes.size(); i++) {
+        Node* node = this->nodes.at(i);
+        if (node->identifier == nodeIdentifier) {
+            return node;
+        }
+    }
+    return new Node(nodeIdentifier);
+}
+
+void Database::runRulesLoop(DataRule *rule, int ruleNum){
 	unsigned long count = this->getFactsCount();
     this->passesThroughRules = 0;
     do {
         this->passesThroughRules++;
         count = this->getFactsCount();
-        this->runRules();
+        this->runRules(rule, ruleNum);
+//        if (count != this->getFactsCount()) {
+//            this->currentQuery->rulesEvaluated.push_back(rule->toString());
+//        }
     } while (count != this->getFactsCount());// run until no more facts are generated
 }
 
@@ -83,15 +245,20 @@ unsigned long Database::getFactsCount(){
     return count;
 }
 
-void Database::runRules(){
-    this->copyRules();
-    
-    for (size_t i = 0; i < this->rules->size(); i++) {
-        this->run(this->rules->at(i)->predicates, false);
-        this->joinRule(this->rules->at(i));
-    }
-    
-    this->deleteRulesCopy();
+void Database::runRules(DataRule * rule, int ruleNum){
+//    this->copyRules(); only for lab 4
+//    for (size_t i = 0; i < rules->size(); i++) {
+//        this->run(this->rules->at(i)->predicates, false);
+//        this->joinRule(this->rules->at(i));
+//    }
+//    
+//    this->deleteRulesCopy();
+    ostringstream os = ostringstream();
+    os << "R" << rule->ruleNum;
+    this->currentQuery->ruleEvaluationOrder.push_back(os.str());
+    this->currentQuery->rulesEvaluated.push_back(rule->toString()); // this isnt correct yet, either I am printing incorrectly or the rules are running too many times
+    this->run(rule->predicates, false);
+    this->joinRule(rule);
 }
 
 void Database::joinRule(DataRule *dr){
@@ -166,7 +333,7 @@ set<pair<int, int> >* Database::findMatchingColumns(Relation *r1, Relation *r2){
 
 Relation* Database::keepGoodTuples(Relation *r1, Relation *r2, set<pair<int, int> >* matches){
     Relation *r = new Relation();
-delete r->variableNames;
+    delete r->variableNames;
     r->variableNames = new vector<string>(*r1->variableNames);// make sure this isnt broken - variable names !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this->doVariableNames = true;
     
@@ -176,7 +343,7 @@ delete r->variableNames;
         
         set<Tuple>::iterator it3;
         for (it3 = r2->tuples->begin(); it3 != r2->tuples->end(); ++it3) {
-           
+            
             Tuple t2 = *it3;
             
             this->keepGoodTuples2(matches, r, t2, t1, r2);
@@ -236,6 +403,7 @@ void Database::generateRules(DatalogProgram *dp){
     this->masterRules = new vector<DataRule*>();
     for (size_t i = 0; i < dp->ruleList->list->size(); i++) {
         DataRule *d = new DataRule();
+        d->ruleNum = i + 1;
         d->head = new Relation();
         d->head->name = dp->ruleList->list->at(i)->firstPredicate->getIdentifier();
         for (size_t j = 0; j < dp->ruleList->list->at(i)->firstPredicate->parameters->size(); j++) {
@@ -277,7 +445,11 @@ Database::~Database(){
     }
     delete this->masterRules;
     
-//    delete this->variablePositions;// always deleted after done using it in run()
+    for (size_t i = 0; i < this->nodes.size(); i++) {
+        delete this->nodes.at(i);
+    }
+    
+    //    delete this->variablePositions;// always deleted after done using it in run()
 }
 
 Relation* Relation::selectConstant(int position, string value){
@@ -305,7 +477,7 @@ Relation* Relation::selectVariable(int position1, int position2){// return where
     for (it = this->tuples->begin(); it != this->tuples->end(); ++it) {
         Tuple t = *it;
         if (t.at(position1) == t.at(position2)) {
-           newTuples->insert(t);
+            newTuples->insert(t);
         }
     }
     delete this->tuples;
@@ -444,7 +616,7 @@ void Relation::generateKeysAndVariablePositions(vector<string>* keys, map<string
                     variablePositions->insert(make_pair(parameter.value, new vector<int>()));
                 }
                 variablePositions->find(parameter.value)->second->push_back((int)k);
-
+                
                 keys->push_back(parameter.value);// add to later check for possible duplicate keys
                 k++;
             }else{
@@ -598,7 +770,7 @@ string Database::toString(){
         Relation *query = this->queries->at(i);
         oss << query->name << "(" << query->toStringOriginalQueryColumns() << ")? ";
         if (query->tuples->size() > 0) {
-            oss << "Yes(" << query->tuples->size() << ")" << "\n" << query->toStringRemainingTuples();;
+            oss << "Yes(" << query->tuples->size() << ")" << "\n" << query->toStringRemainingTuples();
         }else
             oss << "NO\n";
     }
@@ -626,7 +798,96 @@ string Database::tupleToString(Tuple t){
     return output;
 }
 
+string Database::dependencyGraphToString(){
+    vector<string> v;
+    ostringstream os = ostringstream();
+    os << "Dependency Graph\n";
+//    cout << this->nodeMap.size();
+//    for(map<string, Node*>::iterator it = this->nodeMap.begin(); it != this->nodeMap.end(); ++it) {
+//        v.push_back(it->first);
+//        cout << it->first << "\n";
+//    }
+//    sort(v.begin(), v.end());
+    for(Node *n : this->nodes){
+        string s = n->identifier;
+        os << "  " << s << ": ";
+        Node *node = this->nodeMap.at(s);
+        for (size_t i = 0; i < node->dependencies.size(); i++) {
+            os << node->dependencies.at(i);
+            if (i != node->dependencies.size() - 1) {
+                os << " ";
+            }
+        }
+        os << "\n";
+    }
+    os << "\n";
+    return os.str();
+}
 
+string Database::lab5Output(){
+    ostringstream os = ostringstream();
+    os << this->dependencyGraphToString();
+    for (size_t i = 0; i < this->nodes.size(); i++) {
+        Node *node = this->nodes.at(i);
+        if (node->isQuery) {
+            Relation *query = node->query;
+            os << query->name << "(" << query->toStringOriginalQueryColumns() << ")?\n\n";
+            os << this->postOrderNumbersToString(node);
+            os << this->ruleEvaluationOrderToString(node);
+            os << this->backwardsEdgesToString(node);
+            os << this->ruleEvaluationToString(node);
+            os << query->name << "(" << query->toStringOriginalQueryColumns() << ")? ";
+            if (query->tuples->size() > 0) {
+                os << "Yes(" << query->tuples->size() << ")" << "\n" << query->toStringRemainingTuples();
+            }else
+                os << "NO\n";
+            os << "\n\n";
+        }
+    }
+    return os.str();
+}
+
+string Database::postOrderNumbersToString(Node *node){
+    ostringstream os = ostringstream();
+    os << "  Postorder Numbers\n";
+    for (int i = (int)node->postOrderPairs.size() - 1; i >= 0; i--) {
+        pair<string, int> pair = node->postOrderPairs.at(i);
+        os << "    " << pair.first << ": " << pair.second << "\n";
+    }
+    os << "\n";
+    return os.str();
+}
+
+string Database::ruleEvaluationOrderToString(Node *node){
+    ostringstream os = ostringstream();
+    os << "  Rule Evaluation Order\n";
+    for (int i = 0; i < (int)node->ruleEvaluationOrder.size(); i++) {
+        os << "    " << node->ruleEvaluationOrder.at(i) << "\n";
+    }
+    os << "\n";
+    return os.str();
+}
+
+string Database::backwardsEdgesToString(Node *node){
+    ostringstream os = ostringstream();
+    os << "  Backward Edges\n";
+    typedef std::map<string, string>::iterator it_type;
+    for(it_type it = node->backwardsEdges.begin(); it != node->backwardsEdges.end(); it++) {
+        os << "    " << it->first << ": " << it->second << "\n";
+    }
+    os << "\n";
+    return os.str();
+}
+
+string Database::ruleEvaluationToString(Node *node){
+    ostringstream os = ostringstream();
+    os << "  Rule Evaluation\n";
+    for (size_t i = 0; i < node->rulesEvaluated.size(); i++) {
+        os << "    " << node->rulesEvaluated.at(i) << "\n";
+    }
+    os << "\n";
+    return os.str();
+}
 
 
 

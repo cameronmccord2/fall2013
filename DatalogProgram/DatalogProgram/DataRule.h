@@ -19,6 +19,8 @@ public:
     DataRule();
     ~DataRule();
     DataRule(DataRule *dr);
+    int ruleNum;
+    string toString();
 private:
 };
 
