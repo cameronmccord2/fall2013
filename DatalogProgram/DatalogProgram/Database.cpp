@@ -920,8 +920,8 @@ string Database::lab5Output(){
 }
 
 bool sortPostOrderPairs(pair<string, int> p1, pair<string, int> p2){
-    int a = stoi(p1.first.substr(1));
-    int b = stoi(p2.first.substr(1));
+    int a = stringToInt(p1.first.substr(1));
+    int b = stringToInt(p2.first.substr(1));
 //    cout << "rules: " << p1.first << " " << p2.first << endl;
     return (a > b);
 }
