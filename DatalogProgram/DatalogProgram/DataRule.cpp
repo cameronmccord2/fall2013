@@ -30,7 +30,7 @@ DataRule::DataRule(DataRule *dr){
 }
 
 string DataRule::toString(){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << this->head->name << "(" << this->head->toStringOriginalQueryColumns() << ") :- ";
     for (size_t i = 0; i < this->predicates->size(); i++) {
         os << this->predicates->at(i)->name << "(" << this->predicates->at(i)->toStringOriginalQueryColumns() << ")";
