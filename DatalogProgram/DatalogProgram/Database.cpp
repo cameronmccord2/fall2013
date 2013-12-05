@@ -106,6 +106,15 @@ void Database::addToChildNodesWithBackwardsEdges(Node* node, string dependencySt
     this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
 }
 
+bool isStringInVector(vector<string> v, string s){
+    for (int i =0; i < v.size(); i++) {
+        if (v.at(i) == s) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
     for (size_t i = 0; i < node->dependencies.size(); i++) {
         string dependencyString = node->dependencies.at(i);
@@ -121,7 +130,8 @@ void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
             node->hasBackwardEdge = true;
             node->backwardEdge = ruleNode;
             this->cycleFound = true;
-        }else if(find(node->backwardsEdgesList.begin(), node->backwardsEdgesList.end(), dependencyString) != node->backwardsEdgesList.end()){
+        }else if(isStringInVector(node->backwardsEdgesList, dependencyString)){
+//        }else if(find(node->backwardsEdgesList.begin(), node->backwardsEdgesList.end(), dependencyString) != node->backwardsEdgesList.end()){
             // found in backwards edges list, dont go there
             cout << "found: " << dependencyString;
         }else if (ruleNode->alreadyVisited) {
