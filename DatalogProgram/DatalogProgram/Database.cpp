@@ -828,16 +828,16 @@ void Database::writeToFile(char *filename){
     }
 }
 
-void Database::writeToFileS(string filename){
-    try{
-        ofstream myfile;
-        myfile.open(filename);
-        myfile << this->lab5Output();
-        myfile.close();
-    }catch(exception& e){
-        e.what();
-    }
-}
+//void Database::writeToFileS(string filename){
+//    try{
+//        ofstream myfile;
+//        myfile.open(filename);
+//        myfile << this->lab5Output();
+//        myfile.close();
+//    }catch(exception& e){
+//        e.what();
+//    }
+//}
 
 string Database::tupleToString(Tuple t){
     string output = "";
