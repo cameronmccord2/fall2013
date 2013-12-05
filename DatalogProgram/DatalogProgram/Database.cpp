@@ -66,6 +66,12 @@ bool sortNodes(Node* n1, Node* n2){
     return (n1->identifier < n2->identifier);
 }
 
+int stringToInt(string s){
+    int i;
+    istringstream ( s ) >> i;
+    return i;
+}
+
 void Database::runQueries(){
     // run queries one at a time
     bool runningAgain = false;
@@ -861,7 +867,8 @@ string Database::dependencyGraphToString(){
 //        cout << it->first << "\n";
 //    }
     sort(this->nodes.begin(), this->nodes.end(), sortNodes);
-    for(Node *n : this->nodes){
+    for (size_t j = 0; j < this->nodes.size(); j++) {
+        Node *n = this->nodes.at(j);
         string s = n->identifier;
         os << "  " << s << ":";
         Node *node = this->nodeMap.at(s);
@@ -882,8 +889,8 @@ string Database::dependencyGraphToString(){
 }
 
 bool sortNodesNormal(Node* n1, Node* n2){
-    int a = stoi(n1->identifier.substr(1));
-    int b = stoi(n2->identifier.substr(1));
+    int a = stringToInt(n1->identifier.substr(1));
+    int b = stringToInt(n2->identifier.substr(1));
     //    cout << "rules: " << p1.first << " " << p2.first << endl;
     return (a < b);
 }
