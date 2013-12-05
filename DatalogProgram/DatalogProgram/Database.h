@@ -70,6 +70,7 @@ public:
     string ruleEvaluationToString(Node *node);
     void clearPostOrderNumbers();
     void writeToFileS(string filename);
+    void addToChildNodesWithBackwardsEdges(Node* node, string dependencyString);
 private:
     
 };

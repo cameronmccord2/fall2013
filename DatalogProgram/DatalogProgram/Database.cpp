@@ -99,6 +99,13 @@ void Database::clearPostOrderNumbers(){
     }
 }
 
+void Database::addToChildNodesWithBackwardsEdges(Node* node, string dependencyString){
+    if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
+        this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
+    }
+    this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
+}
+
 void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
     for (size_t i = 0; i < node->dependencies.size(); i++) {
         string dependencyString = node->dependencies.at(i);
@@ -108,10 +115,7 @@ void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
             continue;// already been seen
         }else if (ruleJustCameFrom == ruleNode->identifier) {// backwards edge found
 //            this->currentQuery->backwardsEdges.insert(pair<string, string>(dependencyString, ruleJustCameFrom));
-            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
-                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
-            }
-            this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
+            this->addToChildNodesWithBackwardsEdges(node, dependencyString);
 //            this->currentQuery->childNodesWithBackwardsEdges.insert(node);
 //            node->backwardsEdgesList.push_back(dependencyString);
             node->hasBackwardEdge = true;
@@ -122,11 +126,12 @@ void Database::runRuleDepthFirstSearch(Node *node, string ruleJustCameFrom){
             cout << "found: " << dependencyString;
         }else if (ruleNode->alreadyVisited) {
             cout << "already visited: " << ruleNode->identifier << endl;
-            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
-                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
-            }
-            this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
-//            node->backwardsEdgesList.push_back(ruleNode->identifier);
+//            if (this->currentQuery->childNodesWithBackwardsEdges.find(node) == this->currentQuery->childNodesWithBackwardsEdges.end()) {
+//                this->currentQuery->childNodesWithBackwardsEdges.insert(pair<Node*, vector<string> >(node, vector<string>()));
+//            }
+//            this->currentQuery->childNodesWithBackwardsEdges.find(node)->second.push_back(dependencyString);
+            this->addToChildNodesWithBackwardsEdges(node, dependencyString);
+            //            node->backwardsEdgesList.push_back(ruleNode->identifier);
             node->hasBackwardEdge = true;
             node->backwardEdge = ruleNode;
             this->cycleFound = true;
