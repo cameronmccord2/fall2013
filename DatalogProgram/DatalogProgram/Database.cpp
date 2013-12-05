@@ -179,7 +179,7 @@ void Database::makeGraph(){
 }
 
 void Database::makeNodeFromQueryRelation(Relation* query, int queryNum){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "Q" << (queryNum + 1);
     // find or make the node from the datarule
     map<string, Node*>::iterator it = this->nodeMap.find(os.str());
@@ -201,7 +201,7 @@ void Database::makeNodeFromQueryRelation(Relation* query, int queryNum){
 }
 
 void Database::makeNodeFromRule(DataRule *dr, int ruleNum){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "R" << (ruleNum + 1);
     // find or make the node from the datarule
     map<string, Node*>::iterator it = this->nodeMap.find(os.str());
@@ -228,10 +228,9 @@ void Database::makeNodeFromRule(DataRule *dr, int ruleNum){
 
 vector<string> Database::getAllRuleIdsForName(string name){
     vector<string> rules = vector<string>();
-    ostringstream os = ostringstream();
     for (size_t i = 0;  i < this->masterRules->size(); i++) {
         if (this->masterRules->at(i)->head->name == name) {
-            os = ostringstream();
+            ostringstream os;
             os << "R" << (i + 1);
             rules.push_back(os.str());
         }
@@ -240,7 +239,7 @@ vector<string> Database::getAllRuleIdsForName(string name){
 }
 
 Node* Database::getOrMakeNodeForDataRule(DataRule *dr, int ruleNum){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "R" << ruleNum;
     string nodeIdentifier = os.str();
     for (size_t i = 0; i < this->nodes.size(); i++) {
@@ -295,7 +294,7 @@ void Database::runRules(DataRule * rule, int ruleNum){
 //    }
 //    
 //    this->deleteRulesCopy();
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "R" << rule->ruleNum;
     this->currentQuery->ruleEvaluationOrder.push_back(os.str());
     this->currentQuery->rulesEvaluated.push_back(rule->toString()); // this isnt correct yet, either I am printing incorrectly or the rules are running too many times
@@ -855,7 +854,7 @@ string Database::tupleToString(Tuple t){
 
 string Database::dependencyGraphToString(){
     vector<string> v;
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "Dependency Graph\n";
 //    cout << this->nodeMap.size();
 //    for(map<string, Node*>::iterator it = this->nodeMap.begin(); it != this->nodeMap.end(); ++it) {
@@ -891,7 +890,7 @@ bool sortNodesNormal(Node* n1, Node* n2){
 }
 
 string Database::lab5Output(){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << this->dependencyGraphToString();
     sort(this->nodes.begin(), this->nodes.end(), sortNodesNormal);
     for (size_t i = 0; i < this->nodes.size(); i++) {
@@ -927,7 +926,7 @@ bool sortThesePostOrderPairsQueries(pair<string, int> p1, pair<string, int> p2){
 }
 
 string Database::postOrderNumbersToString(Node *node){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "  Postorder Numbers\n";
     // sort thing
 //    sort(node->postOrderPairs.begin(), node->postOrderPairs.end(), sortThesePostOrderPairsQueries);
@@ -949,7 +948,7 @@ string Database::postOrderNumbersToString(Node *node){
 
 
 string Database::ruleEvaluationOrderToString(Node *node){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "  Rule Evaluation Order\n";
     for (int i = 0; i < (int)node->ruleEvaluationOrder.size(); i++) {
         os << "    " << node->ruleEvaluationOrder.at(i) << "\n";
@@ -959,7 +958,7 @@ string Database::ruleEvaluationOrderToString(Node *node){
 }
 
 string Database::backwardsEdgesToString(Node *node){
-    ostringstream os = ostringstream();
+    ostringstream os;
 //    os << "  Backward Edges\n";
 //    typedef std::map<string, string>::iterator it_type;
 //    for(it_type it = node->backwardsEdges.begin(); it != node->backwardsEdges.end(); it++) {
@@ -984,7 +983,7 @@ string Database::backwardsEdgesToString(Node *node){
 }
 
 string Database::ruleEvaluationToString(Node *node){
-    ostringstream os = ostringstream();
+    ostringstream os;
     os << "  Rule Evaluation\n";
     for (size_t i = 0; i < node->rulesEvaluated.size(); i++) {
         os << "    " << node->rulesEvaluated.at(i) << "\n";
