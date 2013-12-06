@@ -25,7 +25,7 @@ public:
     bool isQuery;
     set<Node> edges;
     void addEdge(Node newEdge);
-    vector<string> dependencies;
+    set<string> dependencies;
     bool hasBackwardEdge;
     Node *backwardEdge;
     int postOrderNumber;
