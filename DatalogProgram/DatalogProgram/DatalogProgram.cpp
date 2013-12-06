@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 	try{
         lex = new Lex(argv[1]);
 //        cout << "started" << endl;
-//        lex = new Lex("/Users/cameronmccord2/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/inFinal.txt");
+//        lex = new Lex("/Users/cameronmccord2/Dropbox/Eclipse Workspace/fall2013/DatalogProgram/DatalogProgram/in62.txt");
         dp = new DatalogProgram(lex->getTokens());
         d = new Database(dp);
         

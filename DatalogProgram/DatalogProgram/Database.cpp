@@ -839,16 +839,16 @@ void Database::writeToFile(char *filename){
     }
 }
 
-//void Database::writeToFileS(string filename){
-//    try{
-//        ofstream myfile;
-//        myfile.open(filename);
-//        myfile << this->lab5Output();
-//        myfile.close();
-//    }catch(exception& e){
-//        e.what();
-//    }
-//}
+void Database::writeToFileS(string filename){
+    try{
+        ofstream myfile;
+        myfile.open(filename);
+        myfile << this->lab5Output();
+        myfile.close();
+    }catch(exception& e){
+        e.what();
+    }
+}
 
 string Database::tupleToString(Tuple t){
     string output = "";
@@ -989,12 +989,14 @@ string Database::backwardsEdgesToString(Node *node){
         Node* node = it->first;
         keys.push_back(node);
     }
-    
+    int asdf = (int)keys.size();
+    int lkj = (int)node->childNodesWithBackwardsEdges.size();
     sort(keys.begin(), keys.end(), sortNodes);
     for (size_t i = 0; i < keys.size(); i++) {
-        Node* node = keys.at(i);
-        vector<string> backwardsEdges = node->childNodesWithBackwardsEdges.find(node)->second;
-        os << "    " << node->identifier << ":";
+        Node* node2 = keys.at(i);
+//        map<Node*, vector<string> >::iterator = node->childNodesWithBackwardsEdges.find(node);
+        vector<string> backwardsEdges = node->childNodesWithBackwardsEdges.find(node2)->second;
+        os << "    " << node2->identifier << ":";
         sort(backwardsEdges.begin(), backwardsEdges.end());
         for (size_t i = 0; i < backwardsEdges.size(); i++) {
             os << " " << backwardsEdges.at(i);

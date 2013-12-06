@@ -69,7 +69,7 @@ public:
     string backwardsEdgesToString(Node *node);
     string ruleEvaluationToString(Node *node);
     void clearPostOrderNumbers();
-//    void writeToFileS(string filename);
+    void writeToFileS(string filename);
     void addToChildNodesWithBackwardsEdges(Node* node, string dependencyString);
 private:
     
