@@ -888,7 +888,7 @@ string Database::dependencyGraphToString(){
                 os << " ";
             }
                 os << dependency;
-            if (count != node->dependencies.size()) {
+            if (count != (int)node->dependencies.size()) {
                 os << " ";
             }
         }
@@ -989,8 +989,8 @@ string Database::backwardsEdgesToString(Node *node){
         Node* node = it->first;
         keys.push_back(node);
     }
-    int asdf = (int)keys.size();
-    int lkj = (int)node->childNodesWithBackwardsEdges.size();
+//    int asdf = (int)keys.size();
+//    int lkj = (int)node->childNodesWithBackwardsEdges.size();
     sort(keys.begin(), keys.end(), sortNodes);
     for (size_t i = 0; i < keys.size(); i++) {
         Node* node2 = keys.at(i);
