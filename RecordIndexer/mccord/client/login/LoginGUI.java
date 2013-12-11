@@ -52,31 +52,47 @@ public class LoginGUI extends JFrame{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.setLayout(new GridBagLayout());
 		
-		username = new JTextField();
-		TextPrompt usernameTextPrompt = new TextPrompt("Username", username);
-		usernameTextPrompt.changeAlpha(.75f);
-		usernameTextPrompt.setShow(Show.FOCUS_LOST);
+		JLabel u = new JLabel("Username:");
 		c.weightx = 1;
 		c.gridx = 0;
+		c.gridy = 0;
+		pane.add(u, c);
+		
+		JLabel p = new JLabel("Password:");
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 1;
+		pane.add(p, c);
+		
+		username = new JTextField();
+		TextPrompt usernameTextPrompt = new TextPrompt("", username);
+//		usernameTextPrompt.changeAlpha(.75f);
+//		usernameTextPrompt.setShow(Show.FOCUS_LOST);
+		c.weightx = 7;
+		c.gridx = 1;
 		c.gridy = 0;
 		pane.add(username, c);
 
 		password = new JPasswordField();
-		TextPrompt passwordTextPrompt = new TextPrompt("Password", password);
-		passwordTextPrompt.changeAlpha(.75f);
-		passwordTextPrompt.setShow(Show.FOCUS_LOST);
-		c.weightx = 1;
+		TextPrompt passwordTextPrompt = new TextPrompt("", password);
+//		passwordTextPrompt.changeAlpha(.75f);
+//		passwordTextPrompt.setShow(Show.FOCUS_LOST);
+		c.weightx = 7;
 		c.gridx = 1;
-		c.gridy = 0;
+		c.gridy = 1;
 		pane.add(password, c);
 		
 		username.setText("test1");
 		password.setText("test1");
 		
 		
+		JPanel jp = new JPanel();
+		jp.setLayout(new GridBagLayout());
+		
+		
 		JButton loginButton = new JButton("Login");
 		c.weightx = 1;
-		c.gridx = 2;
+		c.gridx = 0;
 		c.gridy = 0;
 		loginButton.addMouseListener(new MouseListener(){
 
@@ -107,8 +123,46 @@ public class LoginGUI extends JFrame{
 			}
 			
 		});
-		pane.add(loginButton, c);
+		jp.add(loginButton, c);
 		
+		JButton exitButton = new JButton("Exit");
+		c.weightx = 1;
+		c.gridx = 2;
+		c.gridy = 0;
+		exitButton.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(username.getText().length() > 0 && password.getText().length() > 0) 
+					validateUser(username.getText(), password.getText(), host, port);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
+		jp.add(exitButton, c);
+		
+		c.gridx = 1;
+		c.gridy = 3;
+		pane.add(jp, c);
 		this.pack();
 	}
 	
@@ -186,7 +240,7 @@ public class LoginGUI extends JFrame{
 	}
 	
 	public class LoginError extends JFrame{
-		
+		private static final long serialVersionUID = -4243880986399306282L;
 		LoginGUI lg = null;
 		
 		LoginError(ValidateUserResult vur, LoginGUI lg){
@@ -265,9 +319,12 @@ public class LoginGUI extends JFrame{
 				LoginSuccess ls = new LoginSuccess((ValidateUserResult)response, this);
 				
 			}else if(response instanceof FailedResult){
+				System.out.println("failed");
 				LoginError le = new LoginError((ValidateUserResult)response, this);
 			}else if(response instanceof FalseResult){
+				System.out.println("false");
 				LoginError le = new LoginError((ValidateUserResult)response, this);
+				le.setVisible(true);
 			}
 		} catch (Exception e) {
 //			result = "FAILED";
@@ -279,8 +336,8 @@ public class LoginGUI extends JFrame{
 	public static void main(final String[] args) {
 		EventQueue.invokeLater(new Runnable() {		
 			public void run() {
-//				LoginGUI loginGui = new LoginGUI(args[0], args[1]);
-				LoginGUI loginGui = new LoginGUI("localhost", "39640");
+				LoginGUI loginGui = new LoginGUI(args[0], args[1]);
+//				LoginGUI loginGui = new LoginGUI("localhost", "39640");
 				loginGui.setVisible(true);
 //				// Create the frame window object
 //				SimpleFrame frame = new SimpleFrame();

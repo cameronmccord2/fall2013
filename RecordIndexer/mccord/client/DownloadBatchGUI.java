@@ -12,8 +12,10 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import models.FailedResult;
 import models.Fields;
 import server.ClientCommunicator;
@@ -22,22 +24,24 @@ import communicator.DownloadBatchResult;
 import communicator.GetProjectsResult;
 import communicator.ValidateUserParams;
 
-public class DownloadBatchGUI extends JFrame {
+public class DownloadBatchGUI {
 	private static final long serialVersionUID = 8227044344356048883L;
 	private ClientGUI cg;
 	private Integer projectId;
 	private ArrayList<GetProjectsResult> projects;
 	private JComboBox projectList;
-
-	public DownloadBatchGUI(final ClientGUI cg){
-		super("Download Batch");
-		this.cg = cg;
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	private JDialog dbDialog;
+	
+	public JDialog makeDownloadBatchGUI(){
+		JFrame frame = new JFrame("Download Batch");
+		this.dbDialog = new JDialog(frame, "Download Batch", true);
+		
+		this.dbDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Dimension panelSize = new Dimension(400, 200);
-		this.setSize(panelSize);
-		this.setMinimumSize(panelSize);
-		this.setMaximumSize(panelSize);
-		Container pane = this.getContentPane();
+		this.dbDialog.setSize(panelSize);
+		this.dbDialog.setMinimumSize(panelSize);
+		this.dbDialog.setMaximumSize(panelSize);
+		Container pane = this.dbDialog.getContentPane();
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.setLayout(new GridBagLayout());
@@ -83,8 +87,9 @@ public class DownloadBatchGUI extends JFrame {
 		viewSampleButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				SampleImage si = new SampleImage(projects.get(projectList.getSelectedIndex()).getTitle(), projectId, cg);
-				si.setVisible(true);
+				SampleImage si = new SampleImage(cg);
+				JDialog dialog = si.makeSampleImage(projects.get(projectList.getSelectedIndex()).getTitle(), projectId);
+				dialog.setVisible(true);
 			}
 			@Override public void mousePressed(MouseEvent e) {}
 			@Override public void mouseReleased(MouseEvent e) {}
@@ -103,7 +108,7 @@ public class DownloadBatchGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				if(projectId != -1){
 					cg.downloadedBatch(downloadBatch(projectId));
-					setVisible(false);
+					dbDialog.setVisible(false);
 				}
 			}
 			@Override public void mousePressed(MouseEvent e) {}
@@ -129,6 +134,12 @@ public class DownloadBatchGUI extends JFrame {
 			@Override public void mouseExited(MouseEvent e) {}
 		});
 		pane.add(downloadButton, c);
+		return this.dbDialog;
+	}
+
+	public DownloadBatchGUI(final ClientGUI cg){
+//		super("Download Batch");
+		this.cg = cg;
 	}
 	
 	@SuppressWarnings("finally")

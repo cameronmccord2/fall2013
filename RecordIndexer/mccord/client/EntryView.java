@@ -102,7 +102,7 @@ public class EntryView extends JPanel{
 			public void mouseClicked(MouseEvent e) {
 				cg.changeSelectedCell(table.getSelectedColumn(), table.getSelectedRow());
 				if(e.getButton() == 3){// right click functionality
-					
+					System.out.println("right click recieved on table");
 				}
 			}
 			@Override public void mousePressed(MouseEvent e) {}

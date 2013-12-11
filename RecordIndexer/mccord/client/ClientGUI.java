@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -46,6 +47,7 @@ public class ClientGUI extends JFrame {
 	private JSplitPane mainSplitPane;
 	private JMenuBar menuBar;
 	private LoginGUI lg;
+	private JDialog dbgDialog;
 	
 	
 	public ClientGUI(String username, String password, String host, String port, LoginGUI lg){
@@ -57,6 +59,7 @@ public class ClientGUI extends JFrame {
 		this.lg = lg;
 		
 		this.downloadBatchGUI = new DownloadBatchGUI(this);
+		this.dbgDialog = this.downloadBatchGUI.makeDownloadBatchGUI();
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension panelSize = new Dimension(1200, 800);
@@ -153,11 +156,11 @@ public class ClientGUI extends JFrame {
 		if(this.batch != null)
 			return;
 		System.out.println("opening download batch gui");
-		downloadBatchGUI.setVisible(true);
+		dbgDialog.setVisible(true);
 	}
 	
 	public void closeDownloadBatchGUI(){
-		downloadBatchGUI.setVisible(false);
+		dbgDialog.setVisible(false);
 	}
 	
 	public void setDownloadBatchEnabledTo(boolean bool){
@@ -215,6 +218,8 @@ public class ClientGUI extends JFrame {
 	}
 
 	public void submit() {
+		if(this.batch == null)
+			return;
 		SubmitBatchParams sbp = new SubmitBatchParams();
 		sbp.setFieldValues(this.entryView.getFieldValuesForSubmit());
 		sbp.setPassword(this.password);

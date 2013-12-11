@@ -2,6 +2,10 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JPanel;
 
@@ -23,6 +27,19 @@ public class Center extends JPanel {
 		this.component = new DrawingComponent(imageUrl, 0, cg.batch.getFirstYCoor(), cg.batch.getFields().get(1).getWidth(), cg.batch.getRecordHeight());   
 		this.component.setVisible(true);
 		this.add(component);
+		component.addMouseWheelListener(new MouseWheelListener(){ 
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getWheelRotation() < 0){
+					// zoom out
+					cg.zoomOut();
+				}else{
+					//zoom in
+					cg.zoomIn();
+				}
+			}
+		});
 		this.component.setVisible(true);
 	}
 	

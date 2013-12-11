@@ -13,6 +13,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -21,21 +22,23 @@ import server.ClientCommunicator;
 import communicator.GetSampleImageParams;
 import communicator.GetSampleImageResult;
 
-public class SampleImage extends JFrame {
+public class SampleImage {
 
 	private static final long serialVersionUID = -5406111254112561349L;
 	private ClientGUI cg;
+	private JDialog dialog;
 	
-	public SampleImage(String projectTitle, Integer projectId, ClientGUI cg){
-		super("Sample image from " + projectTitle);
-		this.cg = cg;
+	public JDialog makeSampleImage(String projectTitle, Integer projectId){
+		JFrame frame = new JFrame("Sample image from " + projectTitle);
+		dialog = new JDialog(frame, "Sample image from " + projectTitle, true);
+//		super("Sample image from " + projectTitle);
 		
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Dimension panelSize = new Dimension(600, 700);
-		this.setSize(panelSize);
-		this.setMinimumSize(panelSize);
-		this.setMaximumSize(panelSize);
-		Container pane = this.getContentPane();
+		dialog.setSize(panelSize);
+		dialog.setMinimumSize(panelSize);
+		dialog.setMaximumSize(panelSize);
+		Container pane = dialog.getContentPane();
 		pane.setLayout(new BorderLayout());
 		
 		try {
@@ -62,7 +65,7 @@ public class SampleImage extends JFrame {
     			@Override
     			public void mouseClicked(MouseEvent e) {
     				System.out.println("mouse click close");
-    				setVisible(false);
+    				dialog.setVisible(false);
     			}
     			@Override public void mousePressed(MouseEvent e) {}
     			@Override public void mouseReleased(MouseEvent e) {}
@@ -86,6 +89,11 @@ public class SampleImage extends JFrame {
 		}finally{
 			pane.setVisible(true);
 		}
+		return dialog;
+	}
+	
+	public SampleImage(ClientGUI cg){
+		this.cg = cg;
 	}
 	
 	@SuppressWarnings("finally")
