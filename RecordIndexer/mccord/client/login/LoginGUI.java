@@ -82,8 +82,8 @@ public class LoginGUI extends JFrame{
 		c.gridy = 1;
 		pane.add(password, c);
 		
-		username.setText("test1");
-		password.setText("test1");
+//		username.setText("test1");
+//		password.setText("test1");
 		
 		
 		JPanel jp = new JPanel();
@@ -133,8 +133,7 @@ public class LoginGUI extends JFrame{
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(username.getText().length() > 0 && password.getText().length() > 0) 
-					validateUser(username.getText(), password.getText(), host, port);
+				System.exit(0);
 			}
 
 			@Override
