@@ -98,12 +98,12 @@ public class DownloadBatchGUI {
 		});
 		pane.add(viewSampleButton, c);
 		
-		JButton cancelButton = new JButton("Download");
+		JButton downloadButton = new JButton("Download");
 		c.weightx = 1;
-		c.gridx = 0;
+		c.gridx = 1;
 		c.gridy = 1;
-		cancelButton.setVisible(true);
-		cancelButton.addMouseListener(new MouseListener(){
+		downloadButton.setVisible(true);
+		downloadButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(projectId != -1){
@@ -116,14 +116,14 @@ public class DownloadBatchGUI {
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(cancelButton, c);
+		pane.add(downloadButton, c);
 		
-		JButton downloadButton = new JButton("Cancel");
+		JButton cancelButton = new JButton("Cancel");
 		c.weightx = 1;
 		c.gridx = 0;
 		c.gridy = 1;
-		downloadButton.setVisible(true);
-		downloadButton.addMouseListener(new MouseListener(){
+		cancelButton.setVisible(true);
+		cancelButton.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				cg.closeDownloadBatchGUI();
@@ -133,7 +133,7 @@ public class DownloadBatchGUI {
 			@Override public void mouseEntered(MouseEvent e) {}
 			@Override public void mouseExited(MouseEvent e) {}
 		});
-		pane.add(downloadButton, c);
+		pane.add(cancelButton, c);
 		return this.dbDialog;
 	}
 
