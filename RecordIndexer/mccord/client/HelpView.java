@@ -84,7 +84,8 @@ public class HelpView extends JPanel {
 			fieldHelp.setLayout(new BorderLayout());
 			fieldHelp.add(label);
 			fieldHelp.setBackground(Color.white);
-			helpView.setComponentAt(0, fieldHelp);
+			JScrollPane jsp = new JScrollPane(fieldHelp);
+			helpView.setComponentAt(0, jsp);
 		}
 	}
 }
